@@ -6,8 +6,9 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
+
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -17,49 +18,39 @@ import {
   View,
 } from 'react-native';
 
+import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
+
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+  fetchKakaoProfile,
+  signInWithKakao,
+  signOutWithKakao,
+  unlinkKakao,
+} from './src/api/kakao';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+  const handleSignIn = async () => {
+    const token = await signInWithKakao();
+    console.log('Token:', token);
+  };
+
+  const handleSignOut = async () => {
+    const message = await signOutWithKakao();
+    console.log('Logout:', message);
+  };
+
+  const handleUnlink = async () => {
+    const message = await unlinkKakao();
+    console.log('Unlink:', message);
+  };
+
+  const handleGetProfile = async () => {
+    const profile = await fetchKakaoProfile();
+    console.log('Profile:', profile);
   };
 
   return (
@@ -76,20 +67,10 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+          <Button title="Sign In with Kakao" onPress={handleSignIn} />
+          <Button title="Sign Out with Kakao" onPress={handleSignOut} />
+          <Button title="Unlink Kakao" onPress={handleUnlink} />
+          <Button title="Get Profile" onPress={handleGetProfile} />
         </View>
       </ScrollView>
     </SafeAreaView>
