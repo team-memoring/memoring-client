@@ -27,12 +27,15 @@ import {
   unlinkKakao,
 } from './src/api/kakao';
 
+import Config from 'react-native-config';
+
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
   const handleSignIn = async () => {
     const token = await signInWithKakao();
     console.log('Token:', token);
@@ -63,6 +66,7 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <Text>{Config.KAKAO_NATIVE_APP_KEY}</Text>
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
