@@ -13,6 +13,10 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F78CA63B5696AEADAC4165A3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		C5AF234D0E6947B2A9B36A4E /* NanumSquareRoundB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4D45FAABF4346708D899839 /* NanumSquareRoundB.ttf */; };
+		CC6E9E572EA847B8984DFDC9 /* NanumSquareRoundEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 926E172BEE694B0B87A53B63 /* NanumSquareRoundEB.ttf */; };
+		7B54D79CB22F4AE283160282 /* NanumSquareRoundL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B683B38735D04228913148BC /* NanumSquareRoundL.ttf */; };
+		11591811B6814BEC9BB5847D /* NanumSquareRoundR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5683788265F940669D39E6F5 /* NanumSquareRoundR.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +32,10 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MemoringClient/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MemoringClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		D4D45FAABF4346708D899839 /* NanumSquareRoundB.ttf */ = {isa = PBXFileReference; name = "NanumSquareRoundB.ttf"; path = "../src/assets/fonts/NanumSquareRoundB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		926E172BEE694B0B87A53B63 /* NanumSquareRoundEB.ttf */ = {isa = PBXFileReference; name = "NanumSquareRoundEB.ttf"; path = "../src/assets/fonts/NanumSquareRoundEB.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B683B38735D04228913148BC /* NanumSquareRoundL.ttf */ = {isa = PBXFileReference; name = "NanumSquareRoundL.ttf"; path = "../src/assets/fonts/NanumSquareRoundL.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5683788265F940669D39E6F5 /* NanumSquareRoundR.ttf */ = {isa = PBXFileReference; name = "NanumSquareRoundR.ttf"; path = "../src/assets/fonts/NanumSquareRoundR.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +88,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				7CEE3671DF944BF0ACA38AA9 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -102,6 +111,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		7CEE3671DF944BF0ACA38AA9 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				D4D45FAABF4346708D899839 /* NanumSquareRoundB.ttf */,
+				926E172BEE694B0B87A53B63 /* NanumSquareRoundEB.ttf */,
+				B683B38735D04228913148BC /* NanumSquareRoundL.ttf */,
+				5683788265F940669D39E6F5 /* NanumSquareRoundR.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -166,6 +187,10 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				F78CA63B5696AEADAC4165A3 /* PrivacyInfo.xcprivacy in Resources */,
+				C5AF234D0E6947B2A9B36A4E /* NanumSquareRoundB.ttf in Resources */,
+				CC6E9E572EA847B8984DFDC9 /* NanumSquareRoundEB.ttf in Resources */,
+				7B54D79CB22F4AE283160282 /* NanumSquareRoundL.ttf in Resources */,
+				11591811B6814BEC9BB5847D /* NanumSquareRoundR.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
