@@ -1,13 +1,36 @@
-import React, {useEffect, useRef} from 'react';
-import {View, StyleSheet, StatusBar, Animated, Button} from 'react-native';
+import React from 'react';
+import {View, StyleSheet, StatusBar, Alert, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import CustomText from '../components/shared/CustomText';
+import CustomText from '../../components/shared/CustomText';
 
-import Logo from '../assets/icons/logo.svg';
-import Character from '../assets/icons/character.svg';
-import Kakao from '../assets/icons/kakao.svg';
+import Logo from '../../assets/icons/logo.svg';
+import Character from '../../assets/icons/character.svg';
+import Kakao from '../../assets/icons/kakao.svg';
+import {fetchKakaoProfile, signInWithKakao} from '../../api/kakao';
+import {saveToken, saveUser} from '../../utils/storage';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const LoginScreen = (): React.JSX.Element => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const handleKakaoLogin = async () => {
+    try {
+      const accessToken = await signInWithKakao();
+
+      if (accessToken) {
+        await saveToken(accessToken);
+        const kakaoProfile = await fetchKakaoProfile();
+        await saveUser(kakaoProfile);
+        navigation.navigate('LoginSelect');
+      } else {
+        Alert.alert('로그인 실패', '다시 시도해주세요.');
+      }
+    } catch (err) {
+      Alert.alert('로그인 에러', '로그인 중 문제가 발생했습니다.');
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -32,14 +55,19 @@ const LoginScreen = (): React.JSX.Element => {
         <Character width={768} height={768} />
       </View>
       <View style={styles.centerContainer}>
-        <View style={styles.kakaoLoginButton}>
+        <Pressable
+          style={({pressed}) => [
+            styles.kakaoLoginButton,
+            {opacity: pressed ? 0.5 : 1},
+          ]}
+          onPress={handleKakaoLogin}>
           <Kakao width={24} height={24} />
           <CustomText
             weight="ExtraBold"
             style={{fontSize: 18, color: '#fff', marginLeft: 8}}>
             카카오로 로그인
           </CustomText>
-        </View>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
