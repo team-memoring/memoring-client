@@ -38,11 +38,13 @@ const LoginSelectScreen = (): React.JSX.Element => {
         <Header />
         <View style={styles.text}>
           <CustomText
-            weight="Bold"
+            weight="ExtraBold"
             style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
             {`안녕하세요 ${username}님,`}
           </CustomText>
-          <CustomText weight="Bold" style={{fontSize: 28, color: '#222225'}}>
+          <CustomText
+            weight="ExtraBold"
+            style={{fontSize: 28, color: '#222225'}}>
             시작해볼까요?
           </CustomText>
         </View>
