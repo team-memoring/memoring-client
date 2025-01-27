@@ -14,13 +14,13 @@ import {getUser} from '../../utils/storage';
 const LoginSelectScreen = (): React.JSX.Element => {
   const [username, setUsername] = React.useState<string | null>(null);
 
-  const animationValue = useRef(new Animated.Value(-430)).current;
+  const animationValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(animationValue, {
-      toValue: -550, // 캐릭터 최종 위치
-      duration: 1200, // 지속 시간
-      useNativeDriver: false,
+      toValue: 120, // 원하는 이동 거리 (양수로 위로 이동)
+      duration: 1200,
+      useNativeDriver: true, // Native Driver 활성화
     }).start();
   }, [animationValue]);
 
@@ -90,7 +90,10 @@ const LoginSelectScreen = (): React.JSX.Element => {
       </View>
 
       <Animated.View
-        style={[styles.characterContainer, {bottom: animationValue}]}>
+        style={[
+          styles.characterContainer,
+          {transform: [{translateY: animationValue}]},
+        ]}>
         <Character width={768} height={768} />
       </Animated.View>
     </SafeAreaView>
@@ -132,6 +135,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
+    bottom: -430,
     alignItems: 'center',
     overflow: 'hidden',
   },
