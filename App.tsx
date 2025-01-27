@@ -20,6 +20,7 @@ function App(): React.JSX.Element {
             component={SplashScreen}
             options={{
               headerShown: false,
+              animation: 'none',
             }}
           />
           <Stack.Screen
@@ -27,6 +28,7 @@ function App(): React.JSX.Element {
             component={LoginScreen}
             options={{
               headerShown: false,
+              animation: 'none',
             }}
           />
           <Stack.Screen
@@ -34,6 +36,7 @@ function App(): React.JSX.Element {
             component={LoginSelectScreen}
             options={{
               headerShown: false,
+              animation: 'none',
             }}
           />
         </Stack.Navigator>

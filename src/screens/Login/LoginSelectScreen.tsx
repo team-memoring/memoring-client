@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {View, StyleSheet, StatusBar, Pressable} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {View, StyleSheet, StatusBar, Pressable, Animated} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import Character from '../../assets/icons/character.svg';
@@ -13,6 +13,16 @@ import {getUser} from '../../utils/storage';
 
 const LoginSelectScreen = (): React.JSX.Element => {
   const [username, setUsername] = React.useState<string | null>(null);
+
+  const animationValue = useRef(new Animated.Value(-430)).current;
+
+  useEffect(() => {
+    Animated.timing(animationValue, {
+      toValue: -550, // 캐릭터 최종 위치
+      duration: 1200, // 지속 시간
+      useNativeDriver: false,
+    }).start();
+  }, [animationValue]);
 
   useEffect(() => {
     const loadUsername = async () => {
@@ -79,9 +89,10 @@ const LoginSelectScreen = (): React.JSX.Element => {
         </View>
       </View>
 
-      <View style={[styles.characterContainer]}>
+      <Animated.View
+        style={[styles.characterContainer, {bottom: animationValue}]}>
         <Character width={768} height={768} />
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -121,7 +132,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: -550,
     alignItems: 'center',
     overflow: 'hidden',
   },

@@ -43,11 +43,11 @@ const LoginScreen = (): React.JSX.Element => {
           <Logo width={120} height={24} />
         </View>
         <CustomText
-          weight="Bold"
+          weight="ExtraBold"
           style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
           반갑습니다,
         </CustomText>
-        <CustomText weight="Bold" style={{fontSize: 28, color: '#222225'}}>
+        <CustomText weight="ExtraBold" style={{fontSize: 28, color: '#222225'}}>
           함께 추억으로 떠나봐요!
         </CustomText>
       </View>
