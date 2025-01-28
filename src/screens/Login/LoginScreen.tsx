@@ -4,12 +4,13 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomText from '../../components/shared/CustomText';
 
 import Logo from '../../assets/icons/logo.svg';
-import Character from '../../assets/icons/character_close_eye.svg';
+
 import Kakao from '../../assets/icons/kakao.svg';
 import {fetchKakaoProfile, signInWithKakao} from '../../api/kakao';
 import {saveToken, saveUser} from '../../utils/storage';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import Character from '../../components/shared/Character';
 
 const LoginScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -51,9 +52,7 @@ const LoginScreen = (): React.JSX.Element => {
           함께 추억으로 떠나봐요!
         </CustomText>
       </View>
-      <View style={[styles.characterContainer]}>
-        <Character width={768} height={768} />
-      </View>
+      <Character type="close" />
       <View style={styles.centerContainer}>
         <Pressable
           style={({pressed}) => [

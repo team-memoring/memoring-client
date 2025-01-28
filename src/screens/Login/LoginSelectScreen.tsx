@@ -2,7 +2,6 @@ import React, {useEffect, useRef} from 'react';
 import {View, StyleSheet, StatusBar, Pressable, Animated} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import Character from '../../assets/icons/character_close_eye.svg';
 import CustomText from '../../components/shared/CustomText';
 import Header from '../../components/shared/Header';
 
@@ -10,8 +9,13 @@ import Codes from '../../assets/icons/code.svg';
 import Pencil from '../../assets/icons/pencil.svg';
 
 import {getUser} from '../../utils/storage';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import Character from '../../components/shared/Character';
 
 const LoginSelectScreen = (): React.JSX.Element => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const [username, setUsername] = React.useState<string | null>(null);
 
   const animationValue = useRef(new Animated.Value(0)).current;
@@ -59,7 +63,11 @@ const LoginSelectScreen = (): React.JSX.Element => {
           </CustomText>
         </View>
         <View style={[styles.buttonContainer]}>
-          <Pressable style={[styles.button]}>
+          <Pressable
+            style={[styles.button]}
+            onPress={() => {
+              navigation.navigate('OnboardingCreate');
+            }}>
             <Pencil width={24} height={24} />
             <CustomText
               weight="ExtraBold"
@@ -73,7 +81,11 @@ const LoginSelectScreen = (): React.JSX.Element => {
             </CustomText>
           </Pressable>
           <View style={styles.spacer} />
-          <Pressable style={[styles.button]}>
+          <Pressable
+            style={[styles.button]}
+            onPress={() => {
+              // navigation.navigate('CodeInput');
+            }}>
             <Codes width={24} height={24} />
             <CustomText
               weight="ExtraBold"
@@ -88,14 +100,7 @@ const LoginSelectScreen = (): React.JSX.Element => {
           </Pressable>
         </View>
       </View>
-
-      <Animated.View
-        style={[
-          styles.characterContainer,
-          {transform: [{translateY: animationValue}]},
-        ]}>
-        <Character width={768} height={768} />
-      </Animated.View>
+      <Character type="close" animatedTransformValue={animationValue} />
     </SafeAreaView>
   );
 };
