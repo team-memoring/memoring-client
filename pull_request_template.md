@@ -1,6 +1,6 @@
 # PR Title
 
-[Feature] 작업 내용을 간단히 요약해주세요 (JIRA-XXX)
+- 작업 내용을 간단히 요약해주세
 
 ## Description
 

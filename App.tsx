@@ -1,39 +1,48 @@
 import React from 'react';
 
-import {createStaticNavigation} from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import LoginScreen from './src/screens/LoginScreen';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import {StyleSheet} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import LoginScreen from './src/screens/Login/LoginScreen';
+import SplashScreen from './src/screens/\bSplashScreen';
+import LoginSelectScreen from './src/screens/Login/LoginSelectScreen';
 
-const RootStack = createNativeStackNavigator({
-  screens: {
-    Login: {
-      screen: LoginScreen,
-      options: {
-        headerShown: false,
-      },
-    },
-  },
-});
-
-const Navigation = createStaticNavigation(RootStack);
+const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <Navigation />
-      </SafeAreaView>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Splash"
+            component={SplashScreen}
+            options={{
+              headerShown: false,
+              animation: 'none',
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+              animation: 'none',
+            }}
+          />
+          <Stack.Screen
+            name="LoginSelect"
+            component={LoginSelectScreen}
+            options={{
+              headerShown: false,
+              animation: 'none',
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
