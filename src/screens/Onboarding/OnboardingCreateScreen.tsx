@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, StatusBar, Animated, Platform} from 'react-native';
+import {StyleSheet, StatusBar, Animated, Platform, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import PaginationHeader from '../../components/shared/PaginationHeader';
@@ -28,8 +28,6 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [accessibleIndex, setAccessibleIndex] = useState(0);
   const isNextDisabled = !(currentIndex < accessibleIndex);
-
-  console.log('isNextDisabled', isNextDisabled);
 
   const handleCharacterTypeChange = (type: CharacterType) => {
     setCharacterType(type);
@@ -129,24 +127,29 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
             onBackPress={() => navigation.goBack()}
           />
           <Character type={characterType} />
-
-          <Pressable
-            onPress={() => setCurrentIndex(prev => prev + 1)}
-            disabled={isNextDisabled}
+          <View
             style={[
-              styles.nextButton,
-              {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
+              styles.nextButtonWrapper,
               {backgroundColor: isNextDisabled ? '#939396' : '#222225'},
             ]}>
-            <CustomText
-              weight="ExtraBold"
-              style={{
-                color: '#fff',
-                fontSize: 20,
-              }}>
-              다음으로
-            </CustomText>
-          </Pressable>
+            <Pressable
+              onPress={() => setCurrentIndex(prev => prev + 1)}
+              disabled={isNextDisabled}
+              style={[
+                styles.nextButton,
+                {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
+                {backgroundColor: isNextDisabled ? '#939396' : '#222225'},
+              ]}>
+              <CustomText
+                weight="ExtraBold"
+                style={{
+                  color: '#fff',
+                  fontSize: 20,
+                }}>
+                다음으로
+              </CustomText>
+            </Pressable>
+          </View>
 
           <PanGestureHandler
             onGestureEvent={handleGestureEvent}
@@ -169,26 +172,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f9ebe4',
   },
-  text: {
-    alignItems: 'center',
-    marginTop: 72,
-  },
-  characterContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: -430,
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  nextButton: {
+  nextButtonWrapper: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     width: '100%',
+  },
+  nextButton: {
     alignItems: 'center',
     paddingTop: 24,
+    paddingBottom: Platform.OS === 'ios' ? 52 : 24,
   },
 });
 
