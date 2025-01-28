@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, StatusBar} from 'react-native';
+import {StyleSheet, StatusBar, Animated, Platform} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import PaginationHeader from '../../components/shared/PaginationHeader';
@@ -10,11 +10,34 @@ import OnboardingNameView from '../../components/Onboarding/OnboardingNameView';
 import {FormProvider, useForm} from 'react-hook-form';
 import {IFamily} from '../../lib/model/i-family';
 import CustomText from '../../components/shared/CustomText';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  Pressable,
+  State,
+} from 'react-native-gesture-handler';
+import Character, {CharacterType} from '../../components/shared/Character';
 
 const TOTAL_SETPS = 4;
 
 const OnboardingCreateScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const [characterType, setCharacterType] = useState<CharacterType>('close');
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [accessibleIndex, setAccessibleIndex] = useState(0);
+  const isNextDisabled = !(currentIndex < accessibleIndex);
+
+  console.log('isNextDisabled', isNextDisabled);
+
+  const handleCharacterTypeChange = (type: CharacterType) => {
+    setCharacterType(type);
+  };
+
+  const handleAccessibleIndexChange = (accessibleIndex: number) => {
+    setAccessibleIndex(accessibleIndex);
+  };
 
   const methods = useForm<IFamily>({
     defaultValues: {
@@ -36,14 +59,40 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
     console.log(data);
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const translateX = new Animated.Value(0);
+
+  const handleGestureEvent = Animated.event(
+    [{nativeEvent: {translationX: translateX}}],
+    {useNativeDriver: true},
+  );
+
+  const handleGestureStateChange = (event: any) => {
+    if (event.nativeEvent.state === State.END) {
+      const {translationX} = event.nativeEvent;
+
+      if (translationX < -50 && currentIndex < accessibleIndex) {
+        // ✅ 오른쪽 스와이프 → accessibleIndex까지만 이동 가능
+        setCurrentIndex(prev => prev + 1);
+      } else if (translationX > 50 && currentIndex > 0) {
+        // ✅ 왼쪽 스와이프 → 항상 허용
+        setCurrentIndex(prev => prev - 1);
+      }
+
+      // 애니메이션 초기화
+      Animated.spring(translateX, {
+        toValue: 0,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
 
   const renderStepComponent = () => {
     switch (currentIndex) {
       case 0:
         return (
           <OnboardingNameView
-            onNextPress={() => setCurrentIndex(prev => prev + 1)}
+            onCharacterTypeChange={handleCharacterTypeChange}
+            onAccessibleIndexChange={handleAccessibleIndexChange}
           />
         );
       case 1:
@@ -57,13 +106,8 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
         return (
           <CustomText>가족</CustomText>
           // <OnboardingFamilyView
-          //   onNext={() => setCurrentIndex(prev => prev + 1)}
+          //   onNext={methods.handleSubmit(handleSubmit)}
           // />
-        );
-      case 3:
-        return (
-          <CustomText>초대하기</CustomText>
-          // <OnboardingInviteView onNext={methods.handleSubmit(handleSubmit)} />
         );
       default:
         return null;
@@ -71,21 +115,52 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
   };
 
   return (
-    <FormProvider {...methods}>
-      <SafeAreaView style={styles.container}>
-        <StatusBar
-          translucent
-          backgroundColor="#f9ebe4"
-          barStyle="dark-content"
-        />
-        <PaginationHeader
-          currentIndex={currentIndex}
-          totalSteps={TOTAL_SETPS}
-          onBackPress={() => navigation.goBack()}
-        />
-        {renderStepComponent()}
-      </SafeAreaView>
-    </FormProvider>
+    <GestureHandlerRootView>
+      <FormProvider {...methods}>
+        <SafeAreaView style={styles.container}>
+          <StatusBar
+            translucent
+            backgroundColor="#f9ebe4"
+            barStyle="dark-content"
+          />
+          <PaginationHeader
+            currentIndex={currentIndex}
+            totalSteps={TOTAL_SETPS}
+            onBackPress={() => navigation.goBack()}
+          />
+          <Character type={characterType} />
+
+          <Pressable
+            onPress={() => setCurrentIndex(prev => prev + 1)}
+            disabled={isNextDisabled}
+            style={[
+              styles.nextButton,
+              {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
+              {backgroundColor: isNextDisabled ? '#939396' : '#222225'},
+            ]}>
+            <CustomText
+              weight="ExtraBold"
+              style={{
+                color: '#fff',
+                fontSize: 20,
+              }}>
+              다음으로
+            </CustomText>
+          </Pressable>
+
+          <PanGestureHandler
+            onGestureEvent={handleGestureEvent}
+            onHandlerStateChange={handleGestureStateChange}>
+            <Animated.View
+              style={{
+                transform: [{translateX}],
+              }}>
+              {renderStepComponent()}
+            </Animated.View>
+          </PanGestureHandler>
+        </SafeAreaView>
+      </FormProvider>
+    </GestureHandlerRootView>
   );
 };
 
@@ -105,6 +180,15 @@ const styles = StyleSheet.create({
     bottom: -430,
     alignItems: 'center',
     overflow: 'hidden',
+  },
+  nextButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 24,
   },
 });
 

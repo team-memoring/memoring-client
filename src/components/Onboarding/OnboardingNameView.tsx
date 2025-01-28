@@ -1,14 +1,18 @@
 import {Platform, Pressable, StyleSheet, View} from 'react-native';
 import CustomText from '../shared/CustomText';
-import Character from '../shared/Character';
+import {CharacterType} from '../shared/Character';
 import CustomInput from '../shared/CustomInput';
 import {useFormContext} from 'react-hook-form';
 
 interface OnboardingNameViewProps {
-  onNextPress: () => void;
+  onCharacterTypeChange: (type: CharacterType) => void;
+  onAccessibleIndexChange: (accessibleIndex: number) => void;
 }
 
-const OnboardingNameView = ({onNextPress}: OnboardingNameViewProps) => {
+const OnboardingNameView = ({
+  onCharacterTypeChange,
+  onAccessibleIndexChange,
+}: OnboardingNameViewProps) => {
   const {
     watch,
     setValue,
@@ -18,7 +22,6 @@ const OnboardingNameView = ({onNextPress}: OnboardingNameViewProps) => {
   } = useFormContext();
 
   const familyName = watch('familyName');
-  const isFamilyNameEmpty = familyName.trim() === '';
 
   const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ]+$/;
 
@@ -27,14 +30,20 @@ const OnboardingNameView = ({onNextPress}: OnboardingNameViewProps) => {
     setValue('familyName', text);
     if (text.trim() === '') {
       clearErrors('familyName');
+      onCharacterTypeChange('close');
+      onAccessibleIndexChange(0);
     } else if (!koreanRegex.test(text)) {
-      setError('familyName', {message: '한글만 입력 가능합니다.'});
+      setError('familyName', {
+        message: '최대 15자 / 공백, 영문, 숫자, 특수기호 불가',
+      });
+      onCharacterTypeChange('sad');
+      onAccessibleIndexChange(0);
     } else {
       clearErrors('familyName');
+      onCharacterTypeChange('close');
+      onAccessibleIndexChange(1);
     }
   };
-
-  const isNextDisabled = isFamilyNameEmpty || !!errors.familyName;
 
   return (
     <>
@@ -56,6 +65,7 @@ const OnboardingNameView = ({onNextPress}: OnboardingNameViewProps) => {
           <CustomInput
             placeholder="가족 이름을 입력해주세요"
             value={familyName}
+            error={!!errors.familyName}
             maxLength={15}
             onChangeText={handleChangeText}
           />
@@ -77,24 +87,6 @@ const OnboardingNameView = ({onNextPress}: OnboardingNameViewProps) => {
           </View>
         </View>
       </View>
-      <Character type="close" />
-      <Pressable
-        disabled={isNextDisabled}
-        onPress={onNextPress}
-        style={[
-          styles.nextButton,
-          {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
-          isNextDisabled && {backgroundColor: '#939396'},
-        ]}>
-        <CustomText
-          weight="ExtraBold"
-          style={{
-            color: '#fff',
-            fontSize: 20,
-          }}>
-          다음으로
-        </CustomText>
-      </Pressable>
     </>
   );
 };
@@ -103,16 +95,6 @@ const styles = StyleSheet.create({
   text: {
     alignItems: 'center',
     marginTop: 72,
-  },
-  nextButton: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    width: '100%',
-    backgroundColor: '#222225',
-    alignItems: 'center',
-    paddingTop: 24,
   },
   characterContainer: {
     position: 'absolute',
