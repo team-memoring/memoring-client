@@ -7,6 +7,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import LoginScreen from './src/screens/Login/LoginScreen';
 import SplashScreen from './src/screens/\bSplashScreen';
 import LoginSelectScreen from './src/screens/Login/LoginSelectScreen';
+import OnboardingCreateScreen from './src/screens/Onboarding/OnboardingCreateScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,14 @@ function App(): React.JSX.Element {
           <Stack.Screen
             name="LoginSelect"
             component={LoginSelectScreen}
+            options={{
+              headerShown: false,
+              animation: 'none',
+            }}
+          />
+          <Stack.Screen
+            name="OnboardingCreate"
+            component={OnboardingCreateScreen}
             options={{
               headerShown: false,
               animation: 'none',
