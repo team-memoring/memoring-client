@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from 'react';
 import {View, Animated, StyleSheet} from 'react-native';
 
-interface PaginationIndicatorProps {
+export interface PaginationIndicatorProps {
   currentIndex: number; // 현재 페이지 인덱스
   totalSteps: number; // 전체 페이지 수
 }
@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
   },
   bullet: {
     height: 8,
