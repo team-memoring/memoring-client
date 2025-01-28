@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {View, StyleSheet, StatusBar, Pressable, Animated} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import Character from '../../assets/icons/character.svg';
+import Character from '../../assets/icons/character_close_eye.svg';
 import CustomText from '../../components/shared/CustomText';
 import Header from '../../components/shared/Header';
 

@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomText from '../components/shared/CustomText';
 
 import Logo from '../assets/icons/logo.svg';
-import Character from '../assets/icons/character.svg';
+import Character from '../assets/icons/character_close_eye.svg';
 
 const SplashScreen = (): React.JSX.Element => {
   const animationValue = useRef(new Animated.Value(-550)).current;

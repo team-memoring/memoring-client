@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomText from '../../components/shared/CustomText';
 
 import Logo from '../../assets/icons/logo.svg';
-import Character from '../../assets/icons/character.svg';
+import Character from '../../assets/icons/character_close_eye.svg';
 import Kakao from '../../assets/icons/kakao.svg';
 import {fetchKakaoProfile, signInWithKakao} from '../../api/kakao';
 import {saveToken, saveUser} from '../../utils/storage';
@@ -64,7 +64,7 @@ const LoginScreen = (): React.JSX.Element => {
           <Kakao width={24} height={24} />
           <CustomText
             weight="ExtraBold"
-            style={{fontSize: 18, color: '#fff', marginLeft: 8}}>
+            style={{fontSize: 20, color: '#fff', marginLeft: 8}}>
             카카오로 로그인
           </CustomText>
         </Pressable>
@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   kakaoLoginButton: {
-    width: 360,
-    height: 52,
+    width: 361,
+    height: 56,
     backgroundColor: '#222225',
     borderRadius: 16,
     justifyContent: 'center',
