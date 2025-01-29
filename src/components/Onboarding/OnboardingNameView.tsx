@@ -96,14 +96,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 72,
   },
-  characterContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: -430,
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
   captionText: {
     fontSize: 16,
     color: '#AAAAAA',
