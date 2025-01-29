@@ -17,6 +17,7 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import Character, {CharacterType} from '../../components/shared/Character';
+import OnboardingHeroView from '../../components/Onboarding/OnboardingHeroView';
 
 const TOTAL_SETPS = 4;
 
@@ -69,10 +70,10 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
       const {translationX} = event.nativeEvent;
 
       if (translationX < -50 && currentIndex < accessibleIndex) {
-        // ✅ 오른쪽 스와이프 → accessibleIndex까지만 이동 가능
+        // 오른쪽 스와이프 → accessibleIndex까지만 이동 가능
         setCurrentIndex(prev => prev + 1);
       } else if (translationX > 50 && currentIndex > 0) {
-        // ✅ 왼쪽 스와이프 → 항상 허용
+        //  왼쪽 스와이프 → 항상 허용
         setCurrentIndex(prev => prev - 1);
       }
 
@@ -95,10 +96,10 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
         );
       case 1:
         return (
-          <CustomText>주인공</CustomText>
-          // <OnboardingHeroView
-          //   onNext={() => setCurrentIndex(prev => prev + 1)}
-          // />
+          <OnboardingHeroView
+            onCharacterTypeChange={handleCharacterTypeChange}
+            onAccessibleIndexChange={handleAccessibleIndexChange}
+          />
         );
       case 2:
         return (
