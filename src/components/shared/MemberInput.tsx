@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
-import {View, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
-import CustomText from './CustomText';
+import React from 'react';
+import {View, TextInput, StyleSheet} from 'react-native';
 
 import {FamilyRole, familyRoleMap} from '../../lib/model/i-family';
 
@@ -72,7 +71,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 50,
     paddingHorizontal: 24,
-    height: 56,
+    paddingVertical: 24,
+
     width: '100%',
     justifyContent: 'space-between',
   },
