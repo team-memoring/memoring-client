@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
 
 import ArrowDown from '../../assets/icons/arrow_down.svg';
 import ArrowUp from '../../assets/icons/arrow_up.svg';
@@ -47,12 +47,13 @@ const DropDownPicker: React.FC<DropDownPickerProps> = ({
 
       {isOpen && (
         <View style={styles.dropdown}>
-          <FlatList
-            data={items}
-            keyExtractor={item => item.value}
+          <ScrollView
+            nestedScrollEnabled={true}
+            style={{maxHeight: 200, overflow: 'visible'}}
             scrollIndicatorInsets={{top: 12, bottom: 12}}
-            renderItem={({item, index}) => (
-              <>
+            showsVerticalScrollIndicator={true}>
+            {items.map((item, index) => (
+              <View key={item.value}>
                 <TouchableOpacity
                   style={[
                     styles.dropdownItem,
@@ -73,9 +74,9 @@ const DropDownPicker: React.FC<DropDownPickerProps> = ({
                     <View style={styles.divider} />
                   </View>
                 )}
-              </>
-            )}
-          />
+              </View>
+            ))}
+          </ScrollView>
         </View>
       )}
     </View>

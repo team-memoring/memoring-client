@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, View} from 'react-native';
 import CustomText from '../shared/CustomText';
 
 import {useFormContext} from 'react-hook-form';
@@ -7,7 +7,6 @@ import {FamilyRole, IMember} from '../../lib/model/i-family';
 import {Key} from 'react';
 
 import Plus from '../../assets/icons/plus.svg';
-import {ScrollView} from 'react-native-gesture-handler';
 
 interface OnboardingFamilyViewProps {
   onAccessibleIndexChange: (accessibleIndex: number) => void;
@@ -25,13 +24,8 @@ const OnboardingFamilyView = ({
     setValue('hero.role', role);
   };
 
-  const handleHeroNameChange = (text: string) => {
-    setValue('hero.name', text);
-    if (text.trim() === '') {
-      onAccessibleIndexChange(1);
-    } else {
-      onAccessibleIndexChange(2);
-    }
+  const handleMemberRoleChange = (role: FamilyRole, index: number) => {
+    setValue(`members[${index}].role`, role);
   };
 
   const handleHeroNicknameChange = (text: string) => {
@@ -65,38 +59,36 @@ const OnboardingFamilyView = ({
           </CustomText>
         </View>
 
-        <ScrollView
+        <FlatList
           style={{
             width: '100%',
             paddingHorizontal: 16,
             marginTop: 36,
             maxHeight: 232,
-          }}>
-          {members.map((member: IMember, index: Key | null | undefined) => (
-            <View
-              style={{
-                marginBottom: index === members.length - 1 ? 0 : 12,
-              }}>
+          }}
+          data={members}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({item, index}) => (
+            <View style={{marginBottom: index === members.length - 1 ? 0 : 12}}>
               <MemberInput
-                key={index}
-                role={member.role}
-                onRoleChange={role => {
-                  setValue(`members[${index}].role`, role);
-                }}
-                name={member.name}
-                onNameChange={name => {
-                  setValue(`members[${index}].name`, name);
-                }}
-                nickname={member.nickname ?? ''}
-                onNicknameChange={nickname => {
-                  setValue(`members[${index}].nickname`, nickname);
-                }}
+                role={item.role}
+                onRoleChange={role => handleMemberRoleChange(role, index)}
+                name={item.name}
+                onNameChange={name => setValue(`members[${index}].name`, name)}
+                nickname={item.nickname ?? ''}
+                onNicknameChange={nickname =>
+                  setValue(`members[${index}].nickname`, nickname)
+                }
               />
             </View>
-          ))}
-        </ScrollView>
+          )}
+        />
+
         <View style={{width: '100%', marginTop: 12, paddingHorizontal: 16}}>
           <Pressable
+            style={({pressed}) => [
+              pressed && styles.addButtonPressed, // ✅ 눌렸을 때 스타일 추가
+            ]}
             onPress={() => {
               setValue('members', [
                 ...members,
@@ -108,15 +100,17 @@ const OnboardingFamilyView = ({
               ]);
             }}>
             <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingVertical: 24,
-                borderRadius: 50,
-                borderWidth: 1,
-                borderColor: '#CE5419',
-              }}>
+              style={[
+                {
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  paddingVertical: 24,
+                  borderRadius: 50,
+                  borderWidth: 1,
+                  borderColor: '#CE5419',
+                },
+              ]}>
               <Plus width={16} height={16} />
               <CustomText
                 weight="ExtraBold"
@@ -135,6 +129,9 @@ const styles = StyleSheet.create({
   text: {
     alignItems: 'center',
     marginTop: 72,
+  },
+  addButtonPressed: {
+    opacity: 0.5,
   },
 });
 
