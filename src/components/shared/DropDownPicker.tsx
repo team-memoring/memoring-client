@@ -107,7 +107,6 @@ const DropDownPicker: React.FC<DropDownPickerProps> = ({
                           styles.selectedItemStyle,
                       ]}
                       onPress={() => {
-                        console.log(item.value);
                         onValueChange(item.value);
                         setIsOpen(false);
                       }}>
