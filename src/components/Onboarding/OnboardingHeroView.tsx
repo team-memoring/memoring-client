@@ -1,18 +1,15 @@
 import {StyleSheet, View} from 'react-native';
 import CustomText from '../shared/CustomText';
-import {CharacterType} from '../shared/Character';
 
 import {useFormContext} from 'react-hook-form';
 import MemberInput from '../shared/MemberInput';
 import {FamilyRole} from '../../lib/model/i-family';
 
 interface OnboardingHeroViewProps {
-  onCharacterTypeChange: (type: CharacterType) => void;
   onAccessibleIndexChange: (accessibleIndex: number) => void;
 }
 
 const OnboardingHeroView = ({
-  onCharacterTypeChange,
   onAccessibleIndexChange,
 }: OnboardingHeroViewProps) => {
   const {watch, setValue} = useFormContext();
