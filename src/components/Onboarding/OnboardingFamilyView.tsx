@@ -7,6 +7,7 @@ import {FamilyRole, IMember} from '../../lib/model/i-family';
 import {Key} from 'react';
 
 import Plus from '../../assets/icons/plus.svg';
+import {ScrollView} from 'react-native-gesture-handler';
 
 interface OnboardingFamilyViewProps {
   onAccessibleIndexChange: (accessibleIndex: number) => void;
@@ -64,11 +65,17 @@ const OnboardingFamilyView = ({
           </CustomText>
         </View>
 
-        <View style={{width: '100%', paddingHorizontal: 16, marginTop: 36}}>
+        <ScrollView
+          style={{
+            width: '100%',
+            paddingHorizontal: 16,
+            marginTop: 36,
+            maxHeight: 232,
+          }}>
           {members.map((member: IMember, index: Key | null | undefined) => (
             <View
               style={{
-                marginBottom: 12,
+                marginBottom: index === members.length - 1 ? 0 : 12,
               }}>
               <MemberInput
                 key={index}
@@ -87,8 +94,8 @@ const OnboardingFamilyView = ({
               />
             </View>
           ))}
-        </View>
-        <View style={{width: '100%', paddingHorizontal: 16, marginTop: 36}}>
+        </ScrollView>
+        <View style={{width: '100%', marginTop: 12, paddingHorizontal: 16}}>
           <Pressable
             onPress={() => {
               setValue('members', [
