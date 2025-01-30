@@ -2,7 +2,9 @@ import React, {useState} from 'react';
 import {View, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import CustomText from './CustomText';
 
-import {FamilyRole} from '../../lib/model/i-family';
+import {FamilyRole, familyRoleMap} from '../../lib/model/i-family';
+
+import DropDownPicker from './DropDownPicker';
 
 interface MemberInputProps {
   role: string;
@@ -21,22 +23,20 @@ const MemberInput: React.FC<MemberInputProps> = ({
   nickname,
   onNicknameChange,
 }) => {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const roles = Object.entries(familyRoleMap).map(([key, value]) => ({
+    label: value,
+    value: key as FamilyRole,
+  }));
 
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity
-        style={styles.dropdown}
-        onPress={() => setDropdownOpen(!isDropdownOpen)}>
-        <CustomText weight="Bold" style={styles.roleText}>
-          {role}
-        </CustomText>
-        <Ionicons
-          name={isDropdownOpen ? 'chevron-up' : 'chevron-down'}
-          size={16}
-          color="#A34D2A"
+      <View style={styles.dropdownContainer}>
+        <DropDownPicker
+          items={roles}
+          selectedValue={role}
+          onValueChange={value => onRoleChange(value as FamilyRole)}
         />
-      </TouchableOpacity> */}
+      </View>
 
       {/* Divider */}
       <View style={styles.divider} />
@@ -71,10 +71,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 50,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
     height: 56,
     width: '100%',
     justifyContent: 'space-between',
+  },
+  dropdownContainer: {
+    flex: 1,
   },
   divider: {
     width: 1,
@@ -84,18 +87,15 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     color: '#222225',
     fontFamily: 'NanumGothicBold',
   },
-  picker: {
-    position: 'absolute',
-    top: 50,
-    left: 0,
-    right: 0,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    zIndex: 10,
+  roleText: {
+    fontSize: 18,
+    color: '#CE5419',
+    fontFamily: 'NanumGothicBold',
+    minWidth: 66,
   },
 });
 

@@ -15,7 +15,7 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="OnboardingCreate">
           <Stack.Screen
             name="Splash"
             component={SplashScreen}

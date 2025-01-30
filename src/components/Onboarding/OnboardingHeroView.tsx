@@ -1,9 +1,10 @@
-import {Platform, Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import CustomText from '../shared/CustomText';
 import {CharacterType} from '../shared/Character';
-import CustomInput from '../shared/CustomInput';
+
 import {useFormContext} from 'react-hook-form';
 import MemberInput from '../shared/MemberInput';
+import {FamilyRole} from '../../lib/model/i-family';
 
 interface OnboardingHeroViewProps {
   onCharacterTypeChange: (type: CharacterType) => void;
@@ -14,19 +15,16 @@ const OnboardingHeroView = ({
   onCharacterTypeChange,
   onAccessibleIndexChange,
 }: OnboardingHeroViewProps) => {
-  const {
-    watch,
-    setValue,
-    setError,
-    clearErrors,
-    formState: {errors},
-  } = useFormContext();
+  const {watch, setValue} = useFormContext();
 
   const familyName = watch('familyName');
+  const heroRole = watch('hero.role');
   const heroName = watch('hero.name');
   const heroNickname = watch('hero.nickname');
 
-  const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ]+$/;
+  const handleHeroRoleChange = (role: FamilyRole) => {
+    setValue('hero.role', role);
+  };
 
   const handleHeroNameChange = (text: string) => {
     setValue('hero.name', text);
@@ -70,8 +68,8 @@ const OnboardingHeroView = ({
 
         <View style={{width: '100%', paddingHorizontal: 16, marginTop: 36}}>
           <MemberInput
-            role="grandfather"
-            onRoleChange={() => {}}
+            role={heroRole}
+            onRoleChange={handleHeroRoleChange}
             name={heroName}
             onNameChange={handleHeroNameChange}
             nickname={heroNickname}
