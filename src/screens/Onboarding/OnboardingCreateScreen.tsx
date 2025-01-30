@@ -1,23 +1,25 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, StatusBar, Animated, Platform, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-
-import PaginationHeader from '../../components/shared/PaginationHeader';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import OnboardingNameView from '../../components/Onboarding/OnboardingNameView';
 
 import {FormProvider, useForm} from 'react-hook-form';
 import {IFamily} from '../../lib/model/i-family';
-import CustomText from '../../components/shared/CustomText';
+
 import {
   GestureHandlerRootView,
   PanGestureHandler,
   Pressable,
   State,
 } from 'react-native-gesture-handler';
-import Character, {CharacterType} from '../../components/shared/Character';
+
+import OnboardingNameView from '../../components/Onboarding/OnboardingNameView';
 import OnboardingHeroView from '../../components/Onboarding/OnboardingHeroView';
+import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyView';
+
+import {Character, CustomText, PaginationHeader} from '../../components/shared';
+import {CharacterType} from '../../components/shared/Character';
 
 const TOTAL_SETPS = 4;
 
@@ -42,13 +44,13 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
     defaultValues: {
       familyName: '',
       hero: {
-        name: '',
         role: 'grandfather',
+        name: '',
       },
       members: [
         {
-          name: '',
           role: 'father',
+          name: '',
         },
       ],
     },
@@ -85,6 +87,15 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
     }
   };
 
+  const animatedTranslateY = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.spring(animatedTranslateY, {
+      toValue: currentIndex === 2 ? 120 : 0,
+      useNativeDriver: true,
+    }).start();
+  }, [currentIndex]);
+
   const renderStepComponent = () => {
     switch (currentIndex) {
       case 0:
@@ -97,16 +108,14 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
       case 1:
         return (
           <OnboardingHeroView
-            onCharacterTypeChange={handleCharacterTypeChange}
             onAccessibleIndexChange={handleAccessibleIndexChange}
           />
         );
       case 2:
         return (
-          <CustomText>가족</CustomText>
-          // <OnboardingFamilyView
-          //   onNext={methods.handleSubmit(handleSubmit)}
-          // />
+          <OnboardingFamilyView
+            onAccessibleIndexChange={handleAccessibleIndexChange}
+          />
         );
       default:
         return null;
@@ -126,8 +135,16 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
             currentIndex={currentIndex}
             totalSteps={TOTAL_SETPS}
             onBackPress={() => navigation.goBack()}
+            onJumpPress={
+              currentIndex === 2
+                ? methods.handleSubmit(handleSubmit)
+                : undefined
+            }
           />
-          <Character type={characterType} />
+          <Character
+            type={characterType}
+            animatedTransformValue={animatedTranslateY}
+          />
           <View
             style={[
               styles.nextButtonWrapper,
