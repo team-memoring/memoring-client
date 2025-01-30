@@ -4,15 +4,18 @@ import PaginationIndicator, {
 } from './PaginationIndicator';
 
 import BackArrow from '../../assets/icons/back_arrow.svg';
+import {CustomText} from '.';
 
 interface PaginationHeaderProps extends PaginationIndicatorProps {
   onBackPress: () => void;
+  onJumpPress?: () => void;
 }
 
 const PaginationHeader = ({
   currentIndex,
   totalSteps,
   onBackPress,
+  onJumpPress,
 }: PaginationHeaderProps) => {
   return (
     <View style={styles.header}>
@@ -23,6 +26,13 @@ const PaginationHeader = ({
         currentIndex={currentIndex}
         totalSteps={totalSteps}
       />
+      {onJumpPress && (
+        <Pressable style={styles.jumpButtonContainer} onPress={onJumpPress}>
+          <CustomText weight="ExtraBold" style={styles.jumpButton}>
+            건너뛰기
+          </CustomText>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -46,6 +56,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
+  },
+  jumpButtonContainer: {
+    position: 'absolute',
+    right: 16,
+    top: '50%',
+    height: 40,
+    transform: [{translateY: -20}],
+    justifyContent: 'center',
+  },
+  jumpButton: {
+    fontSize: 16,
+    color: '#77777A',
   },
 });
 
