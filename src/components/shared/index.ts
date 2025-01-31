@@ -1,4 +1,5 @@
 export {default as Character} from './Character';
+export {default as CodeInput} from './CodeInput';
 export {default as CustomInput} from './CustomInput';
 export {default as CustomText} from './CustomText';
 export {default as DropDownPicker} from './DropDownPicker';
