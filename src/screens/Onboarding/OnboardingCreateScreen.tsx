@@ -20,6 +20,7 @@ import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyVi
 
 import {Character, CustomText, PaginationHeader} from '../../components/shared';
 import {CharacterType} from '../../components/shared/Character';
+import OnboardingInviteView from '../../components/Onboarding/OnboardingInviteView';
 
 const TOTAL_SETPS = 4;
 
@@ -40,6 +41,34 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
     setAccessibleIndex(accessibleIndex);
   };
 
+  const handleSubmit = (data: IFamily) => {
+    // TODO: API 호출 처리
+    console.log(data);
+  };
+
+  const handleNextPress = () => {
+    if (currentIndex !== 2) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      methods.handleSubmit(
+        data => {
+          handleSubmit(data);
+        },
+        errors => {
+          // TODO: 에러 처리
+          console.log('❌ Form validation failed!', errors);
+        },
+      )();
+
+      setCurrentIndex(prev => prev + 1);
+    }
+  };
+
+  const handleJumpPress = () => {
+    methods.setValue('members', []);
+    methods.handleSubmit(handleSubmit);
+  };
+
   const methods = useForm<IFamily>({
     defaultValues: {
       familyName: '',
@@ -49,16 +78,12 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
       },
       members: [
         {
-          role: 'father',
+          role: 'relative',
           name: '',
         },
       ],
     },
   });
-
-  const handleSubmit = (data: IFamily) => {
-    console.log(data);
-  };
 
   const translateX = new Animated.Value(0);
 
@@ -117,6 +142,13 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
             onAccessibleIndexChange={handleAccessibleIndexChange}
           />
         );
+
+      case 3:
+        return (
+          <OnboardingInviteView
+            onAccessibleIndexChange={handleAccessibleIndexChange}
+          />
+        );
       default:
         return null;
     }
@@ -135,11 +167,7 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
             currentIndex={currentIndex}
             totalSteps={TOTAL_SETPS}
             onBackPress={() => navigation.goBack()}
-            onJumpPress={
-              currentIndex === 2
-                ? methods.handleSubmit(handleSubmit)
-                : undefined
-            }
+            onJumpPress={currentIndex === 2 ? handleJumpPress : undefined}
           />
           <Character
             type={characterType}
@@ -151,7 +179,7 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
               {backgroundColor: isNextDisabled ? '#939396' : '#222225'},
             ]}>
             <Pressable
-              onPress={() => setCurrentIndex(prev => prev + 1)}
+              onPress={handleNextPress}
               disabled={isNextDisabled}
               style={[
                 styles.nextButton,

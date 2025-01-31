@@ -4,7 +4,7 @@ import CustomText from '../shared/CustomText';
 import {useFormContext} from 'react-hook-form';
 import MemberInput from '../shared/MemberInput';
 import {FamilyRole, IMember} from '../../lib/model/i-family';
-import {Key} from 'react';
+import {Key, useEffect} from 'react';
 
 import Plus from '../../assets/icons/plus.svg';
 
@@ -20,17 +20,31 @@ const OnboardingFamilyView = ({
   const familyName = watch('familyName');
   const members = watch('members');
 
-  const handleHeroRoleChange = (role: FamilyRole) => {
-    setValue('hero.role', role);
-  };
-
   const handleMemberRoleChange = (role: FamilyRole, index: number) => {
-    setValue(`members[${index}].role`, role);
+    setValue(`members.${index}.role`, role);
   };
 
-  const handleHeroNicknameChange = (text: string) => {
-    setValue('hero.nickname', text);
+  const handleMemberNameChange = (text: string, index: number) => {
+    setValue(`members.${index}.name`, text);
   };
+
+  const handleMemberNicknameChange = (text: string, index: number) => {
+    setValue(`members.${index}.nickname`, text);
+  };
+
+  useEffect(() => {
+    if (members.length > 1) {
+      const isAllFilled = members.every(
+        (member: IMember) => member.name.trim() !== '',
+      );
+
+      if (isAllFilled) {
+        onAccessibleIndexChange(3);
+      } else {
+        onAccessibleIndexChange(2);
+      }
+    }
+  }, [members, onAccessibleIndexChange]);
 
   return (
     <>
@@ -74,10 +88,10 @@ const OnboardingFamilyView = ({
                 role={item.role}
                 onRoleChange={role => handleMemberRoleChange(role, index)}
                 name={item.name}
-                onNameChange={name => setValue(`members[${index}].name`, name)}
+                onNameChange={name => handleMemberNameChange(name, index)}
                 nickname={item.nickname ?? ''}
                 onNicknameChange={nickname =>
-                  setValue(`members[${index}].nickname`, nickname)
+                  handleMemberNicknameChange(nickname, index)
                 }
               />
             </View>
