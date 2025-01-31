@@ -21,7 +21,7 @@ import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyVi
 import {Character, CustomText, PaginationHeader} from '../../components/shared';
 import {CharacterType} from '../../components/shared/Character';
 
-const TOTAL_SETPS = 4;
+const TOTAL_SETPS = 3;
 
 const OnboardingCreateScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -64,7 +64,15 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
 
   const handleJumpPress = () => {
     methods.setValue('members', []);
-    methods.handleSubmit(handleSubmit);
+    methods.handleSubmit(
+      data => {
+        handleSubmit(data);
+      },
+      errors => {
+        // TODO: 에러 처리
+        console.log('Form validation failed!', errors);
+      },
+    )();
   };
 
   const methods = useForm<IFamily>({

@@ -9,6 +9,7 @@ import SplashScreen from './src/screens/\bSplashScreen';
 import LoginSelectScreen from './src/screens/Login/LoginSelectScreen';
 import OnboardingCreateScreen from './src/screens/Onboarding/OnboardingCreateScreen';
 import {PortalProvider} from '@gorhom/portal';
+import OnboardingInviteScreen from './src/screens/Onboarding/OnboardingInviteScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,14 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="OnboardingCreate"
               component={OnboardingCreateScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="OnboardingInvite"
+              component={OnboardingInviteScreen}
               options={{
                 headerShown: false,
                 animation: 'none',
