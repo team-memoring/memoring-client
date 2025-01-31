@@ -1,9 +1,21 @@
 import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import Share from 'react-native-share';
 
 const OnboardingInviteScreen = () => {
   const familyName = '테스트';
+
+  const shareMessage = async (code: string) => {
+    try {
+      await Share.open({
+        message: `가족 공간 초대 코드: ${code}\n아래 링크에서 가입하세요!`,
+        url: `memoring://invite/family?code=${code}`,
+      });
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,7 +87,9 @@ const OnboardingInviteScreen = () => {
                 145286
               </CustomText>
             </View>
-            <Pressable style={styles.shareButton} onPress={() => true}>
+            <Pressable
+              style={styles.shareButton}
+              onPress={() => shareMessage('145286')}>
               <CustomText
                 weight="ExtraBold"
                 style={{fontSize: 16, color: '#555558'}}>
@@ -93,7 +107,9 @@ const OnboardingInviteScreen = () => {
                 663258
               </CustomText>
             </View>
-            <Pressable style={styles.shareButton} onPress={() => true}>
+            <Pressable
+              style={styles.shareButton}
+              onPress={() => shareMessage('663258')}>
               <CustomText
                 weight="ExtraBold"
                 style={{fontSize: 16, color: '#555558'}}>
