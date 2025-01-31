@@ -20,7 +20,6 @@ import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyVi
 
 import {Character, CustomText, PaginationHeader} from '../../components/shared';
 import {CharacterType} from '../../components/shared/Character';
-import OnboardingInviteView from '../../components/Onboarding/OnboardingInviteView';
 
 const TOTAL_SETPS = 4;
 
@@ -44,6 +43,7 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
   const handleSubmit = (data: IFamily) => {
     // TODO: API 호출 처리
     console.log(data);
+    navigation.navigate('OnboardingInvite');
   };
 
   const handleNextPress = () => {
@@ -56,11 +56,9 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
         },
         errors => {
           // TODO: 에러 처리
-          console.log('❌ Form validation failed!', errors);
+          console.log('Form validation failed!', errors);
         },
       )();
-
-      setCurrentIndex(prev => prev + 1);
     }
   };
 
@@ -143,12 +141,6 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
           />
         );
 
-      case 3:
-        return (
-          <OnboardingInviteView
-            onAccessibleIndexChange={handleAccessibleIndexChange}
-          />
-        );
       default:
         return null;
     }
