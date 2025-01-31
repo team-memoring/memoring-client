@@ -1,4 +1,4 @@
-import {Platform, Pressable, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import CustomText from '../shared/CustomText';
 import {CharacterType} from '../shared/Character';
 import CustomInput from '../shared/CustomInput';
