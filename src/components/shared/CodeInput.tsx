@@ -1,13 +1,19 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {TextInput, View, StyleSheet} from 'react-native';
 
 interface CodeInputProps {
+  code: string[];
+  setCode: (code: string[]) => void;
   codeLength?: number;
-  isError: boolean;
+  isError?: boolean;
 }
 
-const CodeInput = ({codeLength = 6, isError = false}: CodeInputProps) => {
-  const [code, setCode] = useState<string[]>(Array(codeLength).fill(''));
+const CodeInput = ({
+  code,
+  setCode,
+  codeLength = 6,
+  isError = false,
+}: CodeInputProps) => {
   const inputs = useRef<TextInput[]>([]);
 
   const handleChange = (text: string, index: number) => {
