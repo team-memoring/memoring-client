@@ -33,7 +33,7 @@ const OnboardingFamilyView = ({
   };
 
   useEffect(() => {
-    if (members.length > 1) {
+    if (members.length >= 1) {
       const isAllFilled = members.every(
         (member: IMember) => member.name.trim() !== '',
       );

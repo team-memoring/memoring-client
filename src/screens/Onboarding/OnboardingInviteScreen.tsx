@@ -18,6 +18,10 @@ const OnboardingInviteScreen = () => {
     }
   };
 
+  const handleStart = () => {
+    // TODO: Navigation 처리
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -26,26 +30,6 @@ const OnboardingInviteScreen = () => {
         barStyle="dark-content"
       />
       <Header />
-      <Character type="close" bottom={-550} />
-      <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
-        <Pressable
-          onPress={() => true}
-          style={[
-            styles.nextButton,
-            {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
-            {backgroundColor: '#222225'},
-          ]}>
-          <CustomText
-            weight="ExtraBold"
-            style={{
-              color: '#fff',
-              fontSize: 20,
-            }}>
-            시작하기
-          </CustomText>
-        </Pressable>
-      </View>
-
       <View>
         <View style={styles.text}>
           <View
@@ -119,6 +103,25 @@ const OnboardingInviteScreen = () => {
             </Pressable>
           </View>
         </View>
+      </View>
+      <Character type="close" bottom={-550} />
+      <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
+        <Pressable
+          onPress={handleStart}
+          style={[
+            styles.nextButton,
+            {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
+            {backgroundColor: '#222225'},
+          ]}>
+          <CustomText
+            weight="ExtraBold"
+            style={{
+              color: '#fff',
+              fontSize: 20,
+            }}>
+            시작하기
+          </CustomText>
+        </Pressable>
       </View>
     </SafeAreaView>
   );

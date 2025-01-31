@@ -84,7 +84,7 @@ const LoginSelectScreen = (): React.JSX.Element => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              // navigation.navigate('CodeInput');
+              navigation.navigate('OnboardingCode');
             }}>
             <Codes width={24} height={24} />
             <CustomText
