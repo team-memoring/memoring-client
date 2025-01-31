@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingHorizontal: 24,
     paddingVertical: 24,
-
     width: '100%',
     justifyContent: 'space-between',
   },
@@ -90,6 +89,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#222225',
     fontFamily: 'NanumGothicBold',
+    paddingVertical: 0,
+    textAlignVertical: 'center',
   },
   roleText: {
     fontSize: 18,
