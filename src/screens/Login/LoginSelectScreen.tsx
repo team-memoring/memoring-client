@@ -64,7 +64,7 @@ const LoginSelectScreen = (): React.JSX.Element => {
         </View>
         <View style={[styles.buttonContainer]}>
           <Pressable
-            style={[styles.button]}
+            style={styles.button}
             onPress={() => {
               navigation.navigate('OnboardingCreate');
             }}>
@@ -82,7 +82,7 @@ const LoginSelectScreen = (): React.JSX.Element => {
           </Pressable>
           <View style={styles.spacer} />
           <Pressable
-            style={[styles.button]}
+            style={styles.button}
             onPress={() => {
               // navigation.navigate('CodeInput');
             }}>
