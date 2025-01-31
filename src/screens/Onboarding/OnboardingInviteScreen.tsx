@@ -4,6 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Share from 'react-native-share';
 
 const OnboardingInviteScreen = () => {
+  // TODO: change to api call
   const familyName = '테스트';
 
   const shareMessage = async (code: string) => {
