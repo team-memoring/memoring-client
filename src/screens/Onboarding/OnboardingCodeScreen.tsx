@@ -3,6 +3,8 @@ import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CodeInput from '../../components/shared/CodeInput';
 import {useEffect, useState} from 'react';
+import {CharacterType} from '../../components/shared/Character';
+import {set} from 'react-hook-form';
 
 const OnboardingCodeScreen = () => {
   const [code, setCode] = useState<string[]>(Array(6).fill(''));
@@ -10,6 +12,8 @@ const OnboardingCodeScreen = () => {
   const [errorText, setErrorText] = useState('');
 
   const [isNextDisabled, setIsNextDisabled] = useState(true);
+
+  const [characterType, setCharacterType] = useState<CharacterType>('close');
 
   const handleSubmit = () => {
     //TODO: API call 처리 (ex. 존재하지 않는 코드)
@@ -30,7 +34,19 @@ const OnboardingCodeScreen = () => {
     } else {
       setIsNextDisabled(true);
     }
+
+    setIsError(false);
   }, [code]);
+
+  useEffect(() => {
+    if (isError) {
+      setCharacterType('sad');
+    } else if (!isNextDisabled) {
+      setCharacterType('close');
+    } else {
+      setCharacterType('open');
+    }
+  }, [isError, isNextDisabled]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,7 +82,7 @@ const OnboardingCodeScreen = () => {
           <CodeInput code={code} setCode={setCode} isError={isError} />
         </View>
       </View>
-      <Character type="close" bottom={-550} />
+      <Character type={characterType} />
       <View
         style={[
           styles.nextButtonWrapper,
