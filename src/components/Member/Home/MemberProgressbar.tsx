@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {View, Animated, StyleSheet} from 'react-native';
+import {View, Animated, StyleSheet, Easing} from 'react-native';
 import {MEMBER_HOME_DURATION} from '../../../screens/Member/MemberHomeScreen';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -37,6 +37,7 @@ const MemberProgressBar = ({progress, height = 72}: MemberProgressBarProps) => {
   useEffect(() => {
     Animated.timing(animatedProgress, {
       toValue: progress,
+      easing: Easing.out(Easing.exp),
       duration: MEMBER_HOME_DURATION,
       useNativeDriver: false,
     }).start();

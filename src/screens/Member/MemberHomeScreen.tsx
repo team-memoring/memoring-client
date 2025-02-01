@@ -1,12 +1,14 @@
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 import {CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useEffect, useState} from 'react';
 import {getUser} from '../../utils/storage';
 import MemberAnalysisCard from '../../components/Member/Home/MemberAnalysisCard';
 import MemberQuizProgressCard from '../../components/Member/Home/MemberQuizProgressCard';
+import {memberHomeMemoryDummy} from '../../lib/dummy';
+import MemberQuizCard from '../../components/Member/Home/MemberQuizCard';
 
-export const MEMBER_HOME_DURATION = 1200;
+export const MEMBER_HOME_DURATION = 2000;
 
 // TODO: match with the actual backend response
 export type tempTrend = 'up' | 'down' | 'stable';
@@ -59,6 +61,22 @@ const MemberHomeScreen = () => {
       <View style={[styles.itemContainer]}>
         <MemberQuizProgressCard percentage={60} />
       </View>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+        <View style={styles.cardContainer}>
+          {memberHomeMemoryDummy.map((memory, index) => (
+            <MemberQuizCard
+              key={index}
+              title={memory.title}
+              createdAt={memory.createdAt}
+              totalQuizCount={memory.totalQuizCount}
+              solvedQuizCount={memory.solvedQuizCount}
+              creator={memory.creator}
+              status={memory.status}
+              onPress={() => true}
+            />
+          ))}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -71,6 +89,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     width: '100%',
     paddingBottom: 12,
+  },
+  cardContainer: {
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    gap: 12,
   },
 });
 
