@@ -10,11 +10,15 @@
 		0C80B921A6F3F58F76C31292 /* libPods-MemoringClient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-MemoringClient.a */; };
 		11591811B6814BEC9BB5847D /* NanumSquareRoundR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5683788265F940669D39E6F5 /* NanumSquareRoundR.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		26458B74AD18411DBAE9E33B /* NanumGothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 19D32918C6064FE091450601 /* NanumGothic.ttf */; };
 		3A78B0162D4481FB00804EE6 /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A78B0152D4481FB00804EE6 /* SwiftBridge.swift */; };
+		48B445A14BA9421DB57886BD /* NanumGothicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4A6EA9C1CE846E1ADA2B203 /* NanumGothicExtraBold.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
+		7869F0C3B5AE4F539A5E5B37 /* NanumGothicLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C358D55CD604883A271C921 /* NanumGothicLight.ttf */; };
 		7B54D79CB22F4AE283160282 /* NanumSquareRoundL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B683B38735D04228913148BC /* NanumSquareRoundL.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C5AF234D0E6947B2A9B36A4E /* NanumSquareRoundB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4D45FAABF4346708D899839 /* NanumSquareRoundB.ttf */; };
+		C784EA2529F34F509599DE21 /* NanumGothicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EE0AD5EBE87941368E3FFE37 /* NanumGothicBold.ttf */; };
 		CC6E9E572EA847B8984DFDC9 /* NanumSquareRoundEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 926E172BEE694B0B87A53B63 /* NanumSquareRoundEB.ttf */; };
 		F78CA63B5696AEADAC4165A3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
@@ -24,6 +28,7 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MemoringClient/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MemoringClient/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = MemoringClient/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		19D32918C6064FE091450601 /* NanumGothic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothic.ttf; path = ../src/assets/fonts/NanumGothic.ttf; sourceTree = "<group>"; };
 		3A78B0142D44770500804EE6 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		3A78B0152D4481FB00804EE6 /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-MemoringClient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MemoringClient.debug.xcconfig"; path = "Target Support Files/Pods-MemoringClient/Pods-MemoringClient.debug.xcconfig"; sourceTree = "<group>"; };
@@ -32,10 +37,13 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-MemoringClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MemoringClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MemoringClient/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MemoringClient/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8C358D55CD604883A271C921 /* NanumGothicLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothicLight.ttf; path = ../src/assets/fonts/NanumGothicLight.ttf; sourceTree = "<group>"; };
 		926E172BEE694B0B87A53B63 /* NanumSquareRoundEB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundEB.ttf; path = ../src/assets/fonts/NanumSquareRoundEB.ttf; sourceTree = "<group>"; };
+		B4A6EA9C1CE846E1ADA2B203 /* NanumGothicExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothicExtraBold.ttf; path = ../src/assets/fonts/NanumGothicExtraBold.ttf; sourceTree = "<group>"; };
 		B683B38735D04228913148BC /* NanumSquareRoundL.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundL.ttf; path = ../src/assets/fonts/NanumSquareRoundL.ttf; sourceTree = "<group>"; };
 		D4D45FAABF4346708D899839 /* NanumSquareRoundB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundB.ttf; path = ../src/assets/fonts/NanumSquareRoundB.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EE0AD5EBE87941368E3FFE37 /* NanumGothicBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = NanumGothicBold.ttf; path = ../src/assets/fonts/NanumGothicBold.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +86,10 @@
 				926E172BEE694B0B87A53B63 /* NanumSquareRoundEB.ttf */,
 				B683B38735D04228913148BC /* NanumSquareRoundL.ttf */,
 				5683788265F940669D39E6F5 /* NanumSquareRoundR.ttf */,
+				19D32918C6064FE091450601 /* NanumGothic.ttf */,
+				EE0AD5EBE87941368E3FFE37 /* NanumGothicBold.ttf */,
+				B4A6EA9C1CE846E1ADA2B203 /* NanumGothicExtraBold.ttf */,
+				8C358D55CD604883A271C921 /* NanumGothicLight.ttf */,
 			);
 			name = Resources;
 			path = "";
@@ -191,6 +203,10 @@
 				CC6E9E572EA847B8984DFDC9 /* NanumSquareRoundEB.ttf in Resources */,
 				7B54D79CB22F4AE283160282 /* NanumSquareRoundL.ttf in Resources */,
 				11591811B6814BEC9BB5847D /* NanumSquareRoundR.ttf in Resources */,
+				26458B74AD18411DBAE9E33B /* NanumGothic.ttf in Resources */,
+				C784EA2529F34F509599DE21 /* NanumGothicBold.ttf in Resources */,
+				48B445A14BA9421DB57886BD /* NanumGothicExtraBold.ttf in Resources */,
+				7869F0C3B5AE4F539A5E5B37 /* NanumGothicLight.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
