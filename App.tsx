@@ -12,6 +12,7 @@ import {PortalProvider} from '@gorhom/portal';
 import OnboardingInviteScreen from './src/screens/Onboarding/OnboardingInviteScreen';
 import {Linking} from 'react-native';
 import OnboardingCodeScreen from './src/screens/Onboarding/OnboardingCodeScreen';
+import MemberHomeScreen from './src/screens/Member/MemberHomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,7 +44,8 @@ function App(): React.JSX.Element {
     <PortalProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator initialRouteName="MemberHome">
+            {/* Login */}
             <Stack.Screen
               name="Splash"
               component={SplashScreen}
@@ -68,6 +70,7 @@ function App(): React.JSX.Element {
                 animation: 'none',
               }}
             />
+            {/* Onboarding */}
             <Stack.Screen
               name="OnboardingCreate"
               component={OnboardingCreateScreen}
@@ -87,6 +90,16 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="OnboardingCode"
               component={OnboardingCodeScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+
+            {/* Member */}
+            <Stack.Screen
+              name="MemberHome"
+              component={MemberHomeScreen}
               options={{
                 headerShown: false,
                 animation: 'none',
