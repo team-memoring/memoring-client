@@ -3,12 +3,16 @@ import {CustomText} from '../../shared';
 import MemberProgressBar from './MemberProgressbar';
 import {useEffect, useRef, useState} from 'react';
 import {MEMBER_HOME_DURATION} from '../../../screens/Member/MemberHomeScreen';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 interface MemberQuizProgressCardProps {
   percentage: number;
 }
 
 const MemberQuizProgressCard = ({percentage}: MemberQuizProgressCardProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const animatedPercentage = useRef(new Animated.Value(0)).current;
 
   const [displayPercentage, setDisplayPercentage] = useState(0);
@@ -89,7 +93,8 @@ const MemberQuizProgressCard = ({percentage}: MemberQuizProgressCardProps) => {
             borderRadius: 60,
             justifyContent: 'center',
             alignItems: 'center',
-          }}>
+          }}
+          onPress={() => navigation.navigate('MemberRegister')}>
           <CustomText
             weight="ExtraBold"
             style={{
