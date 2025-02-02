@@ -146,10 +146,12 @@ const MemberRegisterScreen = (): React.JSX.Element => {
             totalSteps={TOTAL_SETPS}
             onBackPress={() => navigation.goBack()}
           />
-          <Character
-            type={characterType}
-            animatedTransformValue={animatedTranslateY}
-          />
+          {currentIndex < TOTAL_SETPS - 1 && (
+            <Character
+              type={characterType}
+              animatedTransformValue={animatedTranslateY}
+            />
+          )}
 
           <View
             style={[
