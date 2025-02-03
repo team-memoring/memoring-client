@@ -18,6 +18,7 @@ import {CharacterType} from '../../components/shared/Character';
 import MemberMemoryNameView from '../../components/Member/Register/MemberMemoryNameView';
 import {IMemoryRegister} from '../../lib/model/i-memory';
 import MemberMemoryRoleView from '../../components/Member/Register/MemberMemoryRoleView';
+import MemberMemoryWriteView from '../../components/Member/Register/MemberMemoryWriteView';
 
 const TOTAL_SETPS = 3;
 
@@ -29,6 +30,8 @@ const MemberRegisterScreen = (): React.JSX.Element => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [accessibleIndex, setAccessibleIndex] = useState(0);
   const isNextDisabled = !(currentIndex < accessibleIndex);
+
+  const [memoryIndex, setMemoryIndex] = useState(0);
 
   const animatedTranslateY = useRef(new Animated.Value(0)).current;
 
@@ -45,6 +48,10 @@ const MemberRegisterScreen = (): React.JSX.Element => {
 
   const handleAccessibleIndexChange = (accessibleIndex: number) => {
     setAccessibleIndex(accessibleIndex);
+  };
+
+  const handleMemoryIndexChange = (memoryIndex: number) => {
+    setMemoryIndex(memoryIndex);
   };
 
   const handleSubmit = (data: IMemoryRegister) => {
@@ -73,7 +80,11 @@ const MemberRegisterScreen = (): React.JSX.Element => {
     defaultValues: {
       title: '',
       roles: [],
-      events: [],
+      events: Array(3).fill({
+        date: null, // 초기값을 null로 설정
+        images: [],
+        description: '',
+      }),
     },
   });
 
@@ -121,10 +132,9 @@ const MemberRegisterScreen = (): React.JSX.Element => {
         );
       case 2:
         return (
-          <CustomText>추억 작성</CustomText>
-          //   <OnboardingFamilyView
-          //     onAccessibleIndexChange={handleAccessibleIndexChange}
-          //   />
+          <MemberMemoryWriteView
+            onMemoryIndexChange={handleMemoryIndexChange}
+          />
         );
 
       default:
