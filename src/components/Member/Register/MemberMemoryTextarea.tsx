@@ -81,6 +81,8 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     lineHeight: 24,
     height: 48,
+    paddingVertical: 0,
+    includeFontPadding: false,
   },
 });
 
