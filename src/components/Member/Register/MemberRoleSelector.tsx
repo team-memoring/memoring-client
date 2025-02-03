@@ -108,6 +108,12 @@ const MemberRoleSelector = ({
     onAccessibleIndexChange(isRoleEmpty ? 1 : 2);
   }, [isRoleEmpty, onAccessibleIndexChange]);
 
+  useEffect(() => {
+    if (roles.length > 0) {
+      setSelectedRoles(roles);
+    }
+  }, [roles]);
+
   return (
     <>
       <View style={styles.container} ref={triggerRef}>
