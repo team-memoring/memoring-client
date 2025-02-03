@@ -1,8 +1,10 @@
 import {
   Animated,
+  Image,
   Keyboard,
   Platform,
   StyleSheet,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -13,10 +15,12 @@ import {useFormContext} from 'react-hook-form';
 import {CustomText} from '../../shared';
 
 import MemberMemoryWriteArrow from './MemberMemoryWriteArrow';
-
 import MemoryDatePicker from './MemoryDatePicker';
 import MemberMemoryTextarea from './MemberMemoryTextarea';
+
 import {useEffect, useRef} from 'react';
+
+import Plus from '../../../assets/icons/plus.svg';
 
 const indexMap: {[key: number]: string} = {
   0: '첫번째',
@@ -35,9 +39,33 @@ const MemberMemoryBox = ({
   memoryIndex,
   onMemoryIndexChange,
 }: MemberMemoryBoxProps) => {
-  const {control, getValues} = useFormContext<IMemoryRegister>();
+  const {control, getValues, setValue, watch} =
+    useFormContext<IMemoryRegister>();
+
+  const watchEvents = watch('events');
 
   const offsetY = useRef(new Animated.Value(0)).current;
+
+  const handleDeleteEvent = () => {
+    const events = getValues('events');
+    setValue(
+      'events',
+      events.filter((_, index) => index !== memoryIndex),
+    );
+  };
+
+  const handleAddEvent = () => {
+    const events = getValues('events');
+
+    setValue('events', [
+      ...events,
+      {
+        date: new Date(),
+        description: '',
+        images: [],
+      },
+    ]);
+  };
 
   useEffect(() => {
     const keyboardWillShow = Keyboard.addListener(
@@ -115,7 +143,7 @@ const MemberMemoryBox = ({
             <MemberMemoryWriteArrow
               isLeft={false}
               onPress={() => onMemoryIndexChange(memoryIndex + 1)}
-              disabled={memoryIndex === getValues('events').length - 1}
+              disabled={memoryIndex === watchEvents.length - 1}
             />
           </View>
         </View>
@@ -123,7 +151,7 @@ const MemberMemoryBox = ({
           style={{
             marginTop: 12,
           }}>
-          <MemoryImageUpload control={control} eventIndex={0} />
+          <MemoryImageUpload control={control} eventIndex={memoryIndex} />
         </View>
         <View
           style={{
@@ -154,6 +182,36 @@ const MemberMemoryBox = ({
           </CustomText>
           <MemberMemoryTextarea currentMemoryIndex={memoryIndex} />
         </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 8,
+            marginTop: 16,
+          }}>
+          <TouchableOpacity
+            style={styles.trashContainer}
+            onPress={handleDeleteEvent}>
+            <Image
+              source={require('../../../assets/icons/trash.png')}
+              style={{
+                width: 30,
+                height: 28,
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.plusButton} onPress={handleAddEvent}>
+            <Plus width={12} height={12} color="#222225" />
+            <CustomText
+              weight="ExtraBold"
+              style={{
+                fontSize: 14,
+                color: '#222225',
+              }}>
+              이벤트 추가
+            </CustomText>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
     </TouchableWithoutFeedback>
   );
@@ -164,6 +222,23 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
     borderRadius: 20,
+  },
+  trashContainer: {
+    paddingVertical: 6,
+    paddingHorizontal: 5,
+    borderWidth: 1,
+    borderColor: '#D9D9DC',
+    alignSelf: 'flex-start',
+    borderRadius: 50,
+  },
+  plusButton: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#D9D9DC',
   },
 });
 
