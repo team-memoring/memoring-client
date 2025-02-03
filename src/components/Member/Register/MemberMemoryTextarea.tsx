@@ -13,7 +13,7 @@ const MemberMemoryTextarea = ({
 }: MemberMemoryTextareaProps) => {
   const {watch, setValue} = useFormContext<IMemoryRegister>();
 
-  const text = watch(`events.${currentMemoryIndex}.description`);
+  const text = watch(`events.${currentMemoryIndex}.description`) || '';
 
   const handleTextChange = (text: string) => {
     setValue(`events.${currentMemoryIndex}.description`, text);

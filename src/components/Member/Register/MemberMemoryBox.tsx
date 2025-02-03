@@ -39,26 +39,24 @@ const MemberMemoryBox = ({
   memoryIndex,
   onMemoryIndexChange,
 }: MemberMemoryBoxProps) => {
-  const {control, getValues, setValue, watch} =
-    useFormContext<IMemoryRegister>();
+  const {control, setValue, watch} = useFormContext<IMemoryRegister>();
 
   const watchEvents = watch('events');
 
   const offsetY = useRef(new Animated.Value(0)).current;
 
   const handleDeleteEvent = () => {
-    const events = getValues('events');
+    if (memoryIndex < 3) return;
+
     setValue(
       'events',
-      events.filter((_, index) => index !== memoryIndex),
+      watchEvents.filter((_, index) => index !== memoryIndex),
     );
   };
 
   const handleAddEvent = () => {
-    const events = getValues('events');
-
     setValue('events', [
-      ...events,
+      ...watchEvents,
       {
         date: new Date(),
         description: '',
@@ -190,7 +188,11 @@ const MemberMemoryBox = ({
             marginTop: 16,
           }}>
           <TouchableOpacity
-            style={styles.trashContainer}
+            disabled={memoryIndex < 3}
+            style={[
+              styles.trashContainer,
+              {opacity: memoryIndex < 3 ? 0.3 : 1},
+            ]}
             onPress={handleDeleteEvent}>
             <Image
               source={require('../../../assets/icons/trash.png')}
@@ -200,7 +202,13 @@ const MemberMemoryBox = ({
               }}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.plusButton} onPress={handleAddEvent}>
+          <TouchableOpacity
+            disabled={watchEvents.length === 5}
+            style={[
+              styles.plusButton,
+              {opacity: watchEvents.length === 5 ? 0.3 : 1},
+            ]}
+            onPress={handleAddEvent}>
             <Plus width={12} height={12} color="#222225" />
             <CustomText
               weight="ExtraBold"
