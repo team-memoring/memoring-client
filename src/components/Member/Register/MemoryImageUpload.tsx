@@ -10,7 +10,6 @@ import {
   Pressable,
 } from 'react-native';
 import {
-  Asset,
   ImageLibraryOptions,
   ImagePickerResponse,
   launchImageLibrary,
