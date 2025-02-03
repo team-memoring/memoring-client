@@ -51,9 +51,9 @@ const MemberRegisterScreen = (): React.JSX.Element => {
   };
 
   const handleMemoryIndexChange = (memoryIndex: number) => {
-    if (memoryIndex < 0) {
+    if (memoryIndex <= 0) {
       return;
-    } else if (memoryIndex > methods.getValues().events.length - 1) {
+    } else if (memoryIndex >= methods.getValues().events.length - 1) {
       return;
     }
     setMemoryIndex(memoryIndex);
@@ -138,7 +138,6 @@ const MemberRegisterScreen = (): React.JSX.Element => {
       case 2:
         return (
           <MemberMemoryWriteView
-            memoryIndex={memoryIndex}
             onMemoryIndexChange={handleMemoryIndexChange}
           />
         );

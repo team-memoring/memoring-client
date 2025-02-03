@@ -1,17 +1,39 @@
-import {StyleSheet, View} from 'react-native';
+import {Animated, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {CustomText} from '../../shared';
 import Caution from '../../../assets/icons/caution.svg';
 import MemberMemoryBox from './MemberMemoryBox';
+import {useFormContext} from 'react-hook-form';
+import {IMemoryRegister} from '../../../lib/model/i-memory';
+import {useEffect, useRef} from 'react';
 
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 interface MemberMemoryWriteViewProps {
-  memoryIndex: number;
   onMemoryIndexChange: (memoryIndex: number) => void;
 }
 
 const MemberMemoryWriteView = ({
-  memoryIndex,
   onMemoryIndexChange,
 }: MemberMemoryWriteViewProps) => {
+  const {watch} = useFormContext<IMemoryRegister>();
+  const watchEvents = watch('events');
+
+  const flatListRef = useRef<FlatList>(null);
+
+  const handleScrollToIndex = (index: number) => {
+    if (index < 0 || index >= watchEvents.length) {
+      return;
+    }
+
+    if (flatListRef.current) {
+      flatListRef.current.scrollToIndex({index, animated: true});
+    }
+  };
+
+  // box를 delete하거나 add 하면 해당 box로 이동
+  useEffect(() => {
+    handleScrollToIndex(watchEvents.length - 1);
+  }, [watchEvents]);
+
   return (
     <View>
       <View style={styles.title}>
@@ -41,17 +63,32 @@ const MemberMemoryWriteView = ({
           </CustomText>
         </View>
       </View>
-      <View
-        style={{
-          width: '100%',
-          paddingHorizontal: 16,
-          marginTop: 20,
-        }}>
-        <MemberMemoryBox
-          memoryIndex={memoryIndex}
-          onMemoryIndexChange={onMemoryIndexChange}
-        />
-      </View>
+      <Animated.FlatList
+        ref={flatListRef}
+        data={watchEvents}
+        style={{marginTop: 20}}
+        horizontal
+        pagingEnabled
+        keyExtractor={(_, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+        scrollEnabled={false} // 버튼을 통해서만 스크롤 가능
+        getItemLayout={(_, index) => ({
+          length: SCREEN_WIDTH,
+          offset: SCREEN_WIDTH * index,
+          index,
+        })}
+        renderItem={({index}) => (
+          <View style={{width: SCREEN_WIDTH, paddingHorizontal: 16}}>
+            <MemberMemoryBox
+              memoryIndex={index}
+              onMemoryIndexChange={newIndex => {
+                onMemoryIndexChange(newIndex);
+                handleScrollToIndex(newIndex);
+              }}
+            />
+          </View>
+        )}
+      />
     </View>
   );
 };
