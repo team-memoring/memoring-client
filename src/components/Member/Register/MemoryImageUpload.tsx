@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {
   Alert,
   Image,
@@ -31,16 +30,14 @@ interface MemoryImageUploadProps {
 
 const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
   const {
-    field: {value, onChange},
+    field: {value = [], onChange},
   } = useController({
     control,
     name: `events.${eventIndex}.images`,
   });
 
-  const [images, setImages] = useState<Asset[]>([]);
-
   const pickImage = async () => {
-    if (images.length >= 5) {
+    if (value.length >= 5) {
       Alert.alert('최대 5개의 이미지만 업로드할 수 있습니다.');
       return;
     }
@@ -67,26 +64,20 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
         return;
       }
 
-      const newImage = response.assets[0];
-      const updatedImages = [...images, newImage];
-      setImages(updatedImages);
-
-      // Update form values with image URIs
-      const imageUris = updatedImages.map(img => img.uri);
-      onChange(imageUris);
+      const newImageUri = response.assets[0].uri;
+      if (newImageUri) {
+        const updatedUris = [...value, newImageUri]; // 기존 value 배열 + 새 이미지 URI
+        onChange(updatedUris); // react-hook-form 상태 업데이트
+      }
     } catch (error) {
       console.log('ImagePicker Error:', error);
     }
   };
 
   const removeImage = (index: number) => {
-    const updatedImages = [...images];
-    updatedImages.splice(index, 1);
-    setImages(updatedImages);
-
-    // Update form values with remaining image URIs
-    const imageUris = updatedImages.map(img => img.uri);
-    onChange(imageUris);
+    const updatedUris = [...value];
+    updatedUris.splice(index, 1);
+    onChange(updatedUris);
   };
 
   const requestPermission = async () => {
@@ -116,16 +107,16 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
       {value.length > 0 ? (
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.imageContainer}>
-            {images.map((img, index) => (
+            {value.map((uri, index) => (
               <View
-                key={img.uri}
+                key={uri}
                 style={[
                   styles.imageWrapper,
                   {
-                    marginRight: index !== images.length - 1 ? 8 : 0,
+                    marginRight: index !== value.length - 1 ? 8 : 0,
                   },
                 ]}>
-                <Image source={{uri: img.uri}} style={styles.image} />
+                <Image source={{uri}} style={styles.image} />
                 <TouchableOpacity
                   style={styles.removeButton}
                   onPress={() => removeImage(index)}>
@@ -133,7 +124,7 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
                 </TouchableOpacity>
               </View>
             ))}
-            {images.length < 5 && (
+            {value.length < 5 && (
               <TouchableOpacity style={styles.addButton} onPress={pickImage}>
                 <Camera width={24} height={24} />
                 <CustomText
