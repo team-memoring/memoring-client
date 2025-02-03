@@ -4,10 +4,12 @@ import Caution from '../../../assets/icons/caution.svg';
 import MemberMemoryBox from './MemberMemoryBox';
 
 interface MemberMemoryWriteViewProps {
+  memoryIndex: number;
   onMemoryIndexChange: (memoryIndex: number) => void;
 }
 
 const MemberMemoryWriteView = ({
+  memoryIndex,
   onMemoryIndexChange,
 }: MemberMemoryWriteViewProps) => {
   return (
@@ -45,7 +47,10 @@ const MemberMemoryWriteView = ({
           paddingHorizontal: 16,
           marginTop: 20,
         }}>
-        <MemberMemoryBox onMemoryIndexChange={onMemoryIndexChange} />
+        <MemberMemoryBox
+          memoryIndex={memoryIndex}
+          onMemoryIndexChange={onMemoryIndexChange}
+        />
       </View>
     </View>
   );
