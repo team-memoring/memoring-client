@@ -222,7 +222,8 @@ const MemberRoleSelector = ({
             <Pressable
               style={{
                 width: '100%',
-                backgroundColor: '#222225',
+                backgroundColor:
+                  selectedRoles.length === 0 ? '#939396' : '#222225',
                 paddingVertical: 11.5,
                 borderRadius: 50,
                 alignItems: 'center',
