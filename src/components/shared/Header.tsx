@@ -12,7 +12,6 @@ const Header = () => {
       const user = await getUser();
       if (user) {
         setProfileImageUrl(user.profileImageUrl);
-        console.log('user:', user);
       }
     };
 
