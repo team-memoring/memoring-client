@@ -1,21 +1,25 @@
 import {Animated, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {CustomText} from '../../shared';
-import Caution from '../../../assets/icons/caution.svg';
+
 import MemberMemoryBox from './MemberMemoryBox';
-import {useFormContext} from 'react-hook-form';
+import {useFormContext, useWatch} from 'react-hook-form';
 import {IMemoryRegister} from '../../../lib/model/i-memory';
 import {useEffect, useRef} from 'react';
 
+import Caution from '../../../assets/icons/caution.svg';
+import {TOTAL_STEPS} from '../../../screens/Member/MemberRegisterScreen';
+
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
+
 interface MemberMemoryWriteViewProps {
-  onMemoryIndexChange: (memoryIndex: number) => void;
+  onAccessibleIndexChange: (accessibleIndex: number) => void;
 }
 
 const MemberMemoryWriteView = ({
-  onMemoryIndexChange,
+  onAccessibleIndexChange,
 }: MemberMemoryWriteViewProps) => {
-  const {watch} = useFormContext<IMemoryRegister>();
-  const watchEvents = watch('events');
+  const {} = useFormContext<IMemoryRegister>();
+  const watchEvents = useWatch({name: 'events'});
 
   const flatListRef = useRef<FlatList>(null);
 
@@ -29,9 +33,25 @@ const MemberMemoryWriteView = ({
     }
   };
 
-  // box를 delete하거나 add 하면 해당 box로 이동
+  const checkEventValid = (events: any) => {
+    // event의 모든 description이 존재하는지 확인
+    for (let i = 0; i < events.length; i++) {
+      if (!events[i].description || events[i].description.length === 0) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   useEffect(() => {
-    handleScrollToIndex(watchEvents.length - 1);
+    console.log('watchEvents', checkEventValid(watchEvents));
+
+    if (checkEventValid(watchEvents)) {
+      onAccessibleIndexChange(TOTAL_STEPS);
+    } else {
+      onAccessibleIndexChange(TOTAL_STEPS - 1);
+    }
   }, [watchEvents]);
 
   return (
@@ -81,10 +101,7 @@ const MemberMemoryWriteView = ({
           <View style={{width: SCREEN_WIDTH, paddingHorizontal: 16}}>
             <MemberMemoryBox
               memoryIndex={index}
-              onMemoryIndexChange={newIndex => {
-                onMemoryIndexChange(newIndex);
-                handleScrollToIndex(newIndex);
-              }}
+              onMemoryIndexChange={handleScrollToIndex}
             />
           </View>
         )}

@@ -20,7 +20,7 @@ import {IMemoryRegister} from '../../lib/model/i-memory';
 import MemberMemoryRoleView from '../../components/Member/Register/MemberMemoryRoleView';
 import MemberMemoryWriteView from '../../components/Member/Register/MemberMemoryWriteView';
 
-const TOTAL_SETPS = 3;
+export const TOTAL_STEPS = 3;
 
 const MemberRegisterScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -30,8 +30,6 @@ const MemberRegisterScreen = (): React.JSX.Element => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [accessibleIndex, setAccessibleIndex] = useState(0);
   const isNextDisabled = !(currentIndex < accessibleIndex);
-
-  const [memoryIndex, setMemoryIndex] = useState(0);
 
   const animatedTranslateY = useRef(new Animated.Value(0)).current;
 
@@ -56,7 +54,6 @@ const MemberRegisterScreen = (): React.JSX.Element => {
     } else if (memoryIndex >= methods.getValues().events.length - 1) {
       return;
     }
-    setMemoryIndex(memoryIndex);
   };
 
   const handleSubmit = (data: IMemoryRegister) => {
@@ -66,7 +63,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
   };
 
   const handleNextPress = () => {
-    if (currentIndex !== TOTAL_SETPS - 1) {
+    if (currentIndex !== TOTAL_STEPS - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
       methods.handleSubmit(
@@ -138,7 +135,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
       case 2:
         return (
           <MemberMemoryWriteView
-            onMemoryIndexChange={handleMemoryIndexChange}
+            onAccessibleIndexChange={handleAccessibleIndexChange}
           />
         );
 
@@ -158,10 +155,10 @@ const MemberRegisterScreen = (): React.JSX.Element => {
           />
           <PaginationHeader
             currentIndex={currentIndex}
-            totalSteps={TOTAL_SETPS}
+            totalSteps={TOTAL_STEPS}
             onBackPress={() => navigation.goBack()}
           />
-          {currentIndex < TOTAL_SETPS - 1 && (
+          {currentIndex < TOTAL_STEPS - 1 && (
             <Character
               type={characterType}
               animatedTransformValue={animatedTranslateY}
@@ -224,6 +221,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 24,
     paddingBottom: Platform.OS === 'ios' ? 52 : 24,
+  },
+  registerTitle: {
+    alignItems: 'center',
+    marginTop: 8,
+    paddingHorizontal: 16,
   },
 });
 

@@ -66,6 +66,10 @@ const MemberMemoryBox = ({
   };
 
   useEffect(() => {
+    onMemoryIndexChange(watchEvents.length - 1);
+  }, [watchEvents.length]);
+
+  useEffect(() => {
     const keyboardWillShow = Keyboard.addListener(
       Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
       () => {
