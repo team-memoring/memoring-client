@@ -48,14 +48,6 @@ const MemberRegisterScreen = (): React.JSX.Element => {
     setAccessibleIndex(accessibleIndex);
   };
 
-  const handleMemoryIndexChange = (memoryIndex: number) => {
-    if (memoryIndex <= 0) {
-      return;
-    } else if (memoryIndex >= methods.getValues().events.length - 1) {
-      return;
-    }
-  };
-
   const handleSubmit = (data: IMemoryRegister) => {
     // TODO: API 호출 처리
     console.log(data);
