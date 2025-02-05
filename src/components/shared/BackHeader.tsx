@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Pressable, StatusBar, StyleSheet, View} from 'react-native';
 
 import BackArrow from '../../assets/icons/back_arrow.svg';
 

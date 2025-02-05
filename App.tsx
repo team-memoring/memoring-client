@@ -46,7 +46,7 @@ function App(): React.JSX.Element {
     <PortalProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="MemberHome">
+          <Stack.Navigator initialRouteName="MemberQuizGen">
             {/* Login */}
             <Stack.Screen
               name="Splash"
