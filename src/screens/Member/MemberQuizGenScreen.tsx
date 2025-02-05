@@ -49,7 +49,9 @@ const MemberQuizGenScreen = () => {
           5개의 이벤트로
         </CustomText>
         <CustomText weight="ExtraBold" style={{fontSize: 28, color: '#222225'}}>
-          퀴즈를 만들 준비가 되었어요!
+          {isCreating
+            ? '퀴즈를 만들고 있어요!'
+            : '퀴즈를 만들 준비가 되었어요!'}
         </CustomText>
       </View>
 
