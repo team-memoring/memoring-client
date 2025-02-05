@@ -65,7 +65,14 @@ const MemberMemoryBox = ({
     ]);
   };
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
     onMemoryIndexChange(watchEvents.length - 1);
   }, [watchEvents.length]);
 

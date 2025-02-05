@@ -45,8 +45,6 @@ const MemberMemoryWriteView = ({
   };
 
   useEffect(() => {
-    console.log('watchEvents', checkEventValid(watchEvents));
-
     if (checkEventValid(watchEvents)) {
       onAccessibleIndexChange(TOTAL_STEPS);
     } else {
