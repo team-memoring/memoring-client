@@ -3,7 +3,12 @@ import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Share from 'react-native-share';
 
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
 const OnboardingInviteScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   // TODO: change to api call
   const familyName = '테스트';
 
@@ -16,10 +21,6 @@ const OnboardingInviteScreen = () => {
     } catch (error) {
       console.log('Error sharing:', error);
     }
-  };
-
-  const handleStart = () => {
-    // TODO: Navigation 처리
   };
 
   return (
@@ -107,7 +108,9 @@ const OnboardingInviteScreen = () => {
       <Character type="close" bottom={-550} />
       <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
         <Pressable
-          onPress={handleStart}
+          onPress={() => {
+            navigation.navigate('MainheroSelect');
+          }}
           style={[
             styles.nextButton,
             {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
