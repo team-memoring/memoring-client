@@ -51,7 +51,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
   const handleSubmit = (data: IMemoryRegister) => {
     // TODO: API 호출 처리
     console.log(data);
-    navigation.navigate('OnboardingInvite');
+    navigation.navigate('MemberQuizGen');
   };
 
   const handleNextPress = () => {

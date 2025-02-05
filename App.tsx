@@ -14,6 +14,7 @@ import {Linking} from 'react-native';
 import OnboardingCodeScreen from './src/screens/Onboarding/OnboardingCodeScreen';
 import MemberHomeScreen from './src/screens/Member/MemberHomeScreen';
 import MemberRegisterScreen from './src/screens/Member/MemberRegisterScreen';
+import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -109,6 +110,14 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="MemberRegister"
               component={MemberRegisterScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizGen"
+              component={MemberQuizGenScreen}
               options={{
                 headerShown: false,
                 animation: 'none',
