@@ -15,6 +15,7 @@ import OnboardingCodeScreen from './src/screens/Onboarding/OnboardingCodeScreen'
 import MemberHomeScreen from './src/screens/Member/MemberHomeScreen';
 import MemberRegisterScreen from './src/screens/Member/MemberRegisterScreen';
 import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
+import MemberQuizListScreen from './src/screens/Member/MemberQuizListScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +47,7 @@ function App(): React.JSX.Element {
     <PortalProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="MemberQuizGen">
+          <Stack.Navigator initialRouteName="Login">
             {/* Login */}
             <Stack.Screen
               name="Splash"
@@ -121,6 +122,13 @@ function App(): React.JSX.Element {
               options={{
                 headerShown: false,
                 animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizList"
+              component={MemberQuizListScreen}
+              options={{
+                headerShown: false,
               }}
             />
           </Stack.Navigator>

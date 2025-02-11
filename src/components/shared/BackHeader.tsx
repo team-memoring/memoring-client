@@ -10,7 +10,7 @@ const BackHeader = ({onBackPress}: BackHeaderProps) => {
   return (
     <View style={styles.header}>
       <Pressable style={styles.backButton} onPress={onBackPress}>
-        <BackArrow />
+        <BackArrow color="#CE5419" />
       </Pressable>
     </View>
   );

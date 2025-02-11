@@ -18,7 +18,7 @@ const MemberQuizGenScreen = () => {
   const createRequest = async () => {
     // TODO: API 호출 처리
     setTimeout(() => {
-      navigation.navigate('MemberHome');
+      navigation.navigate('MemberQuizList');
     }, 8000);
   };
 
