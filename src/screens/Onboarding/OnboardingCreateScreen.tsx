@@ -21,7 +21,7 @@ import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyVi
 import {Character, CustomText, PaginationHeader} from '../../components/shared';
 import {CharacterType} from '../../components/shared/Character';
 
-const TOTAL_SETPS = 3;
+const TOTAL_STEPS = 3;
 
 const OnboardingCreateScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -165,7 +165,7 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
           />
           <PaginationHeader
             currentIndex={currentIndex}
-            totalSteps={TOTAL_SETPS}
+            totalSteps={TOTAL_STEPS}
             onBackPress={() => navigation.goBack()}
             onJumpPress={currentIndex === 2 ? handleJumpPress : undefined}
           />
