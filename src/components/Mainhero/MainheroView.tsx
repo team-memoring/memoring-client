@@ -71,7 +71,6 @@ const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
     <FlatList
       data={data}
       keyExtractor={item => item.id}
-      ListHeaderComponent={<View style={{height: 0}} />}
       ListFooterComponent={<View style={{height: 200}} />}
       contentContainerStyle={styles.list}
       renderItem={({item}) => (
@@ -79,11 +78,11 @@ const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
           <Image source={{uri: item.image}} style={styles.image} />
           <CustomText
             weight="ExtraBold"
-            style={
-              item.quizCnt === item.totalCnt
-                ? {fontSize: 16, color: '#939396', marginTop: 26}
-                : {fontSize: 16, color: '#CE5419', marginTop: 26}
-            }>
+            style={{
+              fontSize: 16,
+              marginTop: 26,
+              color: item.quizCnt === item.totalCnt ? '#939396' : '#CE5419',
+            }}>
             {item.quizCnt === item.totalCnt
               ? '풀이 완료'
               : item.quizCnt > 0
@@ -101,11 +100,10 @@ const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
             }>
             <CustomText
               weight="ExtraBold"
-              style={
-                item.quizCnt < item.totalCnt
-                  ? {fontSize: 16, color: '#CE5419'}
-                  : {fontSize: 16, color: '#555558'}
-              }>
+              style={{
+                fontSize: 16,
+                color: item.quizCnt < item.totalCnt ? '#CE5419' : '#555558',
+              }}>
               {item.quizCnt === item.totalCnt
                 ? '다시 풀기'
                 : item.quizCnt < item.totalCnt && 0 < item.quizCnt
@@ -117,7 +115,6 @@ const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
       )}
       showsVerticalScrollIndicator={false}
       snapToAlignment="start" // 스크롤 후 정렬 위치
-      snapToInterval={250} // 아이템 높이에 맞춰 멈춤
       decelerationRate="fast" // 부드러운 스냅 효과
     />
   );
