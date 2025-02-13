@@ -17,6 +17,8 @@ import MemberRegisterScreen from './src/screens/Member/MemberRegisterScreen';
 import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
 import MemberQuizListScreen from './src/screens/Member/MemberQuizListScreen';
 
+import MainheroSelectScreen from './src/screens/Mainhero/MainheroSelectScreen';
+
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
@@ -129,6 +131,15 @@ function App(): React.JSX.Element {
               component={MemberQuizListScreen}
               options={{
                 headerShown: false,
+              }}
+            />
+            {/* Hero */}
+            <Stack.Screen
+              name="MainheroSelect"
+              component={MainheroSelectScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
               }}
             />
           </Stack.Navigator>

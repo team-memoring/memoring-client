@@ -22,10 +22,6 @@ const OnboardingInviteScreen = () => {
     }
   };
 
-  const handleStart = () => {
-    navigation.navigate('MemberHome');
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -111,7 +107,9 @@ const OnboardingInviteScreen = () => {
       <Character type="close" bottom={-550} />
       <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
         <Pressable
-          onPress={handleStart}
+          onPress={() => {
+            navigation.navigate('MainheroSelect');
+          }}
           style={[
             styles.nextButton,
             {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
