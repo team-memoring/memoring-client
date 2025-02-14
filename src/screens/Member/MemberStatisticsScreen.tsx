@@ -71,7 +71,8 @@ const MemberStatisticsScreen = () => {
               }}>
               {adviseText.split(' ').map((word, index) => (
                 <CustomText
-                  weight="ExtraBold"
+                  key={`${word}-${index}`}
+                  weight="Bold"
                   style={{
                     fontSize: 17,
                     color: '#222225',
