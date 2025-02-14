@@ -87,7 +87,7 @@ const MemberQuizProgressCard = ({percentage}: MemberQuizProgressCardProps) => {
         </View>
         <Pressable
           style={{
-            backgroundColor: '#F0F0F3',
+            backgroundColor: '#444447',
             paddingVertical: 16.5,
             paddingHorizontal: 20,
             borderRadius: 60,
@@ -99,7 +99,7 @@ const MemberQuizProgressCard = ({percentage}: MemberQuizProgressCardProps) => {
             weight="ExtraBold"
             style={{
               fontSize: 15,
-              color: '#555558',
+              color: '#fff',
             }}>
             퀴즈 등록하기
           </CustomText>
