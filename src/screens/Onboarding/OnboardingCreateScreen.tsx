@@ -104,7 +104,7 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
 
       if (translationX < -50 && currentIndex < accessibleIndex) {
         // 오른쪽 스와이프 → accessibleIndex까지만 이동 가능
-        if (currentIndex < TOTAL_SETPS - 1) {
+        if (currentIndex < TOTAL_STEPS - 1) {
           setCurrentIndex(prev => prev + 1);
         }
       } else if (translationX > 50 && currentIndex > 0) {
