@@ -18,6 +18,7 @@ import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
 import MemberQuizListScreen from './src/screens/Member/MemberQuizListScreen';
 
 import MainheroSelectScreen from './src/screens/Mainhero/MainheroSelectScreen';
+import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,7 +50,7 @@ function App(): React.JSX.Element {
     <PortalProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator initialRouteName="MemberQuizList">
             {/* Login */}
             <Stack.Screen
               name="Splash"
@@ -129,6 +130,13 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="MemberQuizList"
               component={MemberQuizListScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizComplete"
+              component={MemberQuizCompleteScreen}
               options={{
                 headerShown: false,
               }}

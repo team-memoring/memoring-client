@@ -62,6 +62,10 @@ const MemberQuizListScreen = () => {
     navigation.navigate('MemberQuizGen');
   };
 
+  const handleRegisterPress = () => {
+    navigation.navigate('MemberQuizComplete');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent backgroundColor="#fff" barStyle="dark-content" />
@@ -121,7 +125,7 @@ const MemberQuizListScreen = () => {
       </ScrollView>
       <View style={styles.nextButtonWrapper}>
         <Pressable
-          onPress={() => {}}
+          onPress={handleRegisterPress}
           style={[
             styles.nextButton,
             {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
