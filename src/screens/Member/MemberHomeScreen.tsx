@@ -55,11 +55,11 @@ const MemberHomeScreen = () => {
           오늘의 소식을 알려드릴게요
         </CustomText>
       </View>
-      <View style={styles.itemContainer}>
-        <MemberAnalysisCard trend="stable" month={2} rate={78} rateDiff={8} />
-      </View>
       <View style={[styles.itemContainer]}>
         <MemberQuizProgressCard percentage={60} />
+      </View>
+      <View style={styles.itemContainer}>
+        <MemberAnalysisCard trend="up" month={2} rate={78} rateDiff={8} />
       </View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.cardContainer}>
