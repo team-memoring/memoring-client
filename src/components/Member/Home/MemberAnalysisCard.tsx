@@ -7,6 +7,8 @@ import {
 
 import Trend from '../../../assets/graphics/trend.svg';
 import {useEffect, useRef, useState} from 'react';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
 
 interface MemberAnalysisCardProps {
   trend: tempTrend;
@@ -21,6 +23,8 @@ const MemberAnalysisCard = ({
   rate,
   rateDiff,
 }: MemberAnalysisCardProps) => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const rateDiffValue = rateDiff ?? 0;
 
   const animatedRate = useRef(new Animated.Value(0)).current;
@@ -116,8 +120,12 @@ const MemberAnalysisCard = ({
         {getTrendMessage()}
       </CustomText>
       <Trend width={145} height={137} style={getTrendStyle()} />
-      {/* TODO: add navigate */}
-      <Pressable style={styles.button} onPress={() => true}>
+
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate('MemberStatistics');
+        }}>
         <CustomText
           weight="ExtraBold"
           style={{

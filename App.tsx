@@ -20,6 +20,7 @@ import MemberQuizListScreen from './src/screens/Member/MemberQuizListScreen';
 import MainheroSelectScreen from './src/screens/Mainhero/MainheroSelectScreen';
 import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScreen';
 import MemberQuizDetailScreen from './src/screens/Member/MemberQuizDetailScreen';
+import MemberStatisticsScreen from './src/screens/Member/MemberStatisticsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -145,6 +146,13 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="MemberQuizDetail"
               component={MemberQuizDetailScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MemberStatistics"
+              component={MemberStatisticsScreen}
               options={{
                 headerShown: false,
               }}
