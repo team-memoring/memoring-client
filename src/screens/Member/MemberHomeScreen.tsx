@@ -7,6 +7,8 @@ import MemberAnalysisCard from '../../components/Member/Home/MemberAnalysisCard'
 import MemberQuizProgressCard from '../../components/Member/Home/MemberQuizProgressCard';
 import {memberHomeMemoryDummy} from '../../lib/dummy';
 import MemberQuizCard from '../../components/Member/Home/MemberQuizCard';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
 
 export const MEMBER_HOME_DURATION = 2000;
 
@@ -14,6 +16,8 @@ export const MEMBER_HOME_DURATION = 2000;
 export type tempTrend = 'up' | 'down' | 'stable';
 
 const MemberHomeScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
   const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,6 +32,12 @@ const MemberHomeScreen = () => {
 
     loadUsername();
   }, []);
+
+  const handleQuizPress = (quizId: number) => {
+    navigation.navigate('MemberQuizDetail', {
+      quizId,
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,13 +76,14 @@ const MemberHomeScreen = () => {
           {memberHomeMemoryDummy.map((memory, index) => (
             <MemberQuizCard
               key={index}
+              id={memory.id}
               title={memory.title}
               createdAt={memory.createdAt}
               totalQuizCount={memory.totalQuizCount}
               solvedQuizCount={memory.solvedQuizCount}
               creator={memory.creator}
               status={memory.status}
-              onPress={() => true}
+              onPress={handleQuizPress}
             />
           ))}
         </View>

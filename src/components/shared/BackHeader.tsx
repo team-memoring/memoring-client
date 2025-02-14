@@ -4,13 +4,19 @@ import BackArrow from '../../assets/icons/back_arrow.svg';
 
 interface BackHeaderProps {
   onBackPress: () => void;
+  isWhite?: boolean;
 }
 
-const BackHeader = ({onBackPress}: BackHeaderProps) => {
+const BackHeader = ({onBackPress, isWhite = false}: BackHeaderProps) => {
   return (
     <View style={styles.header}>
-      <Pressable style={styles.backButton} onPress={onBackPress}>
-        <BackArrow color="#CE5419" />
+      <Pressable
+        style={[
+          styles.backButton,
+          {backgroundColor: isWhite ? '#F0F0F3' : '#F4D9CC'},
+        ]}
+        onPress={onBackPress}>
+        <BackArrow color={isWhite ? '#222225' : '#CE5419'} />
       </Pressable>
     </View>
   );
@@ -29,7 +35,6 @@ const styles = StyleSheet.create({
     left: 16,
     top: '50%',
     transform: [{translateY: -20}],
-    backgroundColor: '#F4D9CC',
     width: 40,
     height: 40,
     justifyContent: 'center',
