@@ -1,15 +1,18 @@
 // FIXME: This file should be changed to synced version with the backend model
 
-export type FamilyRole =
-  | 'grandfather'
-  | 'grandmother'
-  | 'father'
-  | 'mother'
-  | 'son'
-  | 'daughter'
-  | 'granddaughter'
-  | 'grandson'
-  | 'relative'; // 친인척 (이모, 삼촌, 고모 등)
+export const familyRoleList = [
+  'grandfather',
+  'grandmother',
+  'father',
+  'mother',
+  'son',
+  'daughter',
+  'granddaughter',
+  'grandson',
+  'relative',
+] as const;
+
+export type FamilyRole = (typeof familyRoleList)[number];
 
 export const familyRoleMap: Record<FamilyRole, string> = {
   grandfather: '할아버지',

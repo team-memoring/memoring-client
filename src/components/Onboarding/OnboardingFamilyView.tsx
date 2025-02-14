@@ -117,6 +117,7 @@ const OnboardingFamilyView = ({
               style={[
                 {
                   flexDirection: 'row',
+                  gap: 8,
                   alignItems: 'center',
                   justifyContent: 'center',
                   paddingVertical: 24,
@@ -125,7 +126,7 @@ const OnboardingFamilyView = ({
                   borderColor: '#CE5419',
                 },
               ]}>
-              <Plus width={16} height={16} />
+              <Plus width={16} height={16} color={'#CE5419'} />
               <CustomText
                 weight="ExtraBold"
                 style={{fontSize: 18, color: '#CE5419'}}>

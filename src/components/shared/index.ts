@@ -1,3 +1,4 @@
+export {default as BackHeader} from './BackHeader';
 export {default as Character} from './Character';
 export {default as CodeInput} from './CodeInput';
 export {default as CustomInput} from './CustomInput';
