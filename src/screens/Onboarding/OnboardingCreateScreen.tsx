@@ -21,7 +21,7 @@ import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyVi
 import {Character, CustomText, PaginationHeader} from '../../components/shared';
 import {CharacterType} from '../../components/shared/Character';
 
-const TOTAL_SETPS = 3;
+const TOTAL_STEPS = 3;
 
 const OnboardingCreateScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -104,7 +104,9 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
 
       if (translationX < -50 && currentIndex < accessibleIndex) {
         // 오른쪽 스와이프 → accessibleIndex까지만 이동 가능
-        setCurrentIndex(prev => prev + 1);
+        if (currentIndex < TOTAL_STEPS - 1) {
+          setCurrentIndex(prev => prev + 1);
+        }
       } else if (translationX > 50 && currentIndex > 0) {
         //  왼쪽 스와이프 → 항상 허용
         setCurrentIndex(prev => prev - 1);
@@ -165,7 +167,7 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
           />
           <PaginationHeader
             currentIndex={currentIndex}
-            totalSteps={TOTAL_SETPS}
+            totalSteps={TOTAL_STEPS}
             onBackPress={() => navigation.goBack()}
             onJumpPress={currentIndex === 2 ? handleJumpPress : undefined}
           />

@@ -12,7 +12,13 @@ import {PortalProvider} from '@gorhom/portal';
 import OnboardingInviteScreen from './src/screens/Onboarding/OnboardingInviteScreen';
 import {Linking} from 'react-native';
 import OnboardingCodeScreen from './src/screens/Onboarding/OnboardingCodeScreen';
+import MemberHomeScreen from './src/screens/Member/MemberHomeScreen';
+import MemberRegisterScreen from './src/screens/Member/MemberRegisterScreen';
+import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
+import MemberQuizListScreen from './src/screens/Member/MemberQuizListScreen';
+
 import MainheroSelectScreen from './src/screens/Mainhero/MainheroSelectScreen';
+import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +51,7 @@ function App(): React.JSX.Element {
       <SafeAreaProvider>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Login">
+            {/* Login */}
             <Stack.Screen
               name="Splash"
               component={SplashScreen}
@@ -69,6 +76,7 @@ function App(): React.JSX.Element {
                 animation: 'none',
               }}
             />
+            {/* Onboarding */}
             <Stack.Screen
               name="OnboardingCreate"
               component={OnboardingCreateScreen}
@@ -93,6 +101,47 @@ function App(): React.JSX.Element {
                 animation: 'none',
               }}
             />
+
+            {/* Member */}
+            <Stack.Screen
+              name="MemberHome"
+              component={MemberHomeScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="MemberRegister"
+              component={MemberRegisterScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizGen"
+              component={MemberQuizGenScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizList"
+              component={MemberQuizListScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizComplete"
+              component={MemberQuizCompleteScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            {/* Hero */}
             <Stack.Screen
               name="MainheroSelect"
               component={MainheroSelectScreen}

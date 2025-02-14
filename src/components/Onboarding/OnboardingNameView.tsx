@@ -23,7 +23,7 @@ const OnboardingNameView = ({
 
   const familyName = watch('familyName');
 
-  const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ]+$/;
+  const koreanRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣ ]+$/;
 
   //FIXME: Should add duplicate name check logic after backend implementation
   const handleChangeText = (text: string) => {
@@ -34,7 +34,7 @@ const OnboardingNameView = ({
       onAccessibleIndexChange(0);
     } else if (!koreanRegex.test(text)) {
       setError('familyName', {
-        message: '최대 15자 / 공백, 영문, 숫자, 특수기호 불가',
+        message: '최대 15자 / 영문, 숫자, 특수기호 불가',
       });
       onCharacterTypeChange('sad');
       onAccessibleIndexChange(0);
@@ -46,48 +46,44 @@ const OnboardingNameView = ({
   };
 
   return (
-    <>
-      <View>
-        <View style={styles.text}>
-          <CustomText
-            weight="ExtraBold"
-            style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
-            우리 가족의 공간,
-          </CustomText>
-          <CustomText
-            weight="ExtraBold"
-            style={{fontSize: 28, color: '#222225'}}>
-            어떤 이름이 좋을까요?
-          </CustomText>
-        </View>
+    <View>
+      <View style={styles.text}>
+        <CustomText
+          weight="ExtraBold"
+          style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
+          우리 가족의 공간,
+        </CustomText>
+        <CustomText weight="ExtraBold" style={{fontSize: 28, color: '#222225'}}>
+          어떤 이름이 좋을까요?
+        </CustomText>
+      </View>
 
-        <View style={{width: '100%', paddingHorizontal: 16, marginTop: 36}}>
-          <CustomInput
-            placeholder="가족 이름을 입력해주세요"
-            value={familyName}
-            error={!!errors.familyName}
-            maxLength={15}
-            onChangeText={handleChangeText}
-          />
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              marginTop: 16,
-            }}>
-            {errors.familyName ? (
-              <CustomText weight="Bold" style={styles.errorText}>
-                {String(errors.familyName.message)}
-              </CustomText>
-            ) : (
-              <CustomText weight="Bold" style={styles.captionText}>
-                최대 15자 / 공백, 영문, 숫자, 특수기호 불가
-              </CustomText>
-            )}
-          </View>
+      <View style={{width: '100%', paddingHorizontal: 16, marginTop: 36}}>
+        <CustomInput
+          placeholder="가족 이름을 입력해주세요"
+          value={familyName}
+          error={!!errors.familyName}
+          maxLength={15}
+          onChangeText={handleChangeText}
+        />
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            marginTop: 16,
+          }}>
+          {errors.familyName ? (
+            <CustomText weight="Bold" style={styles.errorText}>
+              {String(errors.familyName.message)}
+            </CustomText>
+          ) : (
+            <CustomText weight="Bold" style={styles.captionText}>
+              최대 15자 / 영문, 숫자, 특수기호 불가
+            </CustomText>
+          )}
         </View>
       </View>
-    </>
+    </View>
   );
 };
 

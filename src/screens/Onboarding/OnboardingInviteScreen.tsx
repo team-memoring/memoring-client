@@ -2,7 +2,6 @@ import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Share from 'react-native-share';
-
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
