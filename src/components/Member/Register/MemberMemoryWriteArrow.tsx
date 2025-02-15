@@ -1,4 +1,4 @@
-import {Pressable, View} from 'react-native';
+import {Pressable} from 'react-native';
 
 import ArrowLeft from '../../../assets/icons/arrow_left.svg';
 import ArrowRight from '../../../assets/icons/arrow_right.svg';
