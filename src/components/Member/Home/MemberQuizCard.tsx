@@ -10,6 +10,7 @@ import {useEffect, useRef} from 'react';
 interface MemberQuizCardProps
   extends Pick<
     IMemory,
+    | 'id'
     | 'title'
     | 'totalQuizCount'
     | 'solvedQuizCount'
@@ -17,7 +18,7 @@ interface MemberQuizCardProps
     | 'createdAt'
     | 'status'
   > {
-  onPress: () => void;
+  onPress: (quizId: number) => void;
 }
 
 const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
@@ -49,7 +50,11 @@ const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
   }, [progress]);
 
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable
+      style={styles.container}
+      onPress={() => {
+        onPress(props.id);
+      }}>
       <View style={[styles.tag, {backgroundColor: tagStyle().backgroundColor}]}>
         <CustomText
           weight="Bold"
