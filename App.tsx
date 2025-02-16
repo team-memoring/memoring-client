@@ -18,6 +18,8 @@ import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
 import MemberQuizListScreen from './src/screens/Member/MemberQuizListScreen';
 
 import MainheroSelectScreen from './src/screens/Mainhero/MainheroSelectScreen';
+import QuizScreen from './src/screens/Quiz/QuizScreen';
+import QuizEndScreen from './src/screens/Quiz/QuizEndScreen';
 import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScreen';
 
 const Stack = createNativeStackNavigator();
@@ -145,6 +147,23 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="MainheroSelect"
               component={MainheroSelectScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            {/* Quiz */}
+            <Stack.Screen
+              name="Quiz"
+              component={QuizScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="QuizEnd"
+              component={QuizEndScreen}
               options={{
                 headerShown: false,
                 animation: 'none',
