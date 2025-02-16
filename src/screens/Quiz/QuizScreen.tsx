@@ -201,11 +201,12 @@ const QuizScreen = () => {
             </CustomText>
             {questions[currentIndex].choices.map((choice, index) => (
               <View key={index} style={{paddingHorizontal: 16}}>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => handleAnswer(choice)}>
                   <CustomText
                     weight="ExtraBold"
-                    style={{fontSize: 28, color: '000000'}}
-                    onPress={() => handleAnswer(choice)}>
+                    style={{fontSize: 28, color: '000000'}}>
                     {choice}
                   </CustomText>
                 </TouchableOpacity>
