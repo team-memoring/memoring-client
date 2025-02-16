@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   FlatList,
-  Text,
   TouchableOpacity,
   View,
   StyleSheet,
@@ -9,12 +8,10 @@ import {
 } from 'react-native';
 
 import {CustomText} from '../../components/shared';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 // const categoryData = {}  TODO: DB에서 불러오기
-
-interface MainheroViewProps {
-  selectedCategory: string;
-}
 
 const categoryData: Record<
   string,
@@ -26,46 +23,21 @@ const categoryData: Record<
     title: string;
   }[]
 > = {
-  '가족 여행': [
+  categories: [
     {
       id: '1',
-      image:
-        '/Users/mingyucheon/work/skt_fly_ai/OpenCV/chap04/images/matplot.jpg',
+      image: '/Users/mingyucheon/work/dataset/memoring/Example.PNG',
       quizCnt: 3,
       totalCnt: 10,
-      title: '우리 가족 미술관 여행',
-    },
-    {
-      id: '2',
-      image:
-        '/Users/mingyucheon/work/skt_fly_ai/OpenCV/chap08/images/scaling.jpg',
-      quizCnt: 0,
-      totalCnt: 10,
-      title: '우리 가족 유적지 여행',
-    },
-    {
-      id: '3',
-      image:
-        '/Users/mingyucheon/work/skt_fly_ai/OpenCV/chap08/images/translate.jpg',
-      quizCnt: 10,
-      totalCnt: 10,
-      title: '개쩌는 여행',
-    },
-  ],
-  '취미 활동': [
-    {
-      id: '4',
-      image:
-        '/Users/mingyucheon/work/skt_fly_ai/OpenCV/chap06/images/hist_stretch.jpg',
-      quizCnt: 4,
-      totalCnt: 10,
-      title: '고양이 키우기',
+      title: 'FLY AI OT 참석',
     },
   ],
 };
 
-const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
-  const data = categoryData[selectedCategory] || [];
+const MainheroView = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const data = categoryData.categories || [];
 
   return (
     <FlatList
@@ -76,23 +48,11 @@ const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
       renderItem={({item}) => (
         <View style={styles.card}>
           <Image source={{uri: item.image}} style={styles.image} />
-          <CustomText
-            weight="ExtraBold"
-            style={{
-              fontSize: 16,
-              marginTop: 26,
-              color: item.quizCnt === item.totalCnt ? '#939396' : '#CE5419',
-            }}>
-            {item.quizCnt === item.totalCnt
-              ? '풀이 완료'
-              : item.quizCnt > 0
-              ? `${item.quizCnt}/${item.totalCnt}개 진행 중`
-              : '신규 퀴즈'}
-          </CustomText>
-          <CustomText weight="ExtraBold" style={{fontSize: 20, marginTop: 8}}>
+          <CustomText weight="ExtraBold" style={{fontSize: 20, marginTop: 20}}>
             {item.title}
           </CustomText>
           <TouchableOpacity
+            onPress={() => navigation.navigate('Quiz', {title: item.title})}
             style={
               item.quizCnt < item.totalCnt
                 ? styles.button4New
@@ -101,14 +61,10 @@ const MainheroView: React.FC<MainheroViewProps> = ({selectedCategory}) => {
             <CustomText
               weight="ExtraBold"
               style={{
-                fontSize: 16,
+                fontSize: 22,
                 color: item.quizCnt < item.totalCnt ? '#CE5419' : '#555558',
               }}>
-              {item.quizCnt === item.totalCnt
-                ? '다시 풀기'
-                : item.quizCnt < item.totalCnt && 0 < item.quizCnt
-                ? '이어서 하기'
-                : '퀴즈 시작하기'}
+              {item.quizCnt === item.totalCnt ? '다시 풀기' : '시작하기'}
             </CustomText>
           </TouchableOpacity>
         </View>
@@ -126,7 +82,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    height: 410,
+    height: 396,
     borderRadius: 24,
     padding: 16,
     marginBottom: 16,
