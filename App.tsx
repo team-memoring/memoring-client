@@ -22,6 +22,9 @@ import QuizScreen from './src/screens/Quiz/QuizScreen';
 import QuizEndScreen from './src/screens/Quiz/QuizEndScreen';
 import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScreen';
 
+import DiaryScreen from './src/screens/Diary/DiaryScreen';
+import DiaryContentScreen from './src/screens/Diary/DiaryContentScreen';
+
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
@@ -52,7 +55,7 @@ function App(): React.JSX.Element {
     <PortalProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator initialRouteName="Diary">
             {/* Login */}
             <Stack.Screen
               name="Splash"
@@ -164,6 +167,22 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="QuizEnd"
               component={QuizEndScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="Diary"
+              component={DiaryScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="DiaryContent"
+              component={DiaryContentScreen}
               options={{
                 headerShown: false,
                 animation: 'none',
