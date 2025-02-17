@@ -48,7 +48,7 @@ const MainheroView = () => {
       renderItem={({item}) => (
         <View style={styles.card}>
           <Image source={{uri: item.image}} style={styles.image} />
-          <CustomText weight="ExtraBold" style={{fontSize: 20, marginTop: 20}}>
+          <CustomText weight="ExtraBold" style={{fontSize: 24, marginTop: 20}}>
             {item.title}
           </CustomText>
           <TouchableOpacity
