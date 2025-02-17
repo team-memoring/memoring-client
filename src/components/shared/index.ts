@@ -8,3 +8,4 @@ export {default as Header} from './Header';
 export {default as MemberInput} from './MemberInput';
 export {default as PaginationHeader} from './PaginationHeader';
 export {default as PaginationIndicator} from './PaginationIndicator';
+export {default as TitleHeader} from './TitleHeader';
