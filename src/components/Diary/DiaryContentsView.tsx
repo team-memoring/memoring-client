@@ -48,7 +48,10 @@ const DiaryContentsView = () => {
       renderItem={({item}) => (
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate('DiaryContent', {image: item.image})
+            navigation.navigate('DiaryContent', {
+              image: item.image,
+              title: item.title,
+            })
           }
           style={styles.card}>
           <Image source={{uri: item.image}} style={styles.image} />
