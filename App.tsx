@@ -21,6 +21,8 @@ import MainheroSelectScreen from './src/screens/Mainhero/MainheroSelectScreen';
 import QuizScreen from './src/screens/Quiz/QuizScreen';
 import QuizEndScreen from './src/screens/Quiz/QuizEndScreen';
 import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScreen';
+import MemberQuizDetailScreen from './src/screens/Member/MemberQuizDetailScreen';
+import MemberStatisticsScreen from './src/screens/Member/MemberStatisticsScreen';
 
 import DiaryScreen from './src/screens/Diary/DiaryScreen';
 import DiaryContentScreen from './src/screens/Diary/DiaryContentScreen';
@@ -55,7 +57,7 @@ function App(): React.JSX.Element {
     <PortalProvider>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Diary">
+          <Stack.Navigator initialRouteName="MemberHome">
             {/* Login */}
             <Stack.Screen
               name="Splash"
@@ -142,6 +144,20 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="MemberQuizComplete"
               component={MemberQuizCompleteScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MemberQuizDetail"
+              component={MemberQuizDetailScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="MemberStatistics"
+              component={MemberStatisticsScreen}
               options={{
                 headerShown: false,
               }}
