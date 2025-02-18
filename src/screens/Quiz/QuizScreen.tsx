@@ -94,11 +94,6 @@ const QuizScreen = () => {
       setCharacterDecorationType('heart');
     } else {
       const isCorrect = choice === questions[currentIndex].answer;
-
-      setSelectedAnswer(choice);
-      setSelectedAnswer(choice);
-      setShowResult(true);
-
       setSelectedAnswer(choice);
       setShowResult(true);
 
