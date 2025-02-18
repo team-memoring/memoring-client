@@ -24,6 +24,9 @@ import MemberQuizCompleteScreen from './src/screens/Member/MemberQuizCompleteScr
 import MemberQuizDetailScreen from './src/screens/Member/MemberQuizDetailScreen';
 import MemberStatisticsScreen from './src/screens/Member/MemberStatisticsScreen';
 
+import DiaryScreen from './src/screens/Diary/DiaryScreen';
+import DiaryContentScreen from './src/screens/Diary/DiaryContentScreen';
+
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
@@ -180,6 +183,22 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="QuizEnd"
               component={QuizEndScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="Diary"
+              component={DiaryScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
+            <Stack.Screen
+              name="DiaryContent"
+              component={DiaryContentScreen}
               options={{
                 headerShown: false,
                 animation: 'none',

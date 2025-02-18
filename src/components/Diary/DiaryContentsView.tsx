@@ -34,7 +34,7 @@ const categoryData: Record<
   ],
 };
 
-const MainheroView = () => {
+const DiaryContentsView = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const data = categoryData.categories || [];
@@ -46,28 +46,19 @@ const MainheroView = () => {
       ListFooterComponent={<View style={{height: 200}} />}
       contentContainerStyle={styles.list}
       renderItem={({item}) => (
-        <View style={styles.card}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('DiaryContent', {
+              image: item.image,
+              title: item.title,
+            })
+          }
+          style={styles.card}>
           <Image source={{uri: item.image}} style={styles.image} />
           <CustomText weight="ExtraBold" style={{fontSize: 24, marginTop: 20}}>
             {item.title}
           </CustomText>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Quiz', {title: item.title})}
-            style={
-              item.quizCnt < item.totalCnt
-                ? styles.button4New
-                : styles.button4Sec
-            }>
-            <CustomText
-              weight="ExtraBold"
-              style={{
-                fontSize: 22,
-                color: item.quizCnt < item.totalCnt ? '#CE5419' : '#555558',
-              }}>
-              {item.quizCnt === item.totalCnt ? '다시 풀기' : '시작하기'}
-            </CustomText>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       )}
       showsVerticalScrollIndicator={false}
       snapToAlignment="start" // 스크롤 후 정렬 위치
@@ -82,7 +73,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#fff',
-    height: 396,
+    height: 330,
     borderRadius: 24,
     padding: 16,
     marginBottom: 16,
@@ -108,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainheroView;
+export default DiaryContentsView;

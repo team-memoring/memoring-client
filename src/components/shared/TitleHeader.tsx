@@ -1,13 +1,19 @@
-import {Pressable, StatusBar, StyleSheet, View} from 'react-native';
-
+import React from 'react';
+import {Pressable, View, StyleSheet} from 'react-native';
 import BackArrow from '../../assets/icons/back_arrow.svg';
+import {CustomText} from '../../components/shared';
 
-interface BackHeaderProps {
-  onBackPress: () => void;
+interface TitleHeaderProps {
+  title: string;
   color?: string;
+  onBackPress: () => void;
 }
 
-const BackHeader = ({onBackPress, color = '#CE5419'}: BackHeaderProps) => {
+const TitleHeader = ({
+  title,
+  color = '#CE5419',
+  onBackPress,
+}: TitleHeaderProps) => {
   return (
     <View style={styles.header}>
       <Pressable
@@ -18,6 +24,9 @@ const BackHeader = ({onBackPress, color = '#CE5419'}: BackHeaderProps) => {
         onPress={onBackPress}>
         <BackArrow color={color} />
       </Pressable>
+      <CustomText weight="ExtraBold" style={[styles.title, {color}]}>
+        {title}
+      </CustomText>
     </View>
   );
 };
@@ -41,6 +50,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
   },
+  title: {
+    fontSize: 24,
+    lineHeight: 32,
+  },
 });
 
-export default BackHeader;
+export default TitleHeader;
