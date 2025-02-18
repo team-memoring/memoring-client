@@ -1,15 +1,7 @@
 import React, {useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Animated,
-  FlatList,
-  Dimensions,
-} from 'react-native';
+import {StyleSheet, View, Image, Animated, Dimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {useFormContext, useWatch} from 'react-hook-form';
 
 import {TitleHeader, CustomText} from '../../components/shared';
 import {
@@ -46,21 +38,21 @@ const Memory: Record<
   events: [
     {
       id: '1',
-      image: '/Users/mingyucheon/work/dataset/memoring/Example_2.PNG',
+      image: '/Users/kyuho/Desktop/Example_2.PNG',
       date: '2024년 12월 23일',
       description:
         '아침에 일찍 가야해서 아침을 못 먹고 갔는데 간식으로 샌드위치를 줘서 맛있게 먹었어.',
     },
     {
       id: '2',
-      image: '/Users/mingyucheon/work/dataset/memoring/Example_3.PNG',
+      image: '/Users/kyuho/Desktop/Example_3.PNG',
       date: '2024년 12월 23일',
       description:
         '오리엔테이션을 다 듣고 열정반, 패기반으로 나뉘었는데 패기반에 합류하게 되었어.',
     },
     {
       id: '3',
-      image: '/Users/mingyucheon/work/dataset/memoring/Example_4.PNG',
+      image: '/Users/kyuho/Desktop/Example_4.PNG',
       date: '2024년 12월 23일',
       description:
         '팀장들은 득표수가 많은 사람들이 대표해서 맡게 되었는데 우리팀 팀장을 이규호였어.',
@@ -82,7 +74,7 @@ const DiaryContentScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={{paddingVertical: 10}}>
         <TitleHeader
-          onBackPress={() => navigation.navigate('Diary')}
+          onBackPress={() => navigation.goBack()}
           title={title}
           color="#222225"
         />

@@ -49,7 +49,7 @@ const LoginSelectScreen = (): React.JSX.Element => {
         barStyle="dark-content"
       />
       <View>
-        <Header />
+        <Header showDiaryLogo={false} />
         <View style={styles.text}>
           <CustomText
             weight="ExtraBold"

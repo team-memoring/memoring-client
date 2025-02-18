@@ -9,7 +9,7 @@ const OnboardingInviteScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   // TODO: change to api call
-  const familyName = '테스트';
+  const familyName = '규호네가족';
 
   const shareMessage = async (code: string) => {
     try {
@@ -29,7 +29,7 @@ const OnboardingInviteScreen = () => {
         backgroundColor="#f9ebe4"
         barStyle="dark-content"
       />
-      <Header />
+      <Header showDiaryLogo={false} />
       <View>
         <View style={styles.text}>
           <View
@@ -108,7 +108,7 @@ const OnboardingInviteScreen = () => {
       <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
         <Pressable
           onPress={() => {
-            navigation.navigate('MainheroSelect');
+            navigation.navigate('MemberHome');
           }}
           style={[
             styles.nextButton,

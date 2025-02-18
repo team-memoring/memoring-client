@@ -46,7 +46,7 @@ const MemberQuizGenScreen = () => {
         <CustomText
           weight="ExtraBold"
           style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
-          5개의 이벤트로
+          2개의 이벤트로
         </CustomText>
         <CustomText weight="ExtraBold" style={{fontSize: 28, color: '#222225'}}>
           {isCreating
@@ -76,7 +76,7 @@ const MemberQuizGenScreen = () => {
               color: '#fff',
               fontSize: 20,
             }}>
-            다음으로
+            생성하기
           </CustomText>
         </Pressable>
       </View>
