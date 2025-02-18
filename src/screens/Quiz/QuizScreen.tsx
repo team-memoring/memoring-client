@@ -152,7 +152,7 @@ const QuizScreen = () => {
                 ? '#f9ebe4'
                 : selectedAnswer === questions[currentIndex].answer
                 ? '#f9ebe4'
-                : '#d7edff'
+                : '#F0F0F0'
               : styles.container.backgroundColor,
           },
         ]}>
