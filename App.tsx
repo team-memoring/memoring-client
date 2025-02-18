@@ -12,6 +12,7 @@ import {PortalProvider} from '@gorhom/portal';
 import OnboardingInviteScreen from './src/screens/Onboarding/OnboardingInviteScreen';
 import {Linking} from 'react-native';
 import OnboardingCodeScreen from './src/screens/Onboarding/OnboardingCodeScreen';
+import OnboardingStartScreen from './src/screens/Onboarding/OnboardingStartScreen';
 import MemberHomeScreen from './src/screens/Member/MemberHomeScreen';
 import MemberRegisterScreen from './src/screens/Member/MemberRegisterScreen';
 import MemberQuizGenScreen from './src/screens/Member/MemberQuizGenScreen';
@@ -108,7 +109,14 @@ function App(): React.JSX.Element {
                 animation: 'none',
               }}
             />
-
+            <Stack.Screen
+              name="OnboardingStart"
+              component={OnboardingStartScreen}
+              options={{
+                headerShown: false,
+                animation: 'none',
+              }}
+            />
             {/* Member */}
             <Stack.Screen
               name="MemberHome"
