@@ -4,9 +4,11 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import CodeInput from '../../components/shared/CodeInput';
 import {useEffect, useState} from 'react';
 import {CharacterType} from '../../components/shared/Character';
-import {set} from 'react-hook-form';
+import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 const OnboardingCodeScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [code, setCode] = useState<string[]>(Array(6).fill(''));
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -17,13 +19,14 @@ const OnboardingCodeScreen = () => {
 
   const handleSubmit = () => {
     //TODO: API call 처리 (ex. 존재하지 않는 코드)
-    console.log('code:', code.join(''));
-    if (true) {
+    // console.log('code:', code.join(''));
+    if (false) {
       setIsError(true);
       setErrorText('존재하지 않는 코드입니다.');
       return;
     } else {
       setIsError(false);
+      navigation.navigate('MainheroSelect');
       //TODO: Navigation 처리
     }
   };
@@ -55,7 +58,7 @@ const OnboardingCodeScreen = () => {
         backgroundColor="#f9ebe4"
         barStyle="dark-content"
       />
-      <Header />
+      <Header showDiaryLogo={false} />
 
       <View>
         <View style={styles.text}>

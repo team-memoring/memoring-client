@@ -21,6 +21,7 @@ import MemberMemoryTextarea from './MemberMemoryTextarea';
 import {useEffect, useRef} from 'react';
 
 import Plus from '../../../assets/icons/plus.svg';
+import {MINIMUM_EVENTS} from '../../../screens/Member/MemberRegisterScreen';
 
 const indexMap: {[key: number]: string} = {
   0: '첫번째',
@@ -46,7 +47,7 @@ const MemberMemoryBox = ({
   const offsetY = useRef(new Animated.Value(0)).current;
 
   const handleDeleteEvent = () => {
-    if (memoryIndex < 3) return;
+    if (memoryIndex < MINIMUM_EVENTS) return;
 
     setValue(
       'events',
@@ -199,10 +200,10 @@ const MemberMemoryBox = ({
             marginTop: 16,
           }}>
           <TouchableOpacity
-            disabled={memoryIndex < 3}
+            disabled={memoryIndex < MINIMUM_EVENTS}
             style={[
               styles.trashContainer,
-              {opacity: memoryIndex < 3 ? 0.3 : 1},
+              {opacity: memoryIndex < MINIMUM_EVENTS ? 0.3 : 1},
             ]}
             onPress={handleDeleteEvent}>
             <Image
