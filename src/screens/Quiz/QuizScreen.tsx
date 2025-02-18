@@ -1,6 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {
-  StatusBar,
   StyleSheet,
   Animated,
   View,
@@ -20,29 +19,43 @@ import {
   CharacterType,
   CharacterDecorationType,
 } from '../../components/shared/Character';
+import ResultView from '../../components/QuizResult/ResultView';
+import DummyResultView from '../../components/QuizResult/DummyResultView';
 
 // TODO: change to api
 const questions = [
   {
     id: 1,
+    isDummy: false,
     question: '오리엔테이션 간식으로 받은 것은 무엇일까요?',
     choices: ['짜장면', '샌드위치', '쌀국수', '초밥'],
     answer: '샌드위치',
   },
   {
     id: 2,
+    isDummy: false,
     question: '배정 받았던 반 이름은 무엇일까요?',
     choices: ['사랑반', '열정반', '패기반', '우정반'],
     answer: '패기반',
   },
   {
     id: 3,
+    isDummy: true,
+    question: '반 이름을 보고 어떤 생각이 들었나요?',
+    choices: ['힘이 난다!', '다른 이름이 좋다..', '기대된다!', '재밌겠다!'],
+    initial_react: '그러셨군요!',
+    main_react: '저도 그럴거라 생각했어요.',
+  },
+  {
+    id: 4,
+    isDummy: false,
     question: '우리팀 팀장 이름은 무엇일까요?',
     choices: ['천민규', '안치욱', '이태훈', '이규호'],
     answer: '이규호',
   },
   {
-    id: 4,
+    id: 5,
+    isDummy: false,
     question: '첫째날 배웠던 과목의 주제는 무엇일까요?',
     choices: ['인공지능', '애저', '독일어', '컴퓨터 구조'],
     answer: '인공지능',
@@ -73,16 +86,30 @@ const QuizScreen = () => {
 
   const animatedTranslateY = useRef(new Animated.Value(400)).current;
 
+  // TODO: LLM API
   const handleAnswer = (choice: string) => {
-    const isCorrect = choice === questions[currentIndex].answer;
+    if (questions[currentIndex].isDummy) {
+      setSelectedAnswer(questions[currentIndex].initial_react ?? '');
+      setCharacterType('happy');
+      setCharacterDecorationType('heart');
+    } else {
+      const isCorrect = choice === questions[currentIndex].answer;
 
-    setSelectedAnswer(choice);
+      setSelectedAnswer(choice);
+      setSelectedAnswer(choice);
+      setShowResult(true);
+
+      setSelectedAnswer(choice);
+      setShowResult(true);
+
+      setCharacterType(isCorrect ? 'happy' : 'sad');
+      setCharacterDecorationType(isCorrect ? 'heart' : 'tear');
+    }
+
     setShowResult(true);
 
-    setCharacterType(isCorrect ? 'happy' : 'sad');
-    setCharacterDecorationType(isCorrect ? 'heart' : 'tear');
     Animated.spring(animatedTranslateY, {
-      toValue: -100,
+      toValue: -80,
       useNativeDriver: true,
       damping: 15,
       stiffness: 120,
@@ -125,10 +152,13 @@ const QuizScreen = () => {
         style={[
           styles.container,
           {
-            backgroundColor:
-              showResult && selectedAnswer !== questions[currentIndex].answer
-                ? '#d7edff'
-                : '#f9ebe4',
+            backgroundColor: showResult
+              ? questions[currentIndex].isDummy
+                ? '#f9ebe4'
+                : selectedAnswer === questions[currentIndex].answer
+                ? '#f9ebe4'
+                : '#d7edff'
+              : styles.container.backgroundColor,
           },
         ]}>
         <PaginationHeader
@@ -143,33 +173,18 @@ const QuizScreen = () => {
         />
         {showResult ? (
           <>
-            <CustomText
-              weight="ExtraBold"
-              style={{
-                fontSize: 28,
-                color:
-                  selectedAnswer === questions[currentIndex].answer
-                    ? '#CE5419'
-                    : '#939396',
-                paddingTop: 120,
-                paddingHorizontal: 46.5,
-                textAlign: 'center',
-              }}>
-              {selectedAnswer === questions[currentIndex].answer
-                ? '정답이에요!'
-                : '아쉬워요...'}
-            </CustomText>
-            <CustomText
-              weight="ExtraBold"
-              style={{
-                fontSize: 36,
-                color: '222225',
-                paddingTop: 6,
-                paddingHorizontal: 46.5,
-                textAlign: 'center',
-              }}>
-              {selectedAnswer}
-            </CustomText>
+            {questions[currentIndex].isDummy ? (
+              // TODO: LLM
+              <DummyResultView
+                initialReact={selectedAnswer ?? ''}
+                mainReact={questions[currentIndex].main_react ?? ''}
+              />
+            ) : (
+              <ResultView
+                selectedAnswer={selectedAnswer ?? ''}
+                answer={questions[currentIndex].answer ?? ''}
+              />
+            )}
             <View style={[styles.nextButtonWrapper]}>
               <Pressable
                 onPress={handelQuestionPress}
