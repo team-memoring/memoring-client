@@ -40,7 +40,7 @@ const OnboardingInviteScreen = () => {
             <CustomText
               weight="ExtraBold"
               style={{fontSize: 28, marginTop: 8, color: '#CE5419'}}>
-              {`'${familyName}'`}
+              {`'${familyName}' `}
             </CustomText>
             <CustomText
               weight="ExtraBold"
@@ -66,7 +66,7 @@ const OnboardingInviteScreen = () => {
           <View style={styles.button}>
             <View style={styles.textContainer}>
               <CustomText weight="ExtraBold" style={styles.select}>
-                주인공
+                가족 코드
               </CustomText>
               <CustomText weight="ExtraBold" style={styles.number}>
                 145286
@@ -82,33 +82,13 @@ const OnboardingInviteScreen = () => {
               </CustomText>
             </Pressable>
           </View>
-          <View style={styles.spacer} />
-          <View style={styles.button}>
-            <View style={styles.textContainer}>
-              <CustomText weight="ExtraBold" style={styles.select}>
-                가족 구성원
-              </CustomText>
-              <CustomText weight="ExtraBold" style={styles.number}>
-                663258
-              </CustomText>
-            </View>
-            <Pressable
-              style={styles.shareButton}
-              onPress={() => shareMessage('663258')}>
-              <CustomText
-                weight="ExtraBold"
-                style={{fontSize: 16, color: '#555558'}}>
-                공유하기
-              </CustomText>
-            </Pressable>
-          </View>
         </View>
       </View>
       <Character type="close" bottom={-550} />
       <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
         <Pressable
           onPress={() => {
-            navigation.navigate('MemberHome');
+            navigation.navigate('OnboardingStart');
           }}
           style={[
             styles.nextButton,
@@ -121,7 +101,7 @@ const OnboardingInviteScreen = () => {
               color: '#fff',
               fontSize: 20,
             }}>
-            시작하기
+            다음으로
           </CustomText>
         </Pressable>
       </View>
@@ -158,17 +138,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    marginHorizontal: 29,
   },
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 34.5,
   },
-  spacer: {
-    width: 12,
-  },
   select: {
-    fontSize: 18,
+    fontSize: 22,
     color: '#CE5419',
   },
   number: {
@@ -181,6 +159,8 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     backgroundColor: '#F0F0F3',
     borderRadius: 60,
+    width: 269,
+    alignItems: 'center',
   },
 });
 
