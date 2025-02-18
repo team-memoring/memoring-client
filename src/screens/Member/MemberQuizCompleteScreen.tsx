@@ -30,7 +30,7 @@ const MemberQuizCompleteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent backgroundColor="#fff" barStyle="dark-content" />
-      <Header />
+      <Header showDiaryLogo={false} />
       <View style={{alignItems: 'center', marginTop: 72}}>
         <CustomText weight="ExtraBold" style={styles.mainText}>
           5개의 퀴즈를

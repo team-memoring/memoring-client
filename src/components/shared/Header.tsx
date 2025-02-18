@@ -32,7 +32,7 @@ const Header = ({showDiaryLogo = true}: HeaderProps) => {
       <View style={styles.rightContainer}>
         {showDiaryLogo && (
           <Pressable onPress={() => navigation.navigate('Diary')}>
-            <DiaryLogo width={28} height={28} />
+            <DiaryLogo width={24} height={24} />
           </Pressable>
         )}
         {profileImageUrl && (
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   rightContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
   },
   image: {
     width: 32,
