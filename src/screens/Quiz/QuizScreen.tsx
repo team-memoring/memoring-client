@@ -121,12 +121,16 @@ const QuizScreen = () => {
 
   return (
     <GestureHandlerRootView>
-      <SafeAreaView style={styles.container}>
-        <StatusBar
-          translucent
-          backgroundColor="#f9ebe4"
-          barStyle="dark-content"
-        />
+      <SafeAreaView
+        style={[
+          styles.container,
+          {
+            backgroundColor:
+              showResult && selectedAnswer !== questions[currentIndex].answer
+                ? '#d7edff'
+                : '#f9ebe4',
+          },
+        ]}>
         <PaginationHeader
           currentIndex={currentIndex}
           totalSteps={questions.length}
@@ -146,7 +150,7 @@ const QuizScreen = () => {
                 color:
                   selectedAnswer === questions[currentIndex].answer
                     ? '#CE5419'
-                    : '939396',
+                    : '#939396',
                 paddingTop: 120,
                 paddingHorizontal: 46.5,
                 textAlign: 'center',
