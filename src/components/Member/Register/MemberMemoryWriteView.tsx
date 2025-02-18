@@ -77,7 +77,7 @@ const MemberMemoryWriteView = ({
               fontSize: 16,
               color: '#939396',
             }}>
-            최소 3개 - 최대 5개를 등록해주세요
+            객관적일수록 더 정교한 퀴즈가 만들어져요
           </CustomText>
         </View>
       </View>

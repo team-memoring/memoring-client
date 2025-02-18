@@ -18,8 +18,8 @@ const LoginScreen = (): React.JSX.Element => {
   const handleKakaoLogin = async () => {
     try {
       const accessToken = await signInWithKakao();
-
       if (accessToken) {
+        // FIXME: kakao 토큰 말고 서버 토큰 저장
         await saveToken(accessToken);
         const kakaoProfile = await fetchKakaoProfile();
         await saveUser(kakaoProfile);
@@ -28,7 +28,7 @@ const LoginScreen = (): React.JSX.Element => {
         Alert.alert('로그인 실패', '다시 시도해주세요.');
       }
     } catch (err) {
-      Alert.alert('로그인 에러', '로그인 중 문제가 발생했습니다.');
+      Alert.alert('로그인 에러', '카카오 로그인 중 문제가 발생했습니다.');
     }
   };
 

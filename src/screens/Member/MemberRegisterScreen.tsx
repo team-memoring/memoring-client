@@ -21,6 +21,7 @@ import MemberMemoryRoleView from '../../components/Member/Register/MemberMemoryR
 import MemberMemoryWriteView from '../../components/Member/Register/MemberMemoryWriteView';
 
 export const TOTAL_STEPS = 3;
+export const MINIMUM_EVENTS = 1;
 
 const MemberRegisterScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -74,7 +75,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
     defaultValues: {
       title: '',
       roles: [],
-      events: Array(3).fill({
+      events: Array(MINIMUM_EVENTS).fill({
         date: null, // 초기값을 null로 설정
         images: [],
         description: '',

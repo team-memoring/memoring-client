@@ -22,6 +22,8 @@ import Xmark from '../../../assets/icons/xmark.svg';
 
 import {CustomText} from '../../shared';
 
+const TOTAL_IMAGE_LIMIT = 1;
+
 interface MemoryImageUploadProps {
   control: Control<IMemoryRegister>;
   eventIndex: number;
@@ -36,8 +38,10 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
   });
 
   const pickImage = async () => {
-    if (value.length >= 5) {
-      Alert.alert('최대 5개의 이미지만 업로드할 수 있습니다.');
+    if (value.length >= TOTAL_IMAGE_LIMIT) {
+      Alert.alert(
+        `최대 ${TOTAL_IMAGE_LIMIT}개의 이미지만 업로드할 수 있습니다.`,
+      );
       return;
     }
 
@@ -123,7 +127,8 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
                 </TouchableOpacity>
               </View>
             ))}
-            {value.length < 5 && (
+            {/* 꽉 찼을 시에 하나만 있으면 너무 비어보이는 이슈로 display */}
+            {value.length < TOTAL_IMAGE_LIMIT + 1 && (
               <TouchableOpacity style={styles.addButton} onPress={pickImage}>
                 <Camera width={24} height={24} />
                 <CustomText
@@ -134,7 +139,7 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
                     color: '#C5C5C7',
                     marginTop: 4,
                   }}>
-                  {`${value.length}/${5}개`}
+                  {`${value.length}/${TOTAL_IMAGE_LIMIT}개`}
                 </CustomText>
               </TouchableOpacity>
             )}
@@ -151,7 +156,7 @@ const MemoryImageUpload = ({control, eventIndex}: MemoryImageUploadProps) => {
               color: '#C5C5C7',
               marginTop: 4,
             }}>
-            사진 최대 5개
+            사진 최대 1개
           </CustomText>
         </Pressable>
       )}
