@@ -80,7 +80,7 @@ const DiaryContentScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{paddingVertical: 10}}>
+      <View style={{paddingVertical: 2}}>
         <TitleHeader
           onBackPress={() => navigation.navigate('Diary')}
           title={title}
