@@ -12,14 +12,14 @@ const DiaryScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flexDirection: 'row', paddingVertical: 10}}>
+      <View style={{flexDirection: 'row', paddingVertical: 2}}>
         <TitleHeader
           onBackPress={() => navigation.navigate('MainheroSelect')}
           title="가족 다이어리"
           color="#CE5419"
         />
       </View>
-      <View style={{paddingVertical: 12, paddingHorizontal: 16}}>
+      <View style={{paddingVertical: 6, paddingHorizontal: 16}}>
         <CustomText
           weight="ExtraBold"
           style={{

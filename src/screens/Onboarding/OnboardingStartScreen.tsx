@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -5,11 +6,18 @@ import Share from 'react-native-share';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const OnboardingInviteScreen = () => {
+const OnboardingStartScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [startEnabled, setStartEnabled] = useState(false);
 
   // TODO: change to api call
   const familyName = '규호네가족';
+
+  const handleRoleSelect = (role: string) => {
+    setSelectedRole(role);
+    setStartEnabled(true);
+  };
 
   const shareMessage = async (code: string) => {
     try {
@@ -55,53 +63,64 @@ const OnboardingInviteScreen = () => {
           </CustomText>
         </View>
 
-        <View
-          style={{
-            width: '100%',
-            paddingHorizontal: 16,
-            marginTop: 36,
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}>
-          <View style={styles.button}>
+        <View style={styles.buttonContainer}>
+          {/* 주인공 버튼 */}
+          <Pressable
+            onPress={() => handleRoleSelect('주인공')}
+            style={[
+              styles.button,
+              selectedRole === '주인공' && styles.selectedButton, // 선택된 버튼 스타일
+            ]}>
             <View style={styles.textContainer}>
-              <CustomText weight="ExtraBold" style={styles.select}>
-                가족 코드
+              <CustomText weight="ExtraBold" style={styles.title}>
+                주인공
               </CustomText>
-              <CustomText weight="ExtraBold" style={styles.number}>
-                145286
+              <CustomText weight="Bold" style={styles.description}>
+                가족의 주인공으로{'\n'}퀴즈를 풀어요
               </CustomText>
             </View>
-            <Pressable
-              style={styles.shareButton}
-              onPress={() => shareMessage('145286')}>
-              <CustomText
-                weight="ExtraBold"
-                style={{fontSize: 16, color: '#555558'}}>
-                공유하기
+          </Pressable>
+          <View style={styles.spacer} />
+          <Pressable
+            onPress={() => handleRoleSelect('가족 구성원')}
+            style={[
+              styles.button,
+              selectedRole === '가족 구성원' && styles.selectedButton,
+            ]}>
+            <View style={styles.textContainer}>
+              <CustomText weight="ExtraBold" style={styles.title}>
+                가족 구성원
               </CustomText>
-            </Pressable>
-          </View>
+              <CustomText weight="Bold" style={styles.description}>
+                가족 구성원으로{'\n'}퀴즈를 만들어요
+              </CustomText>
+            </View>
+          </Pressable>
         </View>
       </View>
-      <Character type="close" bottom={-550} />
-      <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
+      <Character
+        type={selectedRole === '주인공' ? 'openLeft' : 'openRight'}
+        bottom={-550}
+      />
+      <View
+        style={[
+          styles.nextButtonWrapper,
+          {backgroundColor: startEnabled ? '#222225' : '#d3d3d3'}, // 버튼 활성화 여부
+        ]}>
         <Pressable
           onPress={() => {
-            navigation.navigate('OnboardingStart');
+            selectedRole === '주인공'
+              ? navigation.navigate('MainheroSelect')
+              : navigation.navigate('MemberHome');
           }}
           style={[
             styles.nextButton,
             {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
-            {backgroundColor: '#222225'},
-          ]}>
-          <CustomText
-            weight="ExtraBold"
-            style={{
-              color: '#fff',
-              fontSize: 20,
-            }}>
-            다음으로
+            {backgroundColor: startEnabled ? '#222225' : '#939396'},
+          ]}
+          disabled={!startEnabled}>
+          <CustomText weight="ExtraBold" style={{color: '#fff', fontSize: 20}}>
+            시작하기
           </CustomText>
         </Pressable>
       </View>
@@ -126,6 +145,13 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: Platform.OS === 'ios' ? 52 : 24,
   },
+  buttonContainer: {
+    width: '100%',
+    paddingHorizontal: 16,
+    marginTop: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   text: {
     alignItems: 'center',
     marginTop: 72,
@@ -138,30 +164,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    marginHorizontal: 29,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  selectedButton: {
+    borderColor: '#CE5419',
   },
   textContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 34.5,
   },
-  select: {
+  spacer: {
+    width: 12,
+  },
+  title: {
     fontSize: 22,
     color: '#CE5419',
   },
-  number: {
-    fontSize: 32,
+  description: {
+    fontSize: 16,
     color: '#222225',
     marginTop: 12,
+    textAlign: 'center',
+    lineHeight: 24,
   },
   shareButton: {
     paddingHorizontal: 20,
     paddingVertical: 13,
     backgroundColor: '#F0F0F3',
     borderRadius: 60,
-    width: 269,
-    alignItems: 'center',
   },
 });
 
-export default OnboardingInviteScreen;
+export default OnboardingStartScreen;

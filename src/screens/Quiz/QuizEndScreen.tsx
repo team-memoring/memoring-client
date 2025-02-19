@@ -30,7 +30,7 @@ const QuizEndScreen = () => {
 
   useEffect(() => {
     Animated.spring(animatedTranslateY, {
-      toValue: -100,
+      toValue: -80,
       useNativeDriver: true,
     }).start();
   });
@@ -47,7 +47,7 @@ const QuizEndScreen = () => {
             paddingHorizontal: 38,
             textAlign: 'center',
           }}>
-          {title}의{'\n'}추억 여행을 완료했어요!
+          "{title}"의{'\n'}추억 여행을 완료했어요!
         </CustomText>
         <Character
           type={characterType}

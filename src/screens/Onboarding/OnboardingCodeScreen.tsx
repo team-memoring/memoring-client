@@ -26,7 +26,7 @@ const OnboardingCodeScreen = () => {
       return;
     } else {
       setIsError(false);
-      navigation.navigate('MainheroSelect');
+      navigation.navigate('OnboardingStart');
       //TODO: Navigation 처리
     }
   };
