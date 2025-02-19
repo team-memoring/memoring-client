@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -27,8 +26,16 @@ import MemberStatisticsScreen from './src/screens/Member/MemberStatisticsScreen'
 import DiaryScreen from './src/screens/Diary/DiaryScreen';
 import DiaryContentScreen from './src/screens/Diary/DiaryContentScreen';
 
+import {AuthProvider, useAuth} from './src/contexts/AuthProvider';
+import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './src/utils/navigationHelper';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+
 const Stack = createNativeStackNavigator();
 
+const queryClient = new QueryClient();
+
+// 앱의 루트 컴포넌트
 function App(): React.JSX.Element {
   useEffect(() => {
     const handleDeepLink = (event: {url: string}) => {
@@ -55,160 +62,181 @@ function App(): React.JSX.Element {
 
   return (
     <PortalProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="MemberHome">
-            {/* Login */}
-            <Stack.Screen
-              name="Splash"
-              component={SplashScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="LoginSelect"
-              component={LoginSelectScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            {/* Onboarding */}
-            <Stack.Screen
-              name="OnboardingCreate"
-              component={OnboardingCreateScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="OnboardingInvite"
-              component={OnboardingInviteScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="OnboardingCode"
-              component={OnboardingCodeScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-
-            {/* Member */}
-            <Stack.Screen
-              name="MemberHome"
-              component={MemberHomeScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="MemberRegister"
-              component={MemberRegisterScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="MemberQuizGen"
-              component={MemberQuizGenScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="MemberQuizList"
-              component={MemberQuizListScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="MemberQuizComplete"
-              component={MemberQuizCompleteScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="MemberQuizDetail"
-              component={MemberQuizDetailScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="MemberStatistics"
-              component={MemberStatisticsScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            {/* Hero */}
-            <Stack.Screen
-              name="MainheroSelect"
-              component={MainheroSelectScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            {/* Quiz */}
-            <Stack.Screen
-              name="Quiz"
-              component={QuizScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="QuizEnd"
-              component={QuizEndScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="Diary"
-              component={DiaryScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-            <Stack.Screen
-              name="DiaryContent"
-              component={DiaryContentScreen}
-              options={{
-                headerShown: false,
-                animation: 'none',
-              }}
-            />
-          </Stack.Navigator>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer ref={navigationRef}>
+          <SafeAreaProvider>
+            <AuthProvider>
+              <AppNavigator />
+            </AuthProvider>
+          </SafeAreaProvider>
         </NavigationContainer>
-      </SafeAreaProvider>
+      </QueryClientProvider>
     </PortalProvider>
   );
 }
+
+// 인증 상태에 따라 내비게이션을 관리하는 컴포넌트
+const AppNavigator = () => {
+  const {isAuthenticated, isLoading} = useAuth();
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
+  return (
+    <Stack.Navigator
+      initialRouteName={isAuthenticated ? 'MainheroSelect' : 'Login'}>
+      {/* No Auth needed*/}
+      <Stack.Screen
+        name="Splash"
+        component={SplashScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="LoginSelect"
+        component={LoginSelectScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+
+      {/* Onboarding */}
+      <Stack.Screen
+        name="OnboardingCreate"
+        component={OnboardingCreateScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="OnboardingInvite"
+        component={OnboardingInviteScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="OnboardingCode"
+        component={OnboardingCodeScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+
+      {/* Member */}
+      <Stack.Screen
+        name="MemberHome"
+        component={MemberHomeScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="MemberRegister"
+        component={MemberRegisterScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="MemberQuizGen"
+        component={MemberQuizGenScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="MemberQuizList"
+        component={MemberQuizListScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MemberQuizComplete"
+        component={MemberQuizCompleteScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MemberQuizDetail"
+        component={MemberQuizDetailScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MemberStatistics"
+        component={MemberStatisticsScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      {/* Hero */}
+      <Stack.Screen
+        name="MainheroSelect"
+        component={MainheroSelectScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+
+      {/* Quiz */}
+      <Stack.Screen
+        name="Quiz"
+        component={QuizScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="QuizEnd"
+        component={QuizEndScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="Diary"
+        component={DiaryScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+      <Stack.Screen
+        name="DiaryContent"
+        component={DiaryContentScreen}
+        options={{
+          headerShown: false,
+          animation: 'none',
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default App;
