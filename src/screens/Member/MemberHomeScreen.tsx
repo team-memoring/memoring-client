@@ -26,14 +26,13 @@ const MemberHomeScreen = () => {
 
       if (user) {
         setUsername(user.nickname);
-        console.log('user:', user);
       }
     };
 
     loadUsername();
   }, []);
 
-  const handleQuizPress = (quizId: number) => {
+  const handleQuizPress = async (quizId: number) => {
     navigation.navigate('MemberQuizDetail', {
       quizId,
     });

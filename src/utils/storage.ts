@@ -30,6 +30,48 @@ export const removeToken = async (): Promise<void> => {
   }
 };
 
+// Refresh Token 저장
+export const saveRefreshToken = async (token: string): Promise<void> => {
+  try {
+    await AsyncStorage.setItem('refresh_token', token);
+  } catch (err) {
+    console.error('리프레시 토큰 저장 에러:', err);
+  }
+};
+
+// Refresh Token 가져오기
+export const getRefreshToken = async (): Promise<string | null> => {
+  try {
+    const token = await AsyncStorage.getItem('refresh_token');
+    return token;
+  } catch (err) {
+    console.error('리프레시 토큰 불러오기 에러:', err);
+    return null;
+  }
+};
+
+export const removeRefreshToken = async (): Promise<void> => {
+  try {
+    await AsyncStorage.removeItem('refresh_token');
+  } catch (err) {
+    console.error('리프레시 토큰 삭제 에러:', err);
+  }
+};
+
+export const getKakaoAccessToken = async (): Promise<string | null> => {
+  try {
+    const token = await AsyncStorage.getItem('kakao_access_token');
+    return token;
+  } catch (err) {
+    console.error('카카오 토큰 불러오기 에러:', err);
+    return null;
+  }
+};
+
+export const saveKakaoAccessToken = async (token: string) => {
+  await AsyncStorage.setItem('kakao_access_token', token);
+};
+
 export const saveUser = async (user: KakaoProfile) => {
   await AsyncStorage.setItem('user', JSON.stringify(user));
 };

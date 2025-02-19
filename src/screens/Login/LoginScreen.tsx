@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, StatusBar, Alert, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomText from '../../components/shared/CustomText';
@@ -7,28 +7,43 @@ import Logo from '../../assets/icons/logo.svg';
 
 import Kakao from '../../assets/icons/kakao.svg';
 import {fetchKakaoProfile, signInWithKakao} from '../../api/kakao';
-import {saveToken, saveUser} from '../../utils/storage';
+import {
+  saveKakaoAccessToken,
+  saveRefreshToken,
+  saveToken,
+  saveUser,
+} from '../../utils/storage';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Character from '../../components/shared/Character';
+import {postAuthLogin} from '../../api/memoring/auth';
 
 const LoginScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const handleKakaoLogin = async () => {
     try {
-      const accessToken = await signInWithKakao();
-      if (accessToken) {
-        // FIXME: kakao 토큰 말고 서버 토큰 저장
-        await saveToken(accessToken);
-        const kakaoProfile = await fetchKakaoProfile();
-        await saveUser(kakaoProfile);
-        navigation.navigate('LoginSelect');
-      } else {
-        Alert.alert('로그인 실패', '다시 시도해주세요.');
+      const kakaoAccessToken = await signInWithKakao();
+      if (!kakaoAccessToken) {
+        Alert.alert('로그인 실패', '카카오 로그인 중 오류가 발생했습니다.');
+        return;
       }
-    } catch (err) {
-      Alert.alert('로그인 에러', '카카오 로그인 중 문제가 발생했습니다.');
+      console.log(kakaoAccessToken);
+
+      const response = await postAuthLogin(kakaoAccessToken);
+      const {access_token, refresh_token} = response.data;
+
+      await saveKakaoAccessToken(kakaoAccessToken);
+      await saveToken(access_token);
+      await saveRefreshToken(refresh_token);
+
+      const kakaoProfile = await fetchKakaoProfile();
+      await saveUser(kakaoProfile);
+
+      navigation.navigate('LoginSelect');
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('로그인 실패', '다시 시도해주세요.');
     }
   };
 
