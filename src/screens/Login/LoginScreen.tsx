@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {View, StyleSheet, StatusBar, Alert, Pressable} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CustomText from '../../components/shared/CustomText';
 
 import Logo from '../../assets/icons/logo.svg';
-
 import Kakao from '../../assets/icons/kakao.svg';
+
 import {fetchKakaoProfile, signInWithKakao} from '../../api/kakao';
 import {
   saveKakaoAccessToken,
@@ -28,7 +28,6 @@ const LoginScreen = (): React.JSX.Element => {
         Alert.alert('로그인 실패', '카카오 로그인 중 오류가 발생했습니다.');
         return;
       }
-      console.log(kakaoAccessToken);
 
       const response = await postAuthLogin(kakaoAccessToken);
       const {access_token, refresh_token} = response.data;
