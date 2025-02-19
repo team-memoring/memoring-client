@@ -78,15 +78,8 @@ function App(): React.JSX.Element {
 
 // 인증 상태에 따라 내비게이션을 관리하는 컴포넌트
 const AppNavigator = () => {
-  const {isAuthenticated, isLoading} = useAuth();
-
-  if (isLoading) {
-    return <SplashScreen />;
-  }
-
   return (
-    <Stack.Navigator
-      initialRouteName={isAuthenticated ? 'MainheroSelect' : 'Login'}>
+    <Stack.Navigator initialRouteName={'Login'}>
       {/* No Auth needed*/}
       <Stack.Screen
         name="Splash"
