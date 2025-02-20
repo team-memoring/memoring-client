@@ -46,7 +46,7 @@ const MemberQuizGenScreen = () => {
       />
       <BackHeader
         onBackPress={() => {
-          navigation.goBack();
+          navigation.navigate('MemberHome');
         }}
       />
       <View style={styles.content}>

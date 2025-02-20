@@ -1,14 +1,21 @@
-import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useEffect, useState} from 'react';
 import {getUser} from '../../utils/storage';
 import MemberAnalysisCard from '../../components/Member/Home/MemberAnalysisCard';
 import MemberQuizProgressCard from '../../components/Member/Home/MemberQuizProgressCard';
-import {memberHomeMemoryDummy} from '../../lib/dummy';
 import MemberQuizCard from '../../components/Member/Home/MemberQuizCard';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {useQuery} from '@tanstack/react-query';
+import {getMemoriesMembers} from '../../api/memoring/memories';
 
 export const MEMBER_HOME_DURATION = 2000;
 
@@ -31,6 +38,13 @@ const MemberHomeScreen = () => {
 
     loadUsername();
   }, []);
+
+  const {data: memoriesData, isLoading: isMemoriesLoading} = useQuery({
+    queryKey: ['getMemoriesMembers'],
+    queryFn: async () => getMemoriesMembers(),
+  });
+
+  console.log(memoriesData);
 
   const handleQuizPress = async (quizId: number) => {
     navigation.navigate('MemberQuizDetail', {
@@ -70,23 +84,46 @@ const MemberHomeScreen = () => {
       <View style={styles.itemContainer}>
         <MemberAnalysisCard trend="up" month={2} rate={78} rateDiff={8} />
       </View>
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={styles.cardContainer}>
-          {memberHomeMemoryDummy.map((memory, index) => (
-            <MemberQuizCard
-              key={index}
-              id={memory.id}
-              title={memory.title}
-              createdAt={memory.createdAt}
-              totalQuizCount={memory.totalQuizCount}
-              solvedQuizCount={memory.solvedQuizCount}
-              creator={memory.creator}
-              status={memory.status}
-              onPress={handleQuizPress}
-            />
-          ))}
+      {memoriesData?.data.length !== 0 ? (
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.cardContainer}>
+            {memoriesData?.data.map((memory, index) => (
+              <MemberQuizCard
+                key={index}
+                id={memory.memoryId}
+                title={memory.memoryTitle}
+                createdAt={memory.memoryUploadTime}
+                totalQuizCount={memory.totalQuizzes}
+                solvedQuizCount={memory.completedQuizzes}
+                // creator={memory.creator}
+                onPress={handleQuizPress}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            paddingHorizontal: 16,
+          }}>
+          <View style={styles.emptyCard}>
+            <CustomText
+              weight="ExtraBold"
+              style={{fontSize: 18, marginBottom: 16, color: '#77777A'}}>
+              아직 등록된 추억이 없습니다.
+            </CustomText>
+            <TouchableOpacity
+              style={styles.registerButton}
+              onPress={() => navigation.navigate('MemberRegister')}>
+              <CustomText
+                weight="ExtraBold"
+                style={{fontSize: 14, color: '#555558'}}>
+                추억 등록하기
+              </CustomText>
+            </TouchableOpacity>
+          </View>
         </View>
-      </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -104,6 +141,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flexDirection: 'row',
     gap: 12,
+  },
+  emptyCard: {
+    width: '100%',
+    paddingHorizontal: 16,
+    paddingVertical: 48,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  registerButton: {
+    backgroundColor: '#F0F0F3',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 60,
   },
 });
 
