@@ -15,6 +15,11 @@ export interface PostFamiliesResponse {
   familyCode: string;
 }
 
+export interface PostFamiliesCodeResponse {
+  familyId: number;
+  familyName: string;
+}
+
 export interface GetFamiliesFamilyIdResponse {
   familyId: number;
   familyName: string;
