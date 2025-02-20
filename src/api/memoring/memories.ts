@@ -1,7 +1,16 @@
 import {AxiosResponse} from 'axios';
-import {PostMemoriesResponse} from '../../lib/types/memories';
+import {
+  GetMemoriesMembersResponse,
+  PostMemoriesResponse,
+} from '../../lib/types/memories';
 import {getToken} from '../../utils/storage';
 import apiClient from './apiClient';
+
+export const getMemoriesMembers = async (): Promise<
+  AxiosResponse<GetMemoriesMembersResponse>
+> => {
+  return apiClient.get('/api/v1/memories/members');
+};
 
 export const postMemories = async (
   formData: FormData,

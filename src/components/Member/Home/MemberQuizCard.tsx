@@ -1,9 +1,9 @@
 import {Animated, Pressable, StyleSheet, View} from 'react-native';
-import {IMemory, QuizStatus} from '../../../lib/model/i-memory';
+import {IMemory} from '../../../lib/model/i-memory';
 import {CustomText} from '../../shared';
 
-import CardStarColored from '../../../assets/icons/card_star_colored.svg';
-import CardStarGray from '../../../assets/icons/card_star_grey.svg';
+// import CardStarColored from '../../../assets/icons/card_star_colored.svg';
+// import CardStarGray from '../../../assets/icons/card_star_grey.svg';
 import dayjs from 'dayjs';
 import {useEffect, useRef} from 'react';
 
@@ -14,17 +14,30 @@ interface MemberQuizCardProps
     | 'title'
     | 'totalQuizCount'
     | 'solvedQuizCount'
-    | 'creator'
+    // TODO: add later
+    // | 'creator'
     | 'createdAt'
-    | 'status'
   > {
   onPress: (quizId: number) => void;
 }
 
 const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
-  const formatDate = (date: Date) => dayjs(date).format('YYYY.MM.DD');
+  const formatDate = (date: string) => {
+    return dayjs(new Date(date)).format('YYYY.MM.DD');
+  };
 
-  const isColored = props.status === QuizStatus.IN_PROGRESS;
+  const getStatusText = () => {
+    if (props.solvedQuizCount === 0) {
+      return '풀이전';
+    } else if (props.solvedQuizCount < props.totalQuizCount) {
+      return '풀이중';
+    }
+    return '풀이완료';
+  };
+
+  const status = getStatusText();
+
+  const isColored = status === '풀이중';
 
   const tagStyle = () => {
     if (isColored) {
@@ -44,7 +57,7 @@ const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
   useEffect(() => {
     Animated.timing(animatedWidth, {
       toValue: progress,
-      duration: 800, // ✅ 애니메이션 지속 시간 (0.8초)
+      duration: 800,
       useNativeDriver: false,
     }).start();
   }, [progress]);
@@ -63,7 +76,7 @@ const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
             color: tagStyle().color,
             lineHeight: 12,
           }}>
-          {props.status}
+          {status}
         </CustomText>
       </View>
       <CustomText
@@ -83,7 +96,8 @@ const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
           alignItems: 'center',
           marginTop: 4,
         }}>
-        <View
+        {/* TODO: add later */}
+        {/* <View
           style={{
             flexDirection: 'row',
             gap: 2,
@@ -102,7 +116,7 @@ const MemberQuizCard = ({onPress, ...props}: MemberQuizCardProps) => {
             {props.creator}
           </CustomText>
         </View>
-        <View style={styles.circle} />
+        <View style={styles.circle} /> */}
         <CustomText
           weight="Bold"
           style={{
