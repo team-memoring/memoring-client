@@ -5,7 +5,7 @@ import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {FormProvider, useForm} from 'react-hook-form';
-import {IFamily} from '../../lib/model/i-family';
+import {IFamily, familyRoleMap} from '../../lib/model/i-family';
 
 import {
   GestureHandlerRootView,
@@ -20,6 +20,8 @@ import OnboardingFamilyView from '../../components/Onboarding/OnboardingFamilyVi
 
 import {Character, CustomText, PaginationHeader} from '../../components/shared';
 import {CharacterType} from '../../components/shared/Character';
+import {postFamilies} from '../../api/memoring/families';
+import {PostFamiliesRequestBody} from '../../lib/types/families';
 
 const TOTAL_STEPS = 3;
 
@@ -40,10 +42,37 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
     setAccessibleIndex(accessibleIndex);
   };
 
-  const handleSubmit = (data: IFamily) => {
-    // TODO: API 호출 처리
-    console.log(data);
-    navigation.navigate('OnboardingInvite');
+  const handleSubmit = async (data: IFamily) => {
+    try {
+      let members = data.members.map(member => {
+        return {
+          memberName: member.name,
+          memberRole: familyRoleMap[member.role],
+          isMain: false,
+        };
+      });
+
+      members.push({
+        memberName: data.hero.name,
+        memberRole: familyRoleMap[data.hero.role],
+        isMain: true,
+      });
+
+      const body: PostFamiliesRequestBody = {
+        familyName: data.familyName,
+        members: members,
+      };
+
+      const response = await postFamilies(body);
+
+      navigation.navigate('OnboardingInvite', {
+        familyName: data.familyName,
+        familyCode: response.data.familyCode,
+      });
+    } catch (error) {
+      // TODO: 400일 시 이미 가족 존재, modal 띄우고 가족 코드 보여주기
+      console.error('Error:', error);
+    }
   };
 
   const handleNextPress = () => {
