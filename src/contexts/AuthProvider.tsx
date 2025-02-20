@@ -14,10 +14,12 @@ import {
 import {postAuthRefresh, getAuthMe} from '../api/memoring/auth';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {GetAuthMeResponse} from '../lib/types/auth';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
   isLoading: boolean;
+  user: GetAuthMeResponse | null;
   role: number | null;
   logout: () => Promise<void>;
 }
@@ -25,6 +27,7 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   isLoading: true,
+  user: null,
   role: null,
   logout: async () => {},
 });
@@ -38,6 +41,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [role, setRole] = useState<number | null>(null);
+  const [user, setUser] = useState<GetAuthMeResponse | null>(null);
 
   useEffect(() => {
     const verifyAuth = async () => {
@@ -52,9 +56,10 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
       }
       try {
         const userData = await getAuthMe(); // 사용자 정보 가져오기
+        setUser(userData.data);
         setRole(userData.data.role);
         setIsAuthenticated(true);
-        redirectBasedOnRole(userData.data.role);
+        redirectBasedOnRole(userData.data);
       } catch (error) {
         console.error('Failed to fetch user info:', error);
         await removeToken();
@@ -77,9 +82,10 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
         await saveToken(newAccessToken);
         // 새 토큰으로 사용자 정보 가져오기
         const userData = await getAuthMe();
+        setUser(userData.data);
         setRole(userData.data.role);
         setIsAuthenticated(true);
-        redirectBasedOnRole(userData.data.role);
+        redirectBasedOnRole(userData.data);
         return true;
       } catch (error) {
         // console.error('Refresh token expired or invalid:', error);
@@ -96,12 +102,21 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
       navigation.reset({index: 0, routes: [{name: 'Login'}]});
     };
 
-    const redirectBasedOnRole = (userRole: number | null) => {
-      if (userRole === 0) {
-        navigation.reset({index: 0, routes: [{name: 'LoginSelect'}]});
-      } else if (userRole === 1) {
+    const redirectBasedOnRole = (user: GetAuthMeResponse) => {
+      if (user.role === 0) {
+        if (user.familyId) {
+          navigation.reset({
+            index: 0,
+            routes: [
+              {name: 'OnboardingStart', params: {familyId: user.familyId}},
+            ],
+          });
+        } else {
+          navigation.reset({index: 0, routes: [{name: 'LoginSelect'}]});
+        }
+      } else if (user.role === 1) {
         navigation.reset({index: 0, routes: [{name: 'MemberHome'}]});
-      } else if (userRole === 2) {
+      } else if (user.role === 2) {
         navigation.reset({index: 0, routes: [{name: 'MainheroSelect'}]});
       }
     };
@@ -112,12 +127,14 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const logout = async () => {
     await removeToken();
     setIsAuthenticated(false);
+    setUser(null);
     setRole(null);
     navigation.reset({index: 0, routes: [{name: 'Login'}]});
   };
 
   return (
-    <AuthContext.Provider value={{isAuthenticated, isLoading, role, logout}}>
+    <AuthContext.Provider
+      value={{isAuthenticated, isLoading, user, role, logout}}>
       {children}
     </AuthContext.Provider>
   );
