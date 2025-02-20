@@ -16,7 +16,7 @@ import {
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Character from '../../components/shared/Character';
-import {postAuthLogin} from '../../api/memoring/auth';
+import {getAuthMe, postAuthLogin} from '../../api/memoring/auth';
 
 const LoginScreen = (): React.JSX.Element => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -39,7 +39,22 @@ const LoginScreen = (): React.JSX.Element => {
       const kakaoProfile = await fetchKakaoProfile();
       await saveUser(kakaoProfile);
 
-      navigation.navigate('LoginSelect');
+      const authResponse = await getAuthMe();
+      const role = authResponse.data.role;
+
+      switch (role) {
+        case 0:
+          navigation.navigate('LoginSelect');
+          break;
+        case 1:
+          navigation.navigate('MemberHome');
+          break;
+        case 2:
+          navigation.navigate('MainheroSelect');
+          break;
+        default:
+          Alert.alert('로그인 실패', '로그인 과정에서 오류가 발생했습니다.');
+      }
     } catch (error) {
       console.error('Login error:', error);
       Alert.alert('로그인 실패', '다시 시도해주세요.');
