@@ -2,19 +2,29 @@ import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Share from 'react-native-share';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {
+  ParamListBase,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  OnboardingInvite: {familyName: string; familyCode: string};
+};
 
 const OnboardingInviteScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  // TODO: change to api call
-  const familyName = '규호네가족';
+  const route = useRoute<RouteProp<RootStackParamList, 'OnboardingInvite'>>();
+
+  const {familyName, familyCode} = route.params;
 
   const shareMessage = async (code: string) => {
     try {
       await Share.open({
-        message: `가족 공간 초대 코드: ${code}\n아래 링크에서 가입하세요!`,
+        message: `👨‍👩‍👧‍👦 '${familyName}' 가족 공간에 초대합니다! 🎉\n\n초대 코드: ${code}\n\n아래 링크를 눌러 함께하세요! 👇\nmemoring://invite/family?code=${code}`,
         url: `memoring://invite/family?code=${code}`,
       });
     } catch (error) {
@@ -68,13 +78,17 @@ const OnboardingInviteScreen = () => {
               <CustomText weight="ExtraBold" style={styles.select}>
                 가족 코드
               </CustomText>
-              <CustomText weight="ExtraBold" style={styles.number}>
-                145286
+              <CustomText
+                weight="ExtraBold"
+                style={[styles.number, {width: '100%'}]} // ✅ width 100% 추가
+                numberOfLines={1}
+                ellipsizeMode="tail">
+                {familyCode}
               </CustomText>
             </View>
             <Pressable
               style={styles.shareButton}
-              onPress={() => shareMessage('145286')}>
+              onPress={() => shareMessage(familyCode)}>
               <CustomText
                 weight="ExtraBold"
                 style={{fontSize: 16, color: '#555558'}}>
@@ -137,10 +151,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 16,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
     marginHorizontal: 29,
   },
   textContainer: {
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 34.5,
@@ -159,7 +175,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     backgroundColor: '#F0F0F3',
     borderRadius: 60,
-    width: 269,
+    width: '100%',
     alignItems: 'center',
   },
 });
