@@ -61,11 +61,10 @@ const OnboardingStartScreen = () => {
 
       const body = {
         role: selectedRole === '주인공' ? 2 : 1,
-        memberId: memberData?.data[0].memberId,
+        memberId: memberData.data[0].memberId,
       };
 
-      const response = await patchUserUserId(auth.user?.userId, body);
-      console.log(response);
+      await patchUserUserId(auth.user.userId, body);
 
       selectedRole === '주인공'
         ? navigation.navigate('MainheroSelect')

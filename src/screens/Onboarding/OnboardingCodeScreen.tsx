@@ -1,15 +1,24 @@
 import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
-import {Character, CustomText, Header} from '../../components/shared';
+import {
+  Character,
+  CustomInput,
+  CustomText,
+  Header,
+} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import CodeInput from '../../components/shared/CodeInput';
+
 import {useEffect, useState} from 'react';
 import {CharacterType} from '../../components/shared/Character';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {postFamiliesCode} from '../../api/memoring/families';
+import {AxiosError} from 'axios';
 
 const OnboardingCodeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const [code, setCode] = useState<string[]>(Array(6).fill(''));
+
+  const [code, setCode] = useState<string>('');
+
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
@@ -17,22 +26,29 @@ const OnboardingCodeScreen = () => {
 
   const [characterType, setCharacterType] = useState<CharacterType>('close');
 
-  const handleSubmit = () => {
-    //TODO: API call 처리 (ex. 존재하지 않는 코드)
-    // console.log('code:', code.join(''));
-    if (false) {
-      setIsError(true);
-      setErrorText('존재하지 않는 코드입니다.');
-      return;
-    } else {
+  const handleSubmit = async () => {
+    try {
+      const response = await postFamiliesCode(code);
+
       setIsError(false);
-      navigation.navigate('OnboardingStart');
-      //TODO: Navigation 처리
+      navigation.navigate('OnboardingStart', {
+        familyId: response.data.familyId,
+      });
+    } catch (error) {
+      const _error = error as AxiosError;
+      setIsError(true);
+
+      if (_error.status === 404) {
+        setErrorText('존재하지 않는 코드입니다.');
+      } else {
+        console.error('Error fetching family code:', _error);
+        setErrorText('알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
 
   useEffect(() => {
-    if (code.join('').length === 6) {
+    if (code.trim().length > 0) {
       setIsNextDisabled(false);
     } else {
       setIsNextDisabled(true);
@@ -65,7 +81,7 @@ const OnboardingCodeScreen = () => {
           <CustomText
             weight="ExtraBold"
             style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
-            6자리 코드를
+            가족 코드를
           </CustomText>
           <CustomText
             weight="ExtraBold"
@@ -82,7 +98,14 @@ const OnboardingCodeScreen = () => {
             flexDirection: 'row',
             justifyContent: 'center',
           }}>
-          <CodeInput code={code} setCode={setCode} isError={isError} />
+          <CustomInput
+            value={code}
+            error={isError}
+            placeholder="가족 코드를 입력해주세요."
+            onChangeText={(code: string) => {
+              setCode(code);
+            }}
+          />
         </View>
       </View>
       <Character type={characterType} />
