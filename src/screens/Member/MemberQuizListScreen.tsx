@@ -1,4 +1,9 @@
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {
+  ParamListBase,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   Image,
@@ -15,55 +20,60 @@ import BackArrow from '../../assets/icons/back_arrow.svg';
 import {CustomText} from '../../components/shared';
 import defaultImage from '../../assets/graphics/default_image.png';
 
-const DUMMY_IMAGE = '/Users/kyuho/Downloads/dummy.png';
+import {QuizPair, Quiz, QuizStorage} from '../../lib/types/quizzes';
+import {postQuizzes} from '../../api/memoring/quizzes';
 
-const dummyQuiz = [
-  {
-    id: 0,
-    quiz: '관악산 등반을 누구와 함께 했나요?',
-    answer: '아들',
-    imageUrl: DUMMY_IMAGE,
-    isDummy: false,
-  },
-  {
-    id: 1,
-    quiz: '정상에서 무엇을 먹었나요?',
-    answer: '라면만',
-    imageUrl: DUMMY_IMAGE,
-    isDummy: false,
-  },
-  {
-    id: 2,
-    quiz: '등반을 시작한 곳은 어디였나요?',
-    answer: '관악산 입구',
-    imageUrl: null,
-    isDummy: false,
-  },
-  {
-    id: 3,
-    quiz: '하산한 뒤 어떤 산에 가고 싶다고 하셨나요? 궁금해요',
-    answer: '설악산',
-    imageUrl: DUMMY_IMAGE,
-    isDummy: false,
-  },
-  {
-    id: 4,
-    quiz: '하산한 뒤 어떤 산에 가고 싶다고 하셨나요?',
-    answer: '설악산',
-    imageUrl: null,
-    isDummy: true,
-  },
-];
+const DEFAULT_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
 const MemberQuizListScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const route = useRoute<RouteProp<{params: {data: QuizPair[]}}, 'params'>>();
+
+  const quizzes = route.params?.data || [];
+  const flattenQuizzes = (data: any[]): Quiz[] => {
+    return data.flatMap(item =>
+      Object.entries(item).map(([key, value]: [string, any]) => ({
+        id: value.id,
+        quiz: value.quiz,
+        option: value.option,
+        answer: value.answer,
+        isDummy: key === 'Dummy_quizzes',
+        imageUrl: value.url ?? null,
+      })),
+    );
+  };
+  const flattenedQuizzes = flattenQuizzes(quizzes);
+  console.log('flattened on list:', flattenedQuizzes);
+
+  const transformQuizData = (quizData: Quiz[]): QuizStorage[] => {
+    return quizData.map(item => ({
+      quiz_question: item.quiz,
+      quiz_completion_state: 0,
+      user_answer: null,
+      quiz_choice_1: item.option[1],
+      quiz_choice_2: item.option[2],
+      quiz_choice_3: item.option[3],
+      quiz_answer: item.option[0],
+      quiz_img: item.imageUrl || null,
+      is_dummy: item.isDummy,
+      is_correct: null,
+      memory_id: item.id,
+      family_id: 0,
+    }));
+  };
+
+  const REP_IMAGE = flattenedQuizzes[0].imageUrl || DEFAULT_IMAGE;
 
   const handleRegenaratePress = () => {
     navigation.navigate('MemberQuizGen');
   };
 
   const handleRegisterPress = () => {
-    navigation.navigate('MemberQuizComplete');
+    const transformedQuizzes = transformQuizData(flattenedQuizzes);
+    console.log('transformedQuizzes:', transformedQuizzes);
+
+    postQuizzes(transformedQuizzes);
+    navigation.navigate('MemberQuizComplete', {data: flattenedQuizzes});
   };
 
   return (
@@ -81,7 +91,7 @@ const MemberQuizListScreen = () => {
           </CustomText>
         </Pressable>
       </View>
-      <Image source={{uri: DUMMY_IMAGE}} style={styles.image} />
+      <Image source={{uri: REP_IMAGE}} style={styles.image} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
@@ -89,7 +99,7 @@ const MemberQuizListScreen = () => {
           marginTop: 16,
         }}>
         <View style={styles.quizContainer}>
-          {dummyQuiz.map((quiz, index) => (
+          {flattenedQuizzes.map((quiz, index) => (
             <View key={index} style={styles.quizBox}>
               <View
                 style={{
