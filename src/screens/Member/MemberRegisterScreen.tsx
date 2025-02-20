@@ -19,6 +19,7 @@ import MemberMemoryNameView from '../../components/Member/Register/MemberMemoryN
 import {IMemoryRegister} from '../../lib/model/i-memory';
 import MemberMemoryRoleView from '../../components/Member/Register/MemberMemoryRoleView';
 import MemberMemoryWriteView from '../../components/Member/Register/MemberMemoryWriteView';
+import {postMemories} from '../../api/memoring/memories';
 
 export const TOTAL_STEPS = 3;
 export const MINIMUM_EVENTS = 1;
@@ -49,10 +50,47 @@ const MemberRegisterScreen = (): React.JSX.Element => {
     setAccessibleIndex(accessibleIndex);
   };
 
-  const handleSubmit = (data: IMemoryRegister) => {
-    // TODO: API 호출 처리
-    console.log(data);
-    navigation.navigate('MemberQuizGen');
+  const handleSubmit = async (data: IMemoryRegister) => {
+    try {
+      const formData = new FormData();
+
+      formData.append('memory_title', data.title);
+
+      formData.append('member_id', JSON.stringify(data.roles));
+
+      const eventList = data.events.map(event => ({
+        event_time: event.date || new Date(), // 이벤트 시간 저장
+        event_text: event.description, // 이벤트 설명 저장
+        has_image: event.images.length > 0,
+      }));
+
+      formData.append('events', JSON.stringify(eventList));
+
+      data.events.forEach((event, index) => {
+        if (event.images && event.images.length > 0) {
+          const imageUri = event.images[0]; // 첫 번째 이미지만 사용
+          const filename = imageUri.split('/').pop();
+          const match = /\.(\w+)$/.exec(filename || '');
+          const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+          // 이미지 파일 추가 (파일명에 이벤트 인덱스 포함)
+          formData.append('event_images', {
+            uri: imageUri,
+            name: `event_${index}_${filename}`,
+            type,
+          } as any);
+        }
+      });
+
+      const response = await postMemories(formData);
+
+      navigation.navigate('MemberQuizGen', {
+        memoryId: response.data.memoryId,
+        memoryNumber: data.events.length,
+      });
+    } catch (error) {
+      console.error('API Error:', error);
+    }
   };
 
   const handleNextPress = () => {
@@ -64,7 +102,6 @@ const MemberRegisterScreen = (): React.JSX.Element => {
           handleSubmit(data);
         },
         errors => {
-          // TODO: 에러 처리
           console.log('Form validation failed!', errors);
         },
       )();

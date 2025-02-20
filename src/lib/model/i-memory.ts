@@ -1,21 +1,12 @@
 // This file is temporary. It will be deleted when the actual API is connected.
 
-import {FamilyRole} from './i-family';
-
-export enum QuizStatus {
-  NOT_STARTED = '풀이 전',
-  IN_PROGRESS = '풀이 중',
-  COMPLETED = '풀이 완료',
-}
-
 export interface IMemory {
   id: number;
   title: string;
   creator: string;
   totalQuizCount: number;
   solvedQuizCount: number;
-  createdAt: Date;
-  status: QuizStatus;
+  createdAt: string;
 }
 
 export interface IEventRegister {
@@ -25,6 +16,6 @@ export interface IEventRegister {
 }
 export interface IMemoryRegister {
   title: string;
-  roles: FamilyRole[];
+  roles: number[];
   events: IEventRegister[];
 }

@@ -23,19 +23,22 @@ import AddPlus from '../../../assets/icons/add_plus.svg';
 import Xmark from '../../../assets/icons/xmark.svg';
 import Modal from '../../shared/Modal';
 import LinearGradient from 'react-native-linear-gradient';
+import {GetMembersResponse} from '../../../lib/types/members';
 
 interface MemberRoleSelectorProps {
+  members: GetMembersResponse;
   onAccessibleIndexChange: (accessibleIndex: number) => void;
 }
 
 const MemberRoleSelector = ({
+  members,
   onAccessibleIndexChange,
 }: MemberRoleSelectorProps) => {
   const {watch, setValue} = useFormContext<IMemoryRegister>();
 
   const roles = watch('roles');
 
-  const [selectedRoles, setSelectedRoles] = useState<FamilyRole[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -64,7 +67,7 @@ const MemberRoleSelector = ({
     setIsOpen(true);
   };
 
-  const toggleRole = (role: FamilyRole) => {
+  const toggleRole = (role: number) => {
     const currentRoles = [...roles];
     const roleIndex = currentRoles.indexOf(role);
 
@@ -82,7 +85,7 @@ const MemberRoleSelector = ({
     });
   };
 
-  const toggleSelectedRole = (role: FamilyRole) => {
+  const toggleSelectedRole = (role: number) => {
     const currentRoles = [...selectedRoles];
     const roleIndex = currentRoles.indexOf(role);
 
@@ -102,6 +105,10 @@ const MemberRoleSelector = ({
     });
 
     setIsOpen(false);
+  };
+
+  const getMembersFromRoles = (roles: number[]) => {
+    return members.filter(member => roles.includes(member.memberId));
   };
 
   useEffect(() => {
@@ -133,14 +140,14 @@ const MemberRoleSelector = ({
               style={{
                 flexDirection: 'row',
               }}>
-              {roles.map((role, index) => (
+              {getMembersFromRoles(roles).map((member, index) => (
                 <View
-                  key={role}
+                  key={member.memberId}
                   style={[
                     styles.selectTag,
                     {
                       backgroundColor: '#F7F7F9',
-                      marginRight: index !== roles.length - 1 ? 8 : 0,
+                      marginRight: index !== members.length - 1 ? 8 : 0,
                     },
                   ]}>
                   <View
@@ -153,13 +160,13 @@ const MemberRoleSelector = ({
                       weight="ExtraBold"
                       style={[
                         {fontSize: 15},
-                        roles.includes(role)
+                        roles.includes(member.memberId)
                           ? {color: '#222225'}
                           : {color: '#222225'},
                       ]}>
-                      {familyRoleMap[role]}
+                      {`${member.memberName}(${member.memberRole})`}
                     </CustomText>
-                    <Pressable onPress={() => toggleRole(role)}>
+                    <Pressable onPress={() => toggleRole(member.memberId)}>
                       <Xmark width={16} height={16} />
                     </Pressable>
                   </View>
@@ -199,12 +206,12 @@ const MemberRoleSelector = ({
             styles.rolesContainer,
             {paddingVertical: 16, paddingHorizontal: 24},
           ]}>
-          {familyRoleList.map(role => (
+          {members.map(member => (
             <Pressable
-              key={role}
-              onPress={() => toggleSelectedRole(role)}
+              key={member.memberId}
+              onPress={() => toggleSelectedRole(member.memberId)}
               style={
-                selectedRoles.includes(role)
+                selectedRoles.includes(member.memberId)
                   ? [styles.selectItem, styles.selectedItem]
                   : [styles.selectItem, styles.notSelectedItem]
               }>
@@ -212,11 +219,11 @@ const MemberRoleSelector = ({
                 weight="ExtraBold"
                 style={[
                   {fontSize: 15},
-                  selectedRoles.includes(role)
+                  selectedRoles.includes(member.memberId)
                     ? {color: '#CE5419'}
                     : {color: '#222225'},
                 ]}>
-                {familyRoleMap[role]}
+                {`${member.memberName} (${member.memberRole})`}
               </CustomText>
             </Pressable>
           ))}

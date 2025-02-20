@@ -27,7 +27,7 @@ import MemberStatisticsScreen from './src/screens/Member/MemberStatisticsScreen'
 import DiaryScreen from './src/screens/Diary/DiaryScreen';
 import DiaryContentScreen from './src/screens/Diary/DiaryContentScreen';
 
-import {AuthProvider, useAuth} from './src/contexts/AuthProvider';
+import {AuthProvider} from './src/contexts/AuthProvider';
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './src/utils/navigationHelper';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';

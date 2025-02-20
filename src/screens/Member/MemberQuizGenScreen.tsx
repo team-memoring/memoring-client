@@ -1,31 +1,42 @@
 import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
-import {BackHeader, Character, CustomText} from '../../components/shared';
+import {BackHeader, CustomText} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {ParamListBase, useNavigation, useRoute} from '@react-navigation/native';
 
 import Logo from '../../assets/icons/logo.svg';
 import {useState, useEffect} from 'react';
 import MemberLoadingCharacter from '../../components/Member/QuizGen/MemberLoadingCharacter';
 
+import {RouteProp} from '@react-navigation/native';
+
 import {getQuizzes} from '../../api/memoring/quizzes';
 import {getEvents} from '../../api/memoring/events';
 import {QuizPair} from '../../lib/types/quizzes';
 
+type RootStackParamList = {
+  MemberQuizGen: {memoryId: string; memoryNumber: number};
+};
+
 type QuizzesResponse = QuizPair[];
 
 const MemberQuizGenScreen = () => {
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizGen'>>();
+
+  const {memoryId, memoryNumber} = route.params;
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [events, setEvents] = useState([]);
-  const [memory_id, setMemory_id] = useState(0);
-  const [memories_length, setMemories_length] = useState(0);
   const [isCreating, setIsCreating] = useState(false);
 
   const isCreateDisabled = isCreating;
 
   const createRequest = async () => {
     try {
-      const quizzes = await getQuizzes(memory_id);
+      if (!memoryId) {
+        throw new Error('Memory ID is not provided');
+      }
+      const quizzes = await getQuizzes(Number(memoryId));
       const quizzesData: QuizzesResponse = quizzes.data;
       console.log('quizzes on gen:', quizzesData);
 
@@ -48,8 +59,6 @@ const MemberQuizGenScreen = () => {
         const events = await getEvents();
         if (events?.data) {
           setEvents(events.data);
-          setMemory_id(events.data[0].memory_id);
-          setMemories_length(events.data.length);
         } else {
           setEvents([]);
           console.log('No events');
@@ -71,7 +80,7 @@ const MemberQuizGenScreen = () => {
       />
       <BackHeader
         onBackPress={() => {
-          navigation.goBack();
+          navigation.navigate('MemberHome');
         }}
       />
       <View style={styles.content}>
@@ -81,7 +90,7 @@ const MemberQuizGenScreen = () => {
         <CustomText
           weight="ExtraBold"
           style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
-          {memories_length}개의 이벤트로
+          {`${memoryNumber}개의 이벤트로`}
         </CustomText>
         <CustomText weight="ExtraBold" style={{fontSize: 28, color: '#222225'}}>
           {isCreating
