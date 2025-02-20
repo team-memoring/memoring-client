@@ -3,20 +3,76 @@ import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Share from 'react-native-share';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {
+  ParamListBase,
+  RouteProp,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useQuery} from '@tanstack/react-query';
+import {getMembers} from '../../api/memoring/members';
+import {getFamiliesFamilyId} from '../../api/memoring/families';
+import {patchUserUserId} from '../../api/kakao/user';
+import {useAuth} from '../../contexts/AuthProvider';
+
+type RootStackParamList = {
+  OnboardingStart: {familyId: number};
+};
 
 const OnboardingStartScreen = () => {
+  const auth = useAuth();
+
+  const {
+    data: memberData,
+    isLoading: memberisLoading,
+    isError: memberIsError,
+  } = useQuery({
+    queryKey: ['getMembers'],
+    queryFn: async () => getMembers(),
+  });
+
+  const {data: familyData} = useQuery({
+    queryKey: ['getFamiliesFamilyId'],
+    queryFn: async () => getFamiliesFamilyId(familyId),
+  });
+
+  const isGetMembersNotDone = !memberData || memberisLoading || memberIsError;
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const route = useRoute<RouteProp<RootStackParamList, 'OnboardingStart'>>();
+
+  const {familyId} = route.params;
+
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [startEnabled, setStartEnabled] = useState(false);
-
-  // TODO: change to api call
-  const familyName = '규호네가족';
 
   const handleRoleSelect = (role: string) => {
     setSelectedRole(role);
     setStartEnabled(true);
+  };
+
+  const handleNextPress = async () => {
+    try {
+      if (!auth.user?.userId || !memberData?.data[0].memberId) {
+        throw new Error('User or member not found');
+      }
+
+      const body = {
+        role: selectedRole === '주인공' ? 2 : 1,
+        memberId: memberData?.data[0].memberId,
+      };
+
+      const response = await patchUserUserId(auth.user?.userId, body);
+      console.log(response);
+
+      selectedRole === '주인공'
+        ? navigation.navigate('MainheroSelect')
+        : navigation.navigate('MemberHome');
+    } catch (error) {
+      console.log('Error sharing:', error);
+    }
   };
 
   return (
@@ -37,18 +93,18 @@ const OnboardingStartScreen = () => {
             <CustomText
               weight="ExtraBold"
               style={{fontSize: 28, marginTop: 8, color: '#CE5419'}}>
-              {`'${familyName}' `}
+              {`'${familyData?.data.familyName}' `}
             </CustomText>
             <CustomText
               weight="ExtraBold"
               style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
-              공간을
+              에서
             </CustomText>
           </View>
           <CustomText
             weight="ExtraBold"
             style={{fontSize: 28, color: '#222225'}}>
-            만들었어요!
+            역할을 골라주세요!
           </CustomText>
         </View>
 
@@ -97,15 +153,14 @@ const OnboardingStartScreen = () => {
           {backgroundColor: startEnabled ? '#222225' : '#d3d3d3'}, // 버튼 활성화 여부
         ]}>
         <Pressable
-          onPress={() => {
-            selectedRole === '주인공'
-              ? navigation.navigate('MainheroSelect')
-              : navigation.navigate('MemberHome');
-          }}
+          onPress={handleNextPress}
           style={[
             styles.nextButton,
             {paddingBottom: Platform.OS === 'ios' ? 52 : 24},
-            {backgroundColor: startEnabled ? '#222225' : '#939396'},
+            {
+              backgroundColor:
+                !isGetMembersNotDone && startEnabled ? '#222225' : '#939396',
+            },
           ]}
           disabled={!startEnabled}>
           <CustomText weight="ExtraBold" style={{color: '#fff', fontSize: 20}}>

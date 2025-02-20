@@ -11,7 +11,7 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type RootStackParamList = {
-  OnboardingInvite: {familyName: string; familyCode: string};
+  OnboardingInvite: {familyId: number; familyName: string; familyCode: string};
 };
 
 const OnboardingInviteScreen = () => {
@@ -19,7 +19,7 @@ const OnboardingInviteScreen = () => {
 
   const route = useRoute<RouteProp<RootStackParamList, 'OnboardingInvite'>>();
 
-  const {familyName, familyCode} = route.params;
+  const {familyId, familyName, familyCode} = route.params;
 
   const shareMessage = async (code: string) => {
     try {
@@ -80,7 +80,7 @@ const OnboardingInviteScreen = () => {
               </CustomText>
               <CustomText
                 weight="ExtraBold"
-                style={[styles.number, {width: '100%'}]} // ✅ width 100% 추가
+                style={[styles.number, {width: '100%'}]}
                 numberOfLines={1}
                 ellipsizeMode="tail">
                 {familyCode}
@@ -102,7 +102,9 @@ const OnboardingInviteScreen = () => {
       <View style={[styles.nextButtonWrapper, {backgroundColor: '#222225'}]}>
         <Pressable
           onPress={() => {
-            navigation.navigate('OnboardingStart');
+            navigation.navigate('OnboardingStart', {
+              familyId,
+            });
           }}
           style={[
             styles.nextButton,
