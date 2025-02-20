@@ -1,14 +1,24 @@
 import {Platform, Pressable, StatusBar, StyleSheet, View} from 'react-native';
-import {BackHeader, Character, CustomText} from '../../components/shared';
+import {BackHeader, CustomText} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {ParamListBase, useNavigation, useRoute} from '@react-navigation/native';
 
 import Logo from '../../assets/icons/logo.svg';
 import {useState} from 'react';
 import MemberLoadingCharacter from '../../components/Member/QuizGen/MemberLoadingCharacter';
 
+import {RouteProp} from '@react-navigation/native';
+
+type RootStackParamList = {
+  MemberQuizGen: {memoryId: string; memoryNumber: number};
+};
+
 const MemberQuizGenScreen = () => {
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizGen'>>();
+
+  const {memoryId, memoryNumber} = route.params;
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -46,7 +56,7 @@ const MemberQuizGenScreen = () => {
         <CustomText
           weight="ExtraBold"
           style={{fontSize: 28, marginTop: 8, color: '#222225'}}>
-          2개의 이벤트로
+          {`${memoryNumber}개의 이벤트로`}
         </CustomText>
         <CustomText weight="ExtraBold" style={{fontSize: 28, color: '#222225'}}>
           {isCreating
