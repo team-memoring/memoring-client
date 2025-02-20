@@ -19,17 +19,6 @@ const OnboardingStartScreen = () => {
     setStartEnabled(true);
   };
 
-  const shareMessage = async (code: string) => {
-    try {
-      await Share.open({
-        message: `가족 공간 초대 코드: ${code}\n아래 링크에서 가입하세요!`,
-        url: `memoring://invite/family?code=${code}`,
-      });
-    } catch (error) {
-      console.log('Error sharing:', error);
-    }
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
