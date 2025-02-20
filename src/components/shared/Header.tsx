@@ -6,12 +6,15 @@ import DiaryLogo from '../../assets/icons/diary.svg';
 import {useEffect, useState} from 'react';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {getUser} from '../../utils/storage';
+import {CustomText} from '.';
+import {useAuth} from '../../contexts/AuthProvider';
 
 interface HeaderProps {
   showDiaryLogo?: boolean;
 }
 
 const Header = ({showDiaryLogo = true}: HeaderProps) => {
+  const auth = useAuth();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [profileImageUrl, setProfileImageUrl] = useState<null | string>(null);
 
@@ -38,6 +41,13 @@ const Header = ({showDiaryLogo = true}: HeaderProps) => {
         {profileImageUrl && (
           <Image source={{uri: profileImageUrl}} style={styles.image} />
         )}
+        {/* TODO: Remove on production */}
+        <Pressable
+          onPress={() => {
+            auth.logout();
+          }}>
+          <CustomText>로그아웃</CustomText>
+        </Pressable>
       </View>
     </View>
   );
