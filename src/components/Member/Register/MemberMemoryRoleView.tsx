@@ -4,6 +4,8 @@ import {useFormContext} from 'react-hook-form';
 
 import {CustomText} from '../../shared';
 import MemberRoleSelector from './MemberRoleSelector';
+import {useQuery} from '@tanstack/react-query';
+import {getMembers} from '../../../api/memoring/members';
 
 interface MemberMemoryRoleViewProps {
   onAccessibleIndexChange: (accessibleIndex: number) => void;
@@ -12,6 +14,11 @@ interface MemberMemoryRoleViewProps {
 const MemberMemoryRoleView = ({
   onAccessibleIndexChange,
 }: MemberMemoryRoleViewProps) => {
+  const {data} = useQuery({
+    queryKey: ['getMembers'],
+    queryFn: async () => getMembers(),
+  });
+
   return (
     <>
       <View>
@@ -30,6 +37,7 @@ const MemberMemoryRoleView = ({
 
         <View style={{width: '100%', paddingHorizontal: 16, marginTop: 36}}>
           <MemberRoleSelector
+            members={data?.data || []}
             onAccessibleIndexChange={onAccessibleIndexChange}
           />
         </View>

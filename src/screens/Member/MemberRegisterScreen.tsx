@@ -56,7 +56,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
 
       formData.append('memory_title', data.title);
 
-      formData.append('member_id', '[2]');
+      formData.append('member_id', JSON.stringify(data.roles));
 
       const eventList = data.events.map(event => ({
         event_time: event.date || new Date(), // 이벤트 시간 저장
