@@ -41,17 +41,30 @@ const LoginScreen = (): React.JSX.Element => {
 
       const authResponse = await getAuthMe();
       const role = authResponse.data.role;
+      const familyId = authResponse.data.familyId;
 
       switch (role) {
         case 0:
-          navigation.navigate('LoginSelect');
+          if (familyId) {
+            try {
+              navigation.navigate('OnboardingStart', {familyId});
+            } catch (fetchError) {
+              console.error('Error fetching family name:', fetchError);
+              Alert.alert('가족 정보 불러오기 실패', '다시 시도해주세요.');
+            }
+          } else {
+            navigation.navigate('LoginSelect');
+          }
           break;
+
         case 1:
           navigation.navigate('MemberHome');
           break;
+
         case 2:
           navigation.navigate('MainheroSelect');
           break;
+
         default:
           Alert.alert('로그인 실패', '로그인 과정에서 오류가 발생했습니다.');
       }

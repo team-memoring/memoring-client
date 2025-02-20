@@ -34,7 +34,6 @@ const LoginSelectScreen = (): React.JSX.Element => {
 
       if (user) {
         setUsername(user.nickname);
-        console.log('user:', user);
       }
     };
 
