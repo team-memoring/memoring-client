@@ -25,6 +25,6 @@ export interface IEventRegister {
 }
 export interface IMemoryRegister {
   title: string;
-  roles: FamilyRole[];
+  roles: number[];
   events: IEventRegister[];
 }
