@@ -64,8 +64,8 @@ const OnboardingCreateScreen = (): React.JSX.Element => {
       };
 
       const response = await postFamilies(body);
-
       navigation.navigate('OnboardingInvite', {
+        familyId: response.data.familyId,
         familyName: data.familyName,
         familyCode: response.data.familyCode,
       });

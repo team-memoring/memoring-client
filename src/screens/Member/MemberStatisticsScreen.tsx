@@ -18,12 +18,8 @@ import {
   getInitialDateIndex,
   graphOptionType,
 } from '../../utils/statistics';
-
-const weekData = [12, 35, 78, 35, 23];
-
-const monthData = [20, 45, 67, 23, 45, 100, 23, 45, 67, 23, 45, 67];
-
-const yearData = [45, 34, 84];
+import {getStatisticsStatistics} from '../../api/memoring/statistics';
+import {useQuery} from '@tanstack/react-query';
 
 type GraphOptionMap = {
   [key in graphOptionType]: string;
@@ -44,15 +40,48 @@ const MemberStatisticsScreen = () => {
   const [selectedGraphOption, setSelectedGraphOption] =
     useState<graphOptionType>('month');
 
-  // FIXME: change to api
+  const date = new Date();
+  const currentYear = date.getFullYear();
+  const currentMonth = date.getMonth() + 1;
+
+  const yearQuery = useQuery({
+    queryKey: ['getStatisticsStatisticsYear'],
+    queryFn: async () =>
+      getStatisticsStatistics({
+        option: 'year',
+        year: null,
+        month: null,
+      }),
+  });
+
+  const monthQuery = useQuery({
+    queryKey: ['getStatisticsStatisticsMonth', currentYear],
+    queryFn: async () =>
+      getStatisticsStatistics({
+        option: 'month',
+        year: currentYear,
+        month: null,
+      }),
+  });
+
+  const weekQuery = useQuery({
+    queryKey: ['getStatisticsStatisticsWeek', currentYear, currentMonth],
+    queryFn: async () =>
+      getStatisticsStatistics({
+        option: 'week',
+        year: currentYear,
+        month: currentMonth,
+      }),
+  });
+
   const getGraphData = (option: graphOptionType) => {
     switch (option) {
       case 'week':
-        return weekData;
+        return weekQuery.data?.data.data || [];
       case 'month':
-        return monthData;
+        return monthQuery.data?.data.data || [];
       case 'year':
-        return yearData;
+        return yearQuery.data?.data.data || [];
     }
   };
 
@@ -71,6 +100,9 @@ const MemberStatisticsScreen = () => {
       selectedGraphOption,
     );
 
+    setGraphStartIndex(0);
+    setGraphEndIndex(MAX_VIEW_COUNT - 1);
+
     setGraphSelectedIndex(initailGraphIndex);
   }, [selectedGraphOption]);
 
@@ -82,9 +114,11 @@ const MemberStatisticsScreen = () => {
   const getGraphTitle = () => {
     switch (selectedGraphOption) {
       case 'week':
-        return '2025년도 7월 3주';
+        return `${currentYear}년도 ${currentMonth}월 ${
+          graphSelectedIndex + 1
+        }주`;
       case 'month':
-        return '2025년도 7월';
+        return `${currentYear}년도 ${graphSelectedIndex + 1}월`;
       case 'year':
         return '2025년도';
     }
@@ -128,6 +162,12 @@ const MemberStatisticsScreen = () => {
       setGraphEndIndex(prev => prev + 1);
     }
   };
+
+  if (weekQuery.isLoading || monthQuery.isLoading || yearQuery.isLoading)
+    return null;
+
+  // tap 변경 시 index overflow 예외처리
+  if (graphData.length - 1 < graphSelectedIndex) return null;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -262,7 +302,7 @@ const MemberStatisticsScreen = () => {
                     color: '#CE5419',
                     lineHeight: 25,
                   }}>
-                  80%
+                  {graphData[graphSelectedIndex].value}%
                 </CustomText>
               </View>
             </View>

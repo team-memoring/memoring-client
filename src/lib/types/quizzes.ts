@@ -47,3 +47,23 @@ export interface QuizDummy {
   initial_react: string;
   main_react: string;
 }
+
+export interface GetQuizzesProgressResponse {
+  progressPercentage: number;
+}
+
+export interface GetQuizzesQuizanswerMemoryIdResponseQuiz {
+  quizId: number;
+  quizQuestion: string;
+  userAnswer: string | null;
+  isDummy: boolean;
+  isCorrect: boolean;
+  quizCompletionState: number;
+}
+
+export interface GetQuizzesQuizanswerMemoryIdResponse {
+  memoryId: number;
+  memoryTitle: string;
+  memoryImg: string;
+  quizzes: GetQuizzesQuizanswerMemoryIdResponseQuiz[];
+}

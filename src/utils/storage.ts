@@ -72,6 +72,10 @@ export const saveKakaoAccessToken = async (token: string) => {
   await AsyncStorage.setItem('kakao_access_token', token);
 };
 
+export const removeKakaoAccessToken = async () => {
+  await AsyncStorage.removeItem('kakao_access_token');
+};
+
 export const saveUser = async (user: KakaoProfile) => {
   await AsyncStorage.setItem('user', JSON.stringify(user));
 };
@@ -79,4 +83,8 @@ export const saveUser = async (user: KakaoProfile) => {
 export const getUser = async () => {
   const user = await AsyncStorage.getItem('user');
   return user ? JSON.parse(user) : null;
+};
+
+export const clearStorage = async () => {
+  await AsyncStorage.clear();
 };
