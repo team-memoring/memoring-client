@@ -20,7 +20,7 @@ const MemberQuizProgressCard = () => {
 
   const animatedPercentage = useRef(new Animated.Value(0)).current;
 
-  const [displayPercentage, setDisplayPercentage] = useState(0);
+  const [displayPercentage, setDisplayPercentage] = useState(percentage);
 
   const getProgressMessage = () => {
     if (percentage === 0) {
