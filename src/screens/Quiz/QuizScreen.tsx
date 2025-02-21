@@ -31,8 +31,7 @@ import {
   patchQuizzedUpdateQuizId,
 } from '../../api/memoring/quizzes';
 import {QuizMain, QuizDummy} from '../../lib/types/quizzes';
-
-const API_URL = 'http://127.0.0.1:8000';
+import Config from 'react-native-config';
 
 type RootStackParamList = {
   Quiz: {memoryId: number; title: string};
@@ -220,7 +219,9 @@ const QuizScreen = () => {
             </CustomText>
             {questions[currentIndex].quiz_img ? (
               <Image
-                source={{uri: `${API_URL}/${questions[currentIndex].quiz_img}`}}
+                source={{
+                  uri: `${Config.API_BASE_URL}/${questions[currentIndex].quiz_img}`,
+                }}
                 style={styles.image}
               />
             ) : (

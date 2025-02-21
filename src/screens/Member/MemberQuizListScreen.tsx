@@ -22,8 +22,7 @@ import defaultImage from '../../assets/graphics/default_image.png';
 
 import {QuizPair, Quiz, QuizStorage} from '../../lib/types/quizzes';
 import {postQuizzes} from '../../api/memoring/quizzes';
-
-const API_URL = 'http://127.0.0.1:8000';
+import Config from 'react-native-config';
 
 const DEFAULT_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
@@ -76,7 +75,7 @@ const MemberQuizListScreen = () => {
 
   const REP_IMAGE = flattenedQuizzes[0].imageUrl || DEFAULT_IMAGE;
 
-  const IMAGE_URL = new URL(REP_IMAGE, API_URL).toString();
+  const IMAGE_URL = new URL(REP_IMAGE, Config.API_BASE_URL).toString();
 
   const handleRegenaratePress = () => {
     navigation.navigate('MemberQuizGen', {memoryId, memoryNumber, memoryTitle});
@@ -148,7 +147,7 @@ const MemberQuizListScreen = () => {
                 <Image
                   source={
                     quiz.imageUrl
-                      ? {uri: `${API_URL}/${quiz.imageUrl}`}
+                      ? {uri: `${Config.API_BASE_URL}/${quiz.imageUrl}`}
                       : defaultImage
                   }
                   style={styles.quizImage}

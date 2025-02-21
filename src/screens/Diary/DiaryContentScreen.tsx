@@ -13,8 +13,7 @@ import {
 import {getEventsGeteventsbymemoryidMemoryid} from '../../api/memoring/events';
 
 import {Event} from '../../lib/types/events';
-
-const API_URL = 'http://127.0.0.1:8000';
+import Config from 'react-native-config';
 
 const indexMap: {[key: number]: string} = {
   0: '첫번째',
@@ -65,7 +64,7 @@ const DiaryContentScreen = () => {
       </View>
       <View style={{paddingHorizontal: 16}}>
         <Image
-          source={{uri: `${API_URL}/${events[0].event_img}`}}
+          source={{uri: `${Config.API_BASE_URL}/${events[0].event_img}`}}
           style={styles.image}
         />
       </View>
@@ -116,7 +115,9 @@ const DiaryContentScreen = () => {
                     marginTop: 8,
                   }}>
                   <Image
-                    source={{uri: `${API_URL}/${events[index].event_img}`}}
+                    source={{
+                      uri: `${Config.API_BASE_URL}/${events[index].event_img}`,
+                    }}
                     style={styles.descriptionImage}
                   />
                 </View>

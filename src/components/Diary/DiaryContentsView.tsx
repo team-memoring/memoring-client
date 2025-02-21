@@ -13,6 +13,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import {getMemories} from '../../api/memoring/memories';
 import {Memory} from '../../lib/types/memories';
+import Config from 'react-native-config';
 
 const DiaryContentsView = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -42,12 +43,15 @@ const DiaryContentsView = () => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('DiaryContent', {
-              image: item.memory_img,
-              title: item.memory_title,
+              memoryId: item.memory_id,
+              memoryTitle: item.memory_title,
             })
           }
           style={styles.card}>
-          <Image source={{uri: item.memory_img}} style={styles.image} />
+          <Image
+            source={{uri: `${Config.API_BASE_URL}/${item.memory_img}`}}
+            style={styles.image}
+          />
           <CustomText weight="ExtraBold" style={{fontSize: 24, marginTop: 20}}>
             {item.memory_title}
           </CustomText>
