@@ -23,6 +23,12 @@ type RootStackParamList = {
 const OnboardingStartScreen = () => {
   const auth = useAuth();
 
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+
+  const route = useRoute<RouteProp<RootStackParamList, 'OnboardingStart'>>();
+
+  const {familyId} = route.params;
+
   const {
     data: memberData,
     isLoading: memberisLoading,
@@ -38,12 +44,6 @@ const OnboardingStartScreen = () => {
   });
 
   const isGetMembersNotDone = !memberData || memberisLoading || memberIsError;
-
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
-  const route = useRoute<RouteProp<RootStackParamList, 'OnboardingStart'>>();
-
-  const {familyId} = route.params;
 
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [startEnabled, setStartEnabled] = useState(false);

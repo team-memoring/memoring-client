@@ -14,7 +14,7 @@ const MemberQuizProgressCard = () => {
     queryFn: async () => getQuizzesProgress(),
   });
 
-  const percentage = data?.data?.progressPercentage || 0;
+  const percentage = Number(data?.data?.progressPercentage || 0);
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -52,7 +52,7 @@ const MemberQuizProgressCard = () => {
     return () => {
       animatedPercentage.removeAllListeners();
     };
-  }, [animatedPercentage]);
+  }, [animatedPercentage, percentage]);
 
   return (
     <View style={styles.container}>

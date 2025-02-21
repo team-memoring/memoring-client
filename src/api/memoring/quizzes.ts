@@ -1,5 +1,8 @@
 import {AxiosResponse} from 'axios';
-import {GetQuizzesProgressResponse} from '../../lib/types/quizzes';
+import {
+  GetQuizzesProgressResponse,
+  GetQuizzesQuizanswerMemoryIdResponse,
+} from '../../lib/types/quizzes';
 import apiClient from './apiClient';
 
 export const getQuizzes = async (memoryId: number) => {
@@ -22,10 +25,15 @@ export const patchQuizzedUpdateQuizId = async (
   quizId: number,
   choice: string,
 ) => {
-  return apiClient.patch(`/api/v1/quizzes/update`, null, {
+  return apiClient.patch(`/api/v1/quizzes/update/${quizId}`, null, {
     params: {
-      quiz_id: quizId,
       user_ans: choice,
     },
   });
+};
+
+export const getQuizzesQuizanswerMemoryId = async (
+  memoryId: number,
+): Promise<AxiosResponse<GetQuizzesQuizanswerMemoryIdResponse>> => {
+  return apiClient.get(`/api/v1/quizzes/quizanswer/${memoryId}`);
 };
