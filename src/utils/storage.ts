@@ -84,3 +84,7 @@ export const getUser = async () => {
   const user = await AsyncStorage.getItem('user');
   return user ? JSON.parse(user) : null;
 };
+
+export const clearStorage = async () => {
+  await AsyncStorage.clear();
+};
