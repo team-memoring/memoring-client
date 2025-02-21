@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Platform,
+  Image,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -107,7 +108,7 @@ const QuizScreen = () => {
     setCharacterType('openRight');
     setCharacterDecorationType(null);
     Animated.spring(animatedTranslateY, {
-      toValue: 180,
+      toValue: questions[currentIndex].quiz_img ? 400 : 180,
       useNativeDriver: true,
       damping: 10,
       stiffness: 120,
@@ -205,14 +206,22 @@ const QuizScreen = () => {
               style={{
                 fontSize: 32,
                 color: '#222225',
-                paddingTop: 40,
+                paddingTop: questions[currentIndex].quiz_img ? 0 : 40,
                 paddingBottom: 12,
                 paddingHorizontal: 36,
-                marginBottom: 80, // Edit
+                marginBottom: 80,
                 textAlign: 'center',
               }}>
               {questions[currentIndex].quiz_question}
             </CustomText>
+            {questions[currentIndex].quiz_img ? (
+              <Image
+                source={{uri: questions[currentIndex].quiz_img}}
+                style={styles.image}
+              />
+            ) : (
+              <></>
+            )}
             {shuffleArray([
               questions[currentIndex].quiz_answer,
               questions[currentIndex].quiz_choice_1,
@@ -263,6 +272,11 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: Platform.OS === 'ios' ? 52 : 24,
     backgroundColor: '#222225',
+  },
+  image: {
+    width: '100%',
+    height: 361,
+    borderRadius: 16,
   },
 });
 
