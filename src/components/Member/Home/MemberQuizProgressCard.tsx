@@ -5,12 +5,17 @@ import {useEffect, useRef, useState} from 'react';
 import {MEMBER_HOME_DURATION} from '../../../screens/Member/MemberHomeScreen';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {getQuizzesProgress} from '../../../api/memoring/quizzes';
+import {useQuery} from '@tanstack/react-query';
 
-interface MemberQuizProgressCardProps {
-  percentage: number;
-}
+const MemberQuizProgressCard = () => {
+  const {data} = useQuery({
+    queryKey: ['getQuizzesProgress'],
+    queryFn: async () => getQuizzesProgress(),
+  });
 
-const MemberQuizProgressCard = ({percentage}: MemberQuizProgressCardProps) => {
+  const percentage = data?.data?.progressPercentage || 0;
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const animatedPercentage = useRef(new Animated.Value(0)).current;

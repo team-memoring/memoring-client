@@ -39,12 +39,10 @@ const MemberHomeScreen = () => {
     loadUsername();
   }, []);
 
-  const {data: memoriesData, isLoading: isMemoriesLoading} = useQuery({
+  const {data: memoriesData} = useQuery({
     queryKey: ['getMemoriesMembers'],
     queryFn: async () => getMemoriesMembers(),
   });
-
-  console.log(memoriesData);
 
   const handleQuizPress = async (quizId: number) => {
     navigation.navigate('MemberQuizDetail', {
@@ -79,7 +77,7 @@ const MemberHomeScreen = () => {
         </CustomText>
       </View>
       <View style={[styles.itemContainer]}>
-        <MemberQuizProgressCard percentage={60} />
+        <MemberQuizProgressCard />
       </View>
       <View style={styles.itemContainer}>
         <MemberAnalysisCard trend="up" month={2} rate={78} rateDiff={8} />

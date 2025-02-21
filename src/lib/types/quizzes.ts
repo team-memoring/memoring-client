@@ -26,3 +26,7 @@ export interface QuizStorage {
   memory_id: number;
   family_id: number;
 }
+
+export interface GetQuizzesProgressResponse {
+  progressPercentage: number;
+}

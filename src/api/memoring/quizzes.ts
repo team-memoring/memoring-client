@@ -1,3 +1,5 @@
+import {AxiosResponse} from 'axios';
+import {GetQuizzesProgressResponse} from '../../lib/types/quizzes';
 import apiClient from './apiClient';
 
 export const getQuizzes = async (memoryId: number) => {
@@ -7,3 +9,7 @@ export const getQuizzes = async (memoryId: number) => {
 export const postQuizzes = async (quizData: any) => {
   return apiClient.post(`/api/v1/quizzes/quizupload`, quizData);
 };
+
+export const getQuizzesProgress = async (): Promise<
+  AxiosResponse<GetQuizzesProgressResponse>
+> => apiClient.get(`/api/v1/quizzes/progress`);
