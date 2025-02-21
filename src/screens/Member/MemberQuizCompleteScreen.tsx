@@ -21,12 +21,17 @@ import CelebrateAnimation from '../../components/shared/CelebrateAnimation';
 
 import {Quiz} from '../../lib/types/quizzes';
 
+type RootStackParamList = {
+  MemberQuizComplete: {data: Quiz[]; memoryTitle: string};
+};
+
 const DEFAUL_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
 const MemberQuizCompleteScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<{params: {data: Quiz[]}}>>();
-  const quizzes = route.params?.data || [];
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizComplete'>>();
+  const {data, memoryTitle} = route.params;
+  const quizzes = data || [];
   const animatedTranslateY = useRef(new Animated.Value(0)).current;
 
   const REP_IMAGE = quizzes[0].imageUrl || DEFAUL_IMAGE;
@@ -70,7 +75,7 @@ const MemberQuizCompleteScreen = () => {
                 color: '#222225',
                 lineHeight: 32,
               }}>
-              아버지와의 관악산 등반
+              {memoryTitle}
             </CustomText>
             <CustomText
               weight="ExtraBold"
