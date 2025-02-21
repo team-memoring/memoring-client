@@ -4,15 +4,12 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 
 import Header from '../../components/shared/Header';
 
-import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {CustomText} from '../../components/shared';
 import {getUser} from '../../utils/storage';
 
 import MainheroView from '../../components/Mainhero/MainheroView';
 
 const MainheroSelectScreen = (): React.JSX.Element => {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [username, setUsername] = React.useState<string | null>(null);
 
   useEffect(() => {
