@@ -14,7 +14,6 @@ import {useQuery} from '@tanstack/react-query';
 import {getMembers} from '../../api/memoring/members';
 import {getFamiliesFamilyId} from '../../api/memoring/families';
 import {patchUserUserId} from '../../api/kakao/user';
-import {useAuth} from '../../contexts/AuthProvider';
 import {getAuthMe} from '../../api/memoring/auth';
 
 type RootStackParamList = {
