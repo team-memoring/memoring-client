@@ -18,67 +18,33 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import BackArrow from '../../assets/icons/back_arrow.svg';
 import QuizDetailCard from '../../components/Member/QuizDetail/QuizDetailCard';
+import {useQuery} from '@tanstack/react-query';
+import {getQuizzesQuizanswerMemoryId} from '../../api/memoring/quizzes';
 
 const DUMMY_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
-const dummyQuiz = [
-  {
-    id: 0,
-    quiz: '관악산 등반을 누구와 함께 했나요?',
-    answer: '아들',
-    imageUrl: DUMMY_IMAGE,
-    isCorrect: true,
-    isDummy: false,
-    trial: 2,
-  },
-  {
-    id: 1,
-    quiz: '정상에서의 기분이 어떠셨나요?',
-    answer: '행복했어요',
-    imageUrl: DUMMY_IMAGE,
-    isCorrect: true,
-    isDummy: true,
-    trial: 1,
-  },
-  {
-    id: 2,
-    quiz: '등반을 시작한 곳은 어디였나요?',
-    answer: '관악산 입구',
-    imageUrl: null,
-    isDummy: false,
-    isCorrect: false,
-    trial: 1,
-  },
-  {
-    id: 3,
-    quiz: '하산한 뒤 어떤 산에 가고 싶다고 하셨나요? 궁금해요',
-    answer: null,
-    imageUrl: DUMMY_IMAGE,
-    isDummy: false,
-    isCorrect: false,
-    trial: 0,
-  },
-  {
-    id: 4,
-    quiz: '하산한 뒤 어떤 산에 가고 싶다고 하셨나요? 궁금해요',
-    answer: null,
-    imageUrl: DUMMY_IMAGE,
-    isDummy: false,
-    isCorrect: false,
-    trial: 0,
-  },
-];
-
 type RootStackParamList = {
-  MemberQuizDetail: {quizId: number};
+  MemberQuizDetail: {memoryId: number};
 };
 
 const MemberQuizDetailScreen = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizDetail'>>();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  //   TODO: fetch quiz detail
-  const quizId = route.params.quizId;
+  const memoryId = route.params.memoryId;
+
+  const {data, isLoading} = useQuery({
+    queryKey: ['getQuizzesQuizanswerMemoryId', memoryId],
+    queryFn: async () => {
+      return getQuizzesQuizanswerMemoryId(memoryId);
+    },
+  });
+
+  const memoryData = data?.data;
+
+  if (!memoryData || isLoading) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,7 +77,7 @@ const MemberQuizDetailScreen = () => {
             color: '#222225',
             lineHeight: 32,
           }}>
-          {`${'한강 나들이'}의`}
+          {`${memoryData?.memoryTitle}의`}
         </CustomText>
         <CustomText
           weight="ExtraBold"
@@ -133,16 +99,16 @@ const MemberQuizDetailScreen = () => {
             gap: 12,
             marginBottom: 24,
           }}>
-          {dummyQuiz.map((quiz, index) => {
+          {memoryData.quizzes.map((quiz, index) => {
             return (
               <QuizDetailCard
-                key={index}
+                key={quiz.quizId}
                 index={index}
-                quiz={quiz.quiz}
-                answer={quiz.answer}
+                quiz={quiz.quizQuestion}
+                answer={quiz.userAnswer}
                 isCorrect={quiz.isCorrect}
                 isDummy={quiz.isDummy}
-                trial={quiz.trial}
+                trial={quiz.quizCompletionState}
               />
             );
           })}

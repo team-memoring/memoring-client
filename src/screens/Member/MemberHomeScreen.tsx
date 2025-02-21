@@ -38,16 +38,18 @@ const MemberHomeScreen = () => {
     loadUsername();
   }, []);
 
-  const {data: memoriesData} = useQuery({
+  const {data: memoriesData, isLoading} = useQuery({
     queryKey: ['getMemoriesMembers'],
     queryFn: async () => getMemoriesMembers(),
   });
 
-  const handleQuizPress = async (quizId: number) => {
+  const handleQuizPress = async (memoryId: number) => {
     navigation.navigate('MemberQuizDetail', {
-      quizId,
+      memoryId,
     });
   };
+
+  if (isLoading) return null;
 
   return (
     <SafeAreaView style={styles.container}>
