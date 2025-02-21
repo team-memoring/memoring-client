@@ -32,6 +32,8 @@ import {
 } from '../../api/memoring/quizzes';
 import {QuizMain, QuizDummy} from '../../lib/types/quizzes';
 
+const API_URL = 'http://127.0.0.1:8000';
+
 type RootStackParamList = {
   Quiz: {memoryId: number; title: string};
 };
@@ -64,6 +66,8 @@ const QuizScreen = () => {
   const handleAnswer = async (choice: string) => {
     if (questions[currentIndex].is_dummy) {
       setSelectedAnswer(choice);
+      setShowResult(true);
+
       const llmAnswerData = await patchQuizzedUpdateQuizId(
         questions[currentIndex].quiz_id,
         choice,
@@ -86,10 +90,8 @@ const QuizScreen = () => {
       setCharacterDecorationType(isCorrect ? 'heart' : 'tear');
     }
 
-    setShowResult(true);
-
     Animated.spring(animatedTranslateY, {
-      toValue: -80,
+      toValue: -40,
       useNativeDriver: true,
       damping: 15,
       stiffness: 120,
@@ -108,7 +110,7 @@ const QuizScreen = () => {
     setCharacterType('openRight');
     setCharacterDecorationType(null);
     Animated.spring(animatedTranslateY, {
-      toValue: questions[currentIndex].quiz_img ? 400 : 180,
+      toValue: questions[currentIndex].quiz_img ? 1000 : 180,
       useNativeDriver: true,
       damping: 10,
       stiffness: 120,
@@ -132,14 +134,16 @@ const QuizScreen = () => {
   }, [memoryId]);
 
   useEffect(() => {
-    Animated.spring(animatedTranslateY, {
-      toValue: 180,
-      useNativeDriver: true,
-      damping: 10,
-      stiffness: 120,
-      mass: 1.5,
-    }).start();
-  }, []);
+    if (questions.length > 0) {
+      Animated.spring(animatedTranslateY, {
+        toValue: questions[currentIndex].quiz_img ? 1000 : 180,
+        useNativeDriver: true,
+        damping: 10,
+        stiffness: 120,
+        mass: 1.5,
+      }).start();
+    }
+  }, [currentIndex, questions]);
 
   if (questions.length === 0) return null;
 
@@ -209,14 +213,14 @@ const QuizScreen = () => {
                 paddingTop: questions[currentIndex].quiz_img ? 0 : 40,
                 paddingBottom: 12,
                 paddingHorizontal: 36,
-                marginBottom: 80,
+                marginBottom: questions[currentIndex].quiz_img ? 10 : 80,
                 textAlign: 'center',
               }}>
               {questions[currentIndex].quiz_question}
             </CustomText>
             {questions[currentIndex].quiz_img ? (
               <Image
-                source={{uri: questions[currentIndex].quiz_img}}
+                source={{uri: `${API_URL}/${questions[currentIndex].quiz_img}`}}
                 style={styles.image}
               />
             ) : (
@@ -275,8 +279,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 361,
+    height: 246,
     borderRadius: 16,
+    paddingHorizontal: 16,
+    marginBottom: 20,
   },
 });
 
