@@ -8,12 +8,16 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp, useRoute} from '@react-navigation/native';
 
 import {GestureHandlerRootView, Pressable} from 'react-native-gesture-handler';
 
 import {PaginationHeader, Character, CustomText} from '../../components/shared';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {
+  ParamListBase,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 
 import {
   CharacterType,
@@ -21,59 +25,21 @@ import {
 } from '../../components/shared/Character';
 import ResultView from '../../components/QuizResult/ResultView';
 import DummyResultView from '../../components/QuizResult/DummyResultView';
+import {
+  getQuizzesShowquizMemoryId,
+  patchQuizzedUpdateQuizId,
+} from '../../api/memoring/quizzes';
+import {QuizMain, QuizDummy} from '../../lib/types/quizzes';
 
-// TODO: change to api
-const questions = [
-  {
-    id: 1,
-    isDummy: false,
-    question: '오리엔테이션 간식으로 받은 것은 무엇일까요?',
-    choices: ['짜장면', '샌드위치', '쌀국수', '초밥'],
-    answer: '샌드위치',
-  },
-  {
-    id: 2,
-    isDummy: false,
-    question: '배정 받았던 반 이름은 무엇일까요?',
-    choices: ['사랑반', '열정반', '패기반', '우정반'],
-    answer: '패기반',
-  },
-  {
-    id: 3,
-    isDummy: true,
-    question: '반 이름을 보고 어떤 생각이 들었나요?',
-    choices: ['힘이 난다!', '다른 이름이 좋다..', '기대된다!', '재밌겠다!'],
-    initial_react: '그러셨군요!',
-    main_react: '저도 그럴거라 생각했어요.',
-  },
-  {
-    id: 4,
-    isDummy: false,
-    question: '우리팀 팀장 이름은 무엇일까요?',
-    choices: ['천민규', '안치욱', '이태훈', '이규호'],
-    answer: '이규호',
-  },
-  {
-    id: 5,
-    isDummy: false,
-    question: '첫째날 배웠던 과목의 주제는 무엇일까요?',
-    choices: ['인공지능', '애저', '독일어', '컴퓨터 구조'],
-    answer: '인공지능',
-  },
-];
-
-type QuizParams = {
-  Quiz: {
-    title: string;
-  };
+type RootStackParamList = {
+  Quiz: {memoryId: number; title: string};
 };
-
-type QuizScreenRouteProp = RouteProp<QuizParams, 'Quiz'>;
 
 const QuizScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const route = useRoute<QuizScreenRouteProp>();
-  const title = route.params?.title;
+  const route = useRoute<RouteProp<RootStackParamList, 'Quiz'>>();
+  const {memoryId, title} = route.params;
+  const [questions, setQuestions] = useState<QuizMain[]>([]);
 
   const [characterType, setCharacterType] =
     useState<CharacterType>('openRight');
@@ -83,17 +49,35 @@ const QuizScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const [llmAnswer, setLlmAnswer] = useState<QuizDummy | null>(null);
 
   const animatedTranslateY = useRef(new Animated.Value(400)).current;
 
-  // TODO: LLM API
-  const handleAnswer = (choice: string) => {
-    if (questions[currentIndex].isDummy) {
-      setSelectedAnswer(questions[currentIndex].initial_react ?? '');
+  const shuffleArray = (array: string[]) => {
+    return array
+      .map(value => ({value, sort: Math.random()}))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({value}) => value);
+  };
+
+  const handleAnswer = async (choice: string) => {
+    if (questions[currentIndex].is_dummy) {
+      setSelectedAnswer(choice);
+      const llmAnswerData = await patchQuizzedUpdateQuizId(
+        questions[currentIndex].quiz_id,
+        choice,
+      );
+      setLlmAnswer(llmAnswerData.data);
+
       setCharacterType('happy');
       setCharacterDecorationType('heart');
     } else {
-      const isCorrect = choice === questions[currentIndex].answer;
+      const isCorrect = choice === questions[currentIndex].quiz_answer;
+      const mainAnswerData = await patchQuizzedUpdateQuizId(
+        questions[currentIndex].quiz_id,
+        choice,
+      );
+
       setSelectedAnswer(choice);
       setShowResult(true);
 
@@ -132,6 +116,21 @@ const QuizScreen = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(memoryId);
+        const questionData = await getQuizzesShowquizMemoryId(memoryId);
+        console.log('QuestionData:', questionData);
+        setQuestions(questionData.data.quizzes);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [memoryId]);
+
+  useEffect(() => {
     Animated.spring(animatedTranslateY, {
       toValue: 180,
       useNativeDriver: true,
@@ -141,6 +140,8 @@ const QuizScreen = () => {
     }).start();
   }, []);
 
+  if (questions.length === 0) return null;
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView
@@ -148,9 +149,9 @@ const QuizScreen = () => {
           styles.container,
           {
             backgroundColor: showResult
-              ? questions[currentIndex].isDummy
+              ? questions[currentIndex].is_dummy
                 ? '#f9ebe4'
-                : selectedAnswer === questions[currentIndex].answer
+                : selectedAnswer === questions[currentIndex].quiz_answer
                 ? '#f9ebe4'
                 : '#F0F0F0'
               : styles.container.backgroundColor,
@@ -168,16 +169,15 @@ const QuizScreen = () => {
         />
         {showResult ? (
           <>
-            {questions[currentIndex].isDummy ? (
-              // TODO: LLM
+            {questions[currentIndex].is_dummy ? (
               <DummyResultView
-                initialReact={selectedAnswer ?? ''}
-                mainReact={questions[currentIndex].main_react ?? ''}
+                initialReact={llmAnswer?.initial_react || ''}
+                mainReact={llmAnswer?.main_react || ''}
               />
             ) : (
               <ResultView
                 selectedAnswer={selectedAnswer ?? ''}
-                answer={questions[currentIndex].answer ?? ''}
+                answer={questions[currentIndex].quiz_answer ?? ''}
               />
             )}
             <View style={[styles.nextButtonWrapper]}>
@@ -211,9 +211,14 @@ const QuizScreen = () => {
                 marginBottom: 80, // Edit
                 textAlign: 'center',
               }}>
-              {questions[currentIndex].question}
+              {questions[currentIndex].quiz_question}
             </CustomText>
-            {questions[currentIndex].choices.map((choice, index) => (
+            {shuffleArray([
+              questions[currentIndex].quiz_answer,
+              questions[currentIndex].quiz_choice_1,
+              questions[currentIndex].quiz_choice_2,
+              questions[currentIndex].quiz_choice_3,
+            ]).map((choice, index) => (
               <View key={index} style={{paddingHorizontal: 16}}>
                 <TouchableOpacity
                   style={styles.button}

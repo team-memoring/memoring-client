@@ -47,7 +47,10 @@ const MainheroView = () => {
           </CustomText>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('Quiz', {title: item.memory_title})
+              navigation.navigate('Quiz', {
+                memoryId: item.memory_id,
+                title: item.memory_title,
+              })
             }
             style={item.is_used === 0 ? styles.button4New : styles.button4Sec}>
             <CustomText

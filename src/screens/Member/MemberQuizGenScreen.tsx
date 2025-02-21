@@ -42,6 +42,7 @@ const MemberQuizGenScreen = () => {
         navigation.navigate('MemberQuizList', {
           data: quizzesData,
           memoryId,
+          memoryNumber,
           memoryTitle,
         });
       }

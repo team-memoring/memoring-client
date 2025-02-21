@@ -13,3 +13,19 @@ export const postQuizzes = async (quizData: any) => {
 export const getQuizzesProgress = async (): Promise<
   AxiosResponse<GetQuizzesProgressResponse>
 > => apiClient.get(`/api/v1/quizzes/progress`);
+
+export const getQuizzesShowquizMemoryId = async (memoryId: number) => {
+  return apiClient.get(`/api/v1/quizzes/showquiz/${memoryId}`);
+};
+
+export const patchQuizzedUpdateQuizId = async (
+  quizId: number,
+  choice: string,
+) => {
+  return apiClient.patch(`/api/v1/quizzes/update`, null, {
+    params: {
+      quiz_id: quizId,
+      user_ans: choice,
+    },
+  });
+};
