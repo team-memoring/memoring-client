@@ -51,3 +51,19 @@ export interface QuizDummy {
 export interface GetQuizzesProgressResponse {
   progressPercentage: number;
 }
+
+export interface GetQuizzesQuizanswerMemoryIdResponseQuiz {
+  quizId: number;
+  quizQuestion: string;
+  userAnswer: string | null;
+  isDummy: boolean;
+  isCorrect: boolean;
+  quizCompletionState: number;
+}
+
+export interface GetQuizzesQuizanswerMemoryIdResponse {
+  memoryId: number;
+  memoryTitle: string;
+  memoryImage: string;
+  quizzes: GetQuizzesQuizanswerMemoryIdResponseQuiz[];
+}
