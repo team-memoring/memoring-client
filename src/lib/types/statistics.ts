@@ -9,3 +9,10 @@ export interface GetStatisticsStatisticsOptions {
   year: number | null;
   month: number | null;
 }
+
+interface GetStatisticsResponseElement {
+  month: string;
+  correctRate: number;
+}
+
+export type GetStatisticsResponse = GetStatisticsResponseElement[];
