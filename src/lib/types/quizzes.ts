@@ -64,6 +64,6 @@ export interface GetQuizzesQuizanswerMemoryIdResponseQuiz {
 export interface GetQuizzesQuizanswerMemoryIdResponse {
   memoryId: number;
   memoryTitle: string;
-  memoryImage: string;
+  memoryImg: string;
   quizzes: GetQuizzesQuizanswerMemoryIdResponseQuiz[];
 }
