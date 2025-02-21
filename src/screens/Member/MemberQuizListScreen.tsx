@@ -25,11 +25,16 @@ import {postQuizzes} from '../../api/memoring/quizzes';
 
 const DEFAULT_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
-const MemberQuizListScreen = () => {
-  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const route = useRoute<RouteProp<{params: {data: QuizPair[]}}, 'params'>>();
+type RootStackParamList = {
+  MemberQuizList: {data: QuizPair[]; memoryId: number; memoryTitle: string};
+};
 
-  const quizzes = route.params?.data || [];
+const MemberQuizListScreen = () => {
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizList'>>();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const {data, memoryId, memoryTitle} = route.params;
+
+  const quizzes = data || [];
   const flattenQuizzes = (data: any[]): Quiz[] => {
     return data.flatMap(item =>
       Object.entries(item).map(([key, value]: [string, any]) => ({
@@ -56,9 +61,9 @@ const MemberQuizListScreen = () => {
       quiz_answer: item.option[0],
       quiz_img: item.imageUrl || null,
       is_dummy: item.isDummy,
-      is_correct: null,
-      memory_id: item.id,
-      family_id: 0,
+      is_correct: false,
+      memory_id: memoryId,
+      family_id: 2,
     }));
   };
 
@@ -68,12 +73,19 @@ const MemberQuizListScreen = () => {
     navigation.navigate('MemberQuizGen');
   };
 
-  const handleRegisterPress = () => {
-    const transformedQuizzes = transformQuizData(flattenedQuizzes);
-    console.log('transformedQuizzes:', transformedQuizzes);
+  const handleRegisterPress = async () => {
+    try {
+      const transformedQuizzes = transformQuizData(flattenedQuizzes);
+      console.log('transformedQuizzes:', transformedQuizzes);
 
-    postQuizzes(transformedQuizzes);
-    navigation.navigate('MemberQuizComplete', {data: flattenedQuizzes});
+      postQuizzes(transformedQuizzes);
+      navigation.navigate('MemberQuizComplete', {
+        data: flattenedQuizzes,
+        memoryTitle,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
