@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {StyleSheet, View, Image, Animated, Dimensions} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -10,6 +10,11 @@ import {
   RouteProp,
   ParamListBase,
 } from '@react-navigation/native';
+import {getEventsGeteventsbymemoryidMemoryid} from '../../api/memoring/events';
+
+import {Event} from '../../lib/types/events';
+
+const API_URL = 'http://127.0.0.1:8000';
 
 const indexMap: {[key: number]: string} = {
   0: '첫번째',
@@ -21,71 +26,53 @@ const indexMap: {[key: number]: string} = {
 
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
 
-type DiaryContentRouteProp = RouteProp<
-  {params: {image: string; title: string}},
-  'params'
->;
-
-const Memory: Record<
-  string,
-  {
-    id: string;
-    image: string;
-    date: string;
-    description: string;
-  }[]
-> = {
-  events: [
-    {
-      id: '1',
-      image: '/Users/kyuho/Desktop/Example_2.PNG',
-      date: '2024년 12월 23일',
-      description:
-        '아침에 일찍 가야해서 아침을 못 먹고 갔는데 간식으로 샌드위치를 줘서 맛있게 먹었어.',
-    },
-    {
-      id: '2',
-      image: '/Users/kyuho/Desktop/Example_3.PNG',
-      date: '2024년 12월 23일',
-      description:
-        '오리엔테이션을 다 듣고 열정반, 패기반으로 나뉘었는데 패기반에 합류하게 되었어.',
-    },
-    {
-      id: '3',
-      image: '/Users/kyuho/Desktop/Example_4.PNG',
-      date: '2024년 12월 23일',
-      description:
-        '팀장들은 득표수가 많은 사람들이 대표해서 맡게 되었는데 우리팀 팀장을 이규호였어.',
-    },
-  ],
+type RootStackParamList = {
+  EventParams: {memoryId: number; memoryTitle: string};
 };
 
 const DiaryContentScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const route = useRoute<DiaryContentRouteProp>();
-  const title = route.params.title;
-  const imageUrl = route.params.image;
-
-  const data = Memory.events || [];
+  const route = useRoute<RouteProp<RootStackParamList, 'EventParams'>>();
+  const {memoryId, memoryTitle} = route.params;
+  const [events, setEvents] = useState<Event[]>([]);
 
   const offsetY = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const eventData = await getEventsGeteventsbymemoryidMemoryid(memoryId);
+        setEvents(eventData.data);
+        console.log('events', eventData.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (events.length === 0) return null;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={{paddingVertical: 2}}>
         <TitleHeader
           onBackPress={() => navigation.goBack()}
-          title={title}
+          title={memoryTitle}
           color="#222225"
         />
       </View>
       <View style={{paddingHorizontal: 16}}>
-        <Image source={{uri: imageUrl}} style={styles.image} />
+        <Image
+          source={{uri: `${API_URL}/${events[0].event_img}`}}
+          style={styles.image}
+        />
       </View>
       <View style={{paddingVertical: 16}}>
         <Animated.FlatList
-          data={data}
-          keyExtractor={item => item.id}
+          data={events}
+          keyExtractor={item => item.event_id.toString()}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -129,7 +116,7 @@ const DiaryContentScreen = () => {
                     marginTop: 8,
                   }}>
                   <Image
-                    source={{uri: data[index].image}}
+                    source={{uri: `${API_URL}/${events[index].event_img}`}}
                     style={styles.descriptionImage}
                   />
                 </View>
@@ -143,7 +130,7 @@ const DiaryContentScreen = () => {
                       fontSize: 15,
                       color: '#444447',
                     }}>
-                    {data[index].date}
+                    {events[index].event_time}
                   </CustomText>
                 </View>
 
@@ -166,7 +153,7 @@ const DiaryContentScreen = () => {
                         fontSize: 16,
                         color: '#444447',
                       }}>
-                      {data[index].description}
+                      {events[index].event_text}
                     </CustomText>
                   </View>
                 </View>
