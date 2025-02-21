@@ -26,13 +26,18 @@ import {postQuizzes} from '../../api/memoring/quizzes';
 const DEFAULT_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
 type RootStackParamList = {
-  MemberQuizList: {data: QuizPair[]; memoryId: number; memoryTitle: string};
+  MemberQuizList: {
+    data: QuizPair[];
+    memoryId: number;
+    memoryNumber: number;
+    memoryTitle: string;
+  };
 };
 
 const MemberQuizListScreen = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizList'>>();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const {data, memoryId, memoryTitle} = route.params;
+  const {data, memoryId, memoryNumber, memoryTitle} = route.params;
 
   const quizzes = data || [];
   const flattenQuizzes = (data: any[]): Quiz[] => {
@@ -70,7 +75,7 @@ const MemberQuizListScreen = () => {
   const REP_IMAGE = flattenedQuizzes[0].imageUrl || DEFAULT_IMAGE;
 
   const handleRegenaratePress = () => {
-    navigation.navigate('MemberQuizGen');
+    navigation.navigate('MemberQuizGen', {memoryId, memoryNumber, memoryTitle});
   };
 
   const handleRegisterPress = async () => {
