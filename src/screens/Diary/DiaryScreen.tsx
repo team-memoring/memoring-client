@@ -14,7 +14,7 @@ const DiaryScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={{flexDirection: 'row', paddingVertical: 2}}>
         <TitleHeader
-          onBackPress={() => navigation.navigate('MainheroSelect')}
+          onBackPress={() => navigation.goBack()}
           title="가족 다이어리"
           color="#CE5419"
         />
