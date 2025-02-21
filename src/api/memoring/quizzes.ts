@@ -17,5 +17,10 @@ export const patchQuizzedUpdateQuizId = async (
   quizId: number,
   choice: string,
 ) => {
-  return apiClient.patch(`/api/v1/quizzes/update/${quizId}?user_ans=${choice}`);
+  return apiClient.patch(`/api/v1/quizzes/update`, null, {
+    params: {
+      quiz_id: quizId,
+      user_ans: choice,
+    },
+  });
 };
