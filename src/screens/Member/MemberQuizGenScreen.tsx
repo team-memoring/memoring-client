@@ -5,17 +5,16 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ParamListBase, useNavigation, useRoute} from '@react-navigation/native';
 
 import Logo from '../../assets/icons/logo.svg';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import MemberLoadingCharacter from '../../components/Member/QuizGen/MemberLoadingCharacter';
 
 import {RouteProp} from '@react-navigation/native';
 
 import {getQuizzes} from '../../api/memoring/quizzes';
-import {getEvents} from '../../api/memoring/events';
 import {QuizPair} from '../../lib/types/quizzes';
 
 type RootStackParamList = {
-  MemberQuizGen: {memoryId: string; memoryNumber: number};
+  MemberQuizGen: {memoryId: string; memoryNumber: number; memoryTitle: string};
 };
 
 type QuizzesResponse = QuizPair[];
@@ -23,10 +22,9 @@ type QuizzesResponse = QuizPair[];
 const MemberQuizGenScreen = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizGen'>>();
 
-  const {memoryId, memoryNumber} = route.params;
+  const {memoryId, memoryNumber, memoryTitle} = route.params;
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const [events, setEvents] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
 
   const isCreateDisabled = isCreating;
@@ -41,7 +39,11 @@ const MemberQuizGenScreen = () => {
       console.log('quizzes on gen:', quizzesData);
 
       if (quizzes) {
-        navigation.navigate('MemberQuizList', {data: quizzesData});
+        navigation.navigate('MemberQuizList', {
+          data: quizzesData,
+          memoryId,
+          memoryTitle,
+        });
       }
     } catch (error) {
       console.error('Error fetching quizzes:', error);
@@ -52,24 +54,6 @@ const MemberQuizGenScreen = () => {
     setIsCreating(true);
     await createRequest();
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const events = await getEvents();
-        if (events?.data) {
-          setEvents(events.data);
-        } else {
-          setEvents([]);
-          console.log('No events');
-        }
-      } catch (error) {
-        console.error('Error fetching events:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
