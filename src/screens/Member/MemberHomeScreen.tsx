@@ -19,8 +19,7 @@ import {getMemoriesMembers} from '../../api/memoring/memories';
 
 export const MEMBER_HOME_DURATION = 2000;
 
-// TODO: match with the actual backend response
-export type tempTrend = 'up' | 'down' | 'stable';
+export type rateTrend = 'up' | 'down' | 'stable';
 
 const MemberHomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -39,12 +38,10 @@ const MemberHomeScreen = () => {
     loadUsername();
   }, []);
 
-  const {data: memoriesData, isLoading: isMemoriesLoading} = useQuery({
+  const {data: memoriesData} = useQuery({
     queryKey: ['getMemoriesMembers'],
     queryFn: async () => getMemoriesMembers(),
   });
-
-  console.log(memoriesData);
 
   const handleQuizPress = async (quizId: number) => {
     navigation.navigate('MemberQuizDetail', {
@@ -79,10 +76,10 @@ const MemberHomeScreen = () => {
         </CustomText>
       </View>
       <View style={[styles.itemContainer]}>
-        <MemberQuizProgressCard percentage={60} />
+        <MemberQuizProgressCard />
       </View>
       <View style={styles.itemContainer}>
-        <MemberAnalysisCard trend="up" month={2} rate={78} rateDiff={8} />
+        <MemberAnalysisCard />
       </View>
       {memoriesData?.data.length !== 0 ? (
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>

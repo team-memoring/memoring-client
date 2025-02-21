@@ -1,6 +1,7 @@
 import {AxiosResponse} from 'axios';
 import apiClient from './apiClient';
 import {
+  GetStatisticsResponse,
   GetStatisticsStatisticsOptions,
   GetStatisticsStatisticsResponse,
 } from '../../lib/types/statistics';
@@ -15,4 +16,10 @@ export const getStatisticsStatistics = async (
       ...(options.month !== null && {month: options.month}),
     },
   });
+};
+
+export const getStatistics = async (): Promise<
+  AxiosResponse<GetStatisticsResponse>
+> => {
+  return apiClient.get(`/api/v1/statistics`);
 };

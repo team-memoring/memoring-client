@@ -2,27 +2,49 @@ import {Animated, Easing, Pressable, StyleSheet, View} from 'react-native';
 import {CustomText} from '../../shared';
 import {
   MEMBER_HOME_DURATION,
-  tempTrend,
+  rateTrend,
 } from '../../../screens/Member/MemberHomeScreen';
 
 import Trend from '../../../assets/graphics/trend.svg';
 import {useEffect, useRef, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {useQuery} from '@tanstack/react-query';
+import {getStatistics} from '../../../api/memoring/statistics';
 
-interface MemberAnalysisCardProps {
-  trend: tempTrend;
-  month: number;
-  rate: number;
-  rateDiff?: number;
-}
+const MemberAnalysisCard = () => {
+  const {data} = useQuery({
+    queryKey: ['getStatistics'],
+    queryFn: async () => getStatistics(),
+  });
 
-const MemberAnalysisCard = ({
-  trend,
-  month,
-  rate,
-  rateDiff,
-}: MemberAnalysisCardProps) => {
+  const getTrend = () => {
+    if (!data) return 'stable';
+
+    if (data?.data[0].correctRate > data?.data[1].correctRate) {
+      return 'up';
+    } else if (data?.data[0].correctRate < data?.data[1].correctRate) {
+      return 'down';
+    }
+    return 'stable';
+  };
+
+  const getMonth = (dateStr?: string) => {
+    if (!dateStr) {
+      const date = new Date();
+      return date.getMonth() + 1;
+    }
+
+    const month = parseInt(dateStr.split('-')[1], 10); // "02" -> 2
+    return month;
+  };
+
+  const trend = getTrend();
+  const month = getMonth(data?.data[0].month);
+  const rate = data?.data[0].correctRate || 0;
+  const rateDiff =
+    (data?.data[0].correctRate || 0) - (data?.data[1].correctRate || 0);
+
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
   const rateDiffValue = rateDiff ?? 0;

@@ -48,7 +48,10 @@ const MemberStatisticsGraph = ({
                 <View
                   style={{
                     width: 30,
-                    height: (item.value / MAX_DATA) * MAX_HEIGHT,
+                    height:
+                      item.value <= 10
+                        ? (10 / MAX_DATA) * MAX_HEIGHT
+                        : (item.value / MAX_DATA) * MAX_HEIGHT,
                     backgroundColor:
                       index === selected
                         ? '#CE5419'
