@@ -87,6 +87,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
       navigation.navigate('MemberQuizGen', {
         memoryId: response.data.memoryId,
         memoryNumber: data.events.length,
+        memoryTitle: data.title,
       });
     } catch (error) {
       console.error('API Error:', error);

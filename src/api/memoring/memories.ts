@@ -5,6 +5,7 @@ import {
 } from '../../lib/types/memories';
 import {getToken} from '../../utils/storage';
 import apiClient from './apiClient';
+import {Memory} from '../../lib/types/memories';
 
 export const getMemoriesMembers = async (): Promise<
   AxiosResponse<GetMemoriesMembersResponse>
@@ -23,4 +24,8 @@ export const postMemories = async (
       Authorization: `Bearer ${token}`,
     },
   });
+};
+
+export const getMemories = async (): Promise<{data: Memory[]}> => {
+  return apiClient.get('/api/v1/memories/entirememories');
 };

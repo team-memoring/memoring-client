@@ -10,15 +10,34 @@ import {
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useEffect, useRef} from 'react';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
+import {
+  ParamListBase,
+  useNavigation,
+  useRoute,
+  RouteProp,
+} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CelebrateAnimation from '../../components/shared/CelebrateAnimation';
 
-const DUMMY_IMAGE = '/Users/kyuho/Downloads/dummy.png';
+import {Quiz} from '../../lib/types/quizzes';
+
+type RootStackParamList = {
+  MemberQuizComplete: {data: Quiz[]; memoryTitle: string};
+};
+
+const DEFAUL_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
 const MemberQuizCompleteScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizComplete'>>();
+  const {data, memoryTitle} = route.params;
+  const quizzes = data || [];
   const animatedTranslateY = useRef(new Animated.Value(0)).current;
+
+  const REP_IMAGE = quizzes[0].imageUrl || DEFAUL_IMAGE;
+  const handleRegisterPress = () => {
+    navigation.navigate('MemberHome');
+  };
 
   useEffect(() => {
     Animated.spring(animatedTranslateY, {
@@ -45,7 +64,7 @@ const MemberQuizCompleteScreen = () => {
         }}>
         <View style={styles.quizCard}>
           <Image
-            source={{uri: DUMMY_IMAGE}}
+            source={{uri: REP_IMAGE}}
             style={{width: '100%', height: 165, borderRadius: 16}}
           />
           <View style={styles.quizCartTextContainer}>
@@ -56,7 +75,7 @@ const MemberQuizCompleteScreen = () => {
                 color: '#222225',
                 lineHeight: 32,
               }}>
-              아버지와의 관악산 등반
+              {memoryTitle}
             </CustomText>
             <CustomText
               weight="ExtraBold"
@@ -79,7 +98,7 @@ const MemberQuizCompleteScreen = () => {
       <View style={styles.nextButtonWrapper}>
         <Pressable
           onPress={() => {
-            navigation.navigate('MemberHome');
+            handleRegisterPress();
           }}
           style={[
             styles.nextButton,

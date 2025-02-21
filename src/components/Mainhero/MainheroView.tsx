@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   FlatList,
   TouchableOpacity,
@@ -11,60 +11,52 @@ import {CustomText} from '../../components/shared';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-// const categoryData = {}  TODO: DB에서 불러오기
-
-const categoryData: Record<
-  string,
-  {
-    id: string;
-    image: string;
-    quizCnt: number;
-    totalCnt: number;
-    title: string;
-  }[]
-> = {
-  categories: [
-    {
-      id: '1',
-      image: '/Users/mingyucheon/work/dataset/memoring/Example.PNG',
-      quizCnt: 3,
-      totalCnt: 10,
-      title: 'FLY AI OT 참석',
-    },
-  ],
-};
+import {getMemories} from '../../api/memoring/memories';
+import {Memory} from '../../lib/types/memories';
 
 const MainheroView = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
-  const data = categoryData.categories || [];
+  const [memories, setMemories] = useState<Memory[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const memoriesData = await getMemories();
+        console.log('memoriesData:', memoriesData);
+        setMemories(memoriesData.data);
+      } catch (error) {
+        console.error('Error fetching memories:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <FlatList
-      data={data}
-      keyExtractor={item => item.id}
+      data={memories}
+      keyExtractor={item => item.memory_id.toString()}
       ListFooterComponent={<View style={{height: 200}} />}
       contentContainerStyle={styles.list}
       renderItem={({item}) => (
         <View style={styles.card}>
-          <Image source={{uri: item.image}} style={styles.image} />
+          <Image source={{uri: item.memory_img}} style={styles.image} />
           <CustomText weight="ExtraBold" style={{fontSize: 24, marginTop: 20}}>
-            {item.title}
+            {item.memory_title}
           </CustomText>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Quiz', {title: item.title})}
-            style={
-              item.quizCnt < item.totalCnt
-                ? styles.button4New
-                : styles.button4Sec
-            }>
+            onPress={() =>
+              navigation.navigate('Quiz', {title: item.memory_title})
+            }
+            style={item.is_used === 0 ? styles.button4New : styles.button4Sec}>
             <CustomText
               weight="ExtraBold"
               style={{
                 fontSize: 22,
-                color: item.quizCnt < item.totalCnt ? '#CE5419' : '#555558',
+                color: item.is_used === 0 ? '#CE5419' : '#555558',
               }}>
-              {item.quizCnt === item.totalCnt ? '다시 풀기' : '시작하기'}
+              {item.is_used > 0 ? '다시 풀기' : '시작하기'}
             </CustomText>
           </TouchableOpacity>
         </View>

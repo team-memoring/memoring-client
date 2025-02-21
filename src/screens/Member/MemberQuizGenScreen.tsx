@@ -10,26 +10,44 @@ import MemberLoadingCharacter from '../../components/Member/QuizGen/MemberLoadin
 
 import {RouteProp} from '@react-navigation/native';
 
+import {getQuizzes} from '../../api/memoring/quizzes';
+import {QuizPair} from '../../lib/types/quizzes';
+
 type RootStackParamList = {
-  MemberQuizGen: {memoryId: string; memoryNumber: number};
+  MemberQuizGen: {memoryId: string; memoryNumber: number; memoryTitle: string};
 };
+
+type QuizzesResponse = QuizPair[];
 
 const MemberQuizGenScreen = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizGen'>>();
 
-  const {memoryId, memoryNumber} = route.params;
+  const {memoryId, memoryNumber, memoryTitle} = route.params;
 
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
   const [isCreating, setIsCreating] = useState(false);
 
   const isCreateDisabled = isCreating;
 
   const createRequest = async () => {
-    // TODO: API 호출 처리
-    setTimeout(() => {
-      navigation.navigate('MemberQuizList');
-    }, 8000);
+    try {
+      if (!memoryId) {
+        throw new Error('Memory ID is not provided');
+      }
+      const quizzes = await getQuizzes(Number(memoryId));
+      const quizzesData: QuizzesResponse = quizzes.data;
+      console.log('quizzes on gen:', quizzesData);
+
+      if (quizzes) {
+        navigation.navigate('MemberQuizList', {
+          data: quizzesData,
+          memoryId,
+          memoryTitle,
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching quizzes:', error);
+    }
   };
 
   const handelQuizCreate = async () => {
