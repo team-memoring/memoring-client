@@ -20,11 +20,10 @@ import BackArrow from '../../assets/icons/back_arrow.svg';
 import QuizDetailCard from '../../components/Member/QuizDetail/QuizDetailCard';
 import {useQuery} from '@tanstack/react-query';
 import {getQuizzesQuizanswerMemoryId} from '../../api/memoring/quizzes';
-import {useEffect, useState} from 'react';
 
 import Config from 'react-native-config';
 
-const DEFAULT_IMAGE = '../../assets/graphics/default_memory_image.png';
+import DEFAULT_IMAGE from '../../assets/graphics/default_memory_image.png';
 
 type RootStackParamList = {
   MemberQuizDetail: {memoryId: number};
@@ -33,8 +32,6 @@ type RootStackParamList = {
 const MemberQuizDetailScreen = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'MemberQuizDetail'>>();
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-
-  const [imageUri, setImageUri] = useState<string>('');
 
   const memoryId = route.params.memoryId;
 
@@ -47,13 +44,10 @@ const MemberQuizDetailScreen = () => {
 
   const memoryData = data?.data;
 
-  useEffect(() => {
-    if (memoryData) {
-      setImageUri(Config.API_BASE_URL + '/' + memoryData.memoryImg);
-    } else {
-      setImageUri(DEFAULT_IMAGE);
-    }
-  }, [memoryData]);
+  const imgSrc =
+    memoryData && memoryData?.memoryImg !== null
+      ? {uri: Config.API_BASE_URL + '/' + memoryData.memoryImg}
+      : DEFAULT_IMAGE;
 
   if (!memoryData || isLoading) {
     return null;
@@ -67,7 +61,7 @@ const MemberQuizDetailScreen = () => {
           paddingHorizontal: 16,
         }}>
         <View>
-          <Image source={{uri: imageUri}} style={styles.quizImage} />
+          <Image source={imgSrc} style={styles.quizImage} />
           <Pressable
             style={styles.backButton}
             onPress={() => {
