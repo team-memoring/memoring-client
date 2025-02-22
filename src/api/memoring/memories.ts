@@ -2,6 +2,7 @@ import {AxiosResponse} from 'axios';
 import {
   GetMemoriesMembersResponse,
   PostMemoriesResponse,
+  UpdateMemory,
 } from '../../lib/types/memories';
 import {getToken} from '../../utils/storage';
 import apiClient from './apiClient';
@@ -28,4 +29,15 @@ export const postMemories = async (
 
 export const getMemories = async (): Promise<{data: Memory[]}> => {
   return apiClient.get('/api/v1/memories/entirememories');
+};
+
+export const getMemoriesSpecificmemoryMemoryId = async (memoryId: number) => {
+  return apiClient(`/api/v1/memories/specificmemory/${memoryId}`);
+};
+
+export const patchMemoriesMemoryId = async (
+  memoryId: number,
+  body: UpdateMemory,
+): Promise<UpdateMemory> => {
+  return apiClient.patch(`api/v1/memories/${memoryId}`, body);
 };

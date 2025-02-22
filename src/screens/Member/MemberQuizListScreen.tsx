@@ -19,6 +19,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import BackArrow from '../../assets/icons/back_arrow.svg';
 import {CustomText} from '../../components/shared';
 import defaultImage from '../../assets/graphics/default_image.png';
+import defaultTitleImage from '../../assets/graphics/default_title_image.png';
 
 import {QuizPair, Quiz, QuizStorage} from '../../lib/types/quizzes';
 import {postQuizzes} from '../../api/memoring/quizzes';
@@ -111,7 +112,14 @@ const MemberQuizListScreen = () => {
           </CustomText>
         </Pressable>
       </View>
-      <Image source={{uri: IMAGE_URL}} style={styles.image} />
+      <Image
+        source={
+          flattenedQuizzes[0].imageUrl
+            ? {uri: `${Config.API_BASE_URL}/${flattenedQuizzes[0].imageUrl}`}
+            : defaultTitleImage
+        }
+        style={styles.image}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{

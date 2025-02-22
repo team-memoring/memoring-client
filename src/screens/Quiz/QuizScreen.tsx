@@ -65,22 +65,19 @@ const QuizScreen = () => {
   const handleAnswer = async (choice: string) => {
     if (questions[currentIndex].is_dummy) {
       setSelectedAnswer(choice);
-      setShowResult(true);
 
       const llmAnswerData = await patchQuizzedUpdateQuizId(
         questions[currentIndex].quiz_id,
         choice,
       );
       setLlmAnswer(llmAnswerData.data);
+      setShowResult(true);
 
       setCharacterType('happy');
       setCharacterDecorationType('heart');
     } else {
       const isCorrect = choice === questions[currentIndex].quiz_answer;
-      const mainAnswerData = await patchQuizzedUpdateQuizId(
-        questions[currentIndex].quiz_id,
-        choice,
-      );
+      await patchQuizzedUpdateQuizId(questions[currentIndex].quiz_id, choice);
 
       setSelectedAnswer(choice);
       setShowResult(true);
@@ -102,7 +99,7 @@ const QuizScreen = () => {
     if (currentIndex !== questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
-      navigation.navigate('QuizEnd', {title});
+      navigation.navigate('QuizEnd', {memoryId, title});
     }
     setShowResult(false);
 

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {Character, CustomText, Header} from '../../components/shared';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {
   ParamListBase,
   useNavigation,
@@ -18,14 +18,17 @@ import {
 } from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CelebrateAnimation from '../../components/shared/CelebrateAnimation';
+import defaultImage from '../../assets/graphics/default_image.png';
+import defaultTitleImage from '../../assets/graphics/default_title_image.png';
 
 import {Quiz} from '../../lib/types/quizzes';
+import Config from 'react-native-config';
+import {getMembersGetMain} from '../../api/memoring/members';
+import {MainInfo} from '../../lib/types/members';
 
 type RootStackParamList = {
   MemberQuizComplete: {data: Quiz[]; memoryTitle: string};
 };
-
-const DEFAUL_IMAGE = '/Users/kyuho/Downloads/dummy.png';
 
 const MemberQuizCompleteScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -33,8 +36,9 @@ const MemberQuizCompleteScreen = () => {
   const {data, memoryTitle} = route.params;
   const quizzes = data || [];
   const animatedTranslateY = useRef(new Animated.Value(0)).current;
+  const [mainName, setMainName] = useState<MainInfo>();
+  console.log(mainName);
 
-  const REP_IMAGE = quizzes[0].imageUrl || DEFAUL_IMAGE;
   const handleRegisterPress = () => {
     navigation.navigate('MemberHome');
   };
@@ -46,16 +50,32 @@ const MemberQuizCompleteScreen = () => {
     }).start();
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const nameData = await getMembersGetMain();
+        console.log('nameData:', nameData);
+        setMainName(nameData.data);
+      } catch (error) {
+        console.error('Error fetching memories:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!mainName) return null;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar translucent backgroundColor="#fff" barStyle="dark-content" />
       <Header showDiaryLogo={false} />
       <View style={{alignItems: 'center', marginTop: 72}}>
         <CustomText weight="ExtraBold" style={styles.mainText}>
-          5개의 퀴즈를
+          {quizzes.length}개의 퀴즈를
         </CustomText>
         <CustomText weight="ExtraBold" style={styles.mainText}>
-          선옥님에게 전달했어요
+          {mainName.memberName}님에게 전달했어요
         </CustomText>
       </View>
       <View
@@ -64,7 +84,11 @@ const MemberQuizCompleteScreen = () => {
         }}>
         <View style={styles.quizCard}>
           <Image
-            source={{uri: REP_IMAGE}}
+            source={
+              quizzes[0].imageUrl
+                ? {uri: `${Config.API_BASE_URL}/${quizzes[0].imageUrl}`}
+                : defaultTitleImage
+            }
             style={{width: '100%', height: 165, borderRadius: 16}}
           />
           <View style={styles.quizCartTextContainer}>
@@ -84,7 +108,7 @@ const MemberQuizCompleteScreen = () => {
                 color: '#939396',
                 lineHeight: 24,
               }}>
-              5개의 퀴즈
+              {quizzes.length}개의 퀴즈
             </CustomText>
           </View>
         </View>

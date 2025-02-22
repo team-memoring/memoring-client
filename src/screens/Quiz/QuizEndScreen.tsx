@@ -9,22 +9,23 @@ import {CharacterType} from '../../components/shared/Character';
 import {RouteProp, useRoute} from '@react-navigation/native';
 
 import CelebrateAnimation from '../../components/shared/CelebrateAnimation';
+import {
+  getMemoriesSpecificmemoryMemoryId,
+  patchMemoriesMemoryId,
+} from '../../api/memoring/memories';
+import {SpecificMemory} from '../../lib/types/memories';
 
-type QuizEndScreenParams = {
-  title: string;
+type RootStackParamList = {
+  QuizEnd: {memoryId: number; title: string};
 };
-
-type QuizEndScreenRouteProp = RouteProp<
-  {QuizEnd: QuizEndScreenParams},
-  'QuizEnd'
->;
 
 const QuizEndScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-  const route = useRoute<QuizEndScreenRouteProp>();
-  const title = route.params?.title;
+  const route = useRoute<RouteProp<RootStackParamList, 'QuizEnd'>>();
+  const {memoryId, title} = route.params;
 
   const [characterType, setCharacterType] = useState<CharacterType>('happy');
+  const [memory, setMemory] = useState<SpecificMemory>();
 
   const animatedTranslateY = useRef(new Animated.Value(-100)).current;
 
@@ -34,6 +35,45 @@ const QuizEndScreen = () => {
       useNativeDriver: true,
     }).start();
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const memoryData = await getMemoriesSpecificmemoryMemoryId(memoryId);
+        console.log('MemoryData:', memoryData);
+
+        if (!memoryData?.data) {
+          throw new Error('Memory not found');
+        }
+
+        setMemory(memoryData.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [memoryId]);
+
+  useEffect(() => {
+    if (!memory) return;
+
+    const updateData = async () => {
+      try {
+        const body = {
+          memory_title: memory.memory_title,
+          memory_upload_time: memory.memory_upload_time,
+          is_used: (memory.is_used || 0) + 1,
+          memory_img: memory.memory_img,
+        };
+        await patchMemoriesMemoryId(memoryId, body);
+      } catch (error) {
+        console.error('Error updating memory:', error);
+      }
+    };
+
+    updateData();
+  }, [memory]);
 
   return (
     <GestureHandlerRootView>

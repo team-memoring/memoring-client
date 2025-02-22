@@ -15,6 +15,8 @@ import {getMemories} from '../../api/memoring/memories';
 import {Memory} from '../../lib/types/memories';
 import Config from 'react-native-config';
 
+import defaultMemoryImage from '../../assets/graphics/default_memory_image.png';
+
 const DiaryContentsView = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [memories, setMemories] = useState<Memory[]>([]);
@@ -39,24 +41,30 @@ const DiaryContentsView = () => {
       keyExtractor={item => item.memory_id.toString()}
       ListFooterComponent={<View style={{height: 200}} />}
       contentContainerStyle={styles.list}
-      renderItem={({item}) => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('DiaryContent', {
-              memoryId: item.memory_id,
-              memoryTitle: item.memory_title,
-            })
-          }
-          style={styles.card}>
-          <Image
-            source={{uri: `${Config.API_BASE_URL}/${item.memory_img}`}}
-            style={styles.image}
-          />
-          <CustomText weight="ExtraBold" style={{fontSize: 24, marginTop: 20}}>
-            {item.memory_title}
-          </CustomText>
-        </TouchableOpacity>
-      )}
+      renderItem={({item}) => {
+        const imageSource =
+          item.memory_img && item.memory_img.trim() !== ''
+            ? {uri: `${Config.API_BASE_URL}/${item.memory_img}`}
+            : defaultMemoryImage;
+
+        return (
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('DiaryContent', {
+                memoryId: item.memory_id,
+                memoryTitle: item.memory_title,
+              })
+            }
+            style={styles.card}>
+            <Image source={imageSource} style={styles.image} />
+            <CustomText
+              weight="ExtraBold"
+              style={{fontSize: 24, marginTop: 20}}>
+              {item.memory_title}
+            </CustomText>
+          </TouchableOpacity>
+        );
+      }}
       showsVerticalScrollIndicator={false}
       snapToAlignment="start" // 스크롤 후 정렬 위치
       decelerationRate="fast" // 부드러운 스냅 효과

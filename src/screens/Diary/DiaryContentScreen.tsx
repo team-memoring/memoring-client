@@ -15,6 +15,9 @@ import {getEventsGeteventsbymemoryidMemoryid} from '../../api/memoring/events';
 import {Event} from '../../lib/types/events';
 import Config from 'react-native-config';
 
+import defaultImage from '../../assets/graphics/default_image.png';
+import defaultTitleImage from '../../assets/graphics/default_title_image.png';
+
 const indexMap: {[key: number]: string} = {
   0: '첫번째',
   1: '두번째',
@@ -64,7 +67,11 @@ const DiaryContentScreen = () => {
       </View>
       <View style={{paddingHorizontal: 16}}>
         <Image
-          source={{uri: `${Config.API_BASE_URL}/${events[0].event_img}`}}
+          source={
+            events[0].event_img
+              ? {uri: `${Config.API_BASE_URL}/${events[0].event_img}`}
+              : defaultTitleImage
+          }
           style={styles.image}
         />
       </View>
@@ -115,9 +122,13 @@ const DiaryContentScreen = () => {
                     marginTop: 8,
                   }}>
                   <Image
-                    source={{
-                      uri: `${Config.API_BASE_URL}/${events[index].event_img}`,
-                    }}
+                    source={
+                      events[index].event_img
+                        ? {
+                            uri: `${Config.API_BASE_URL}/${events[index].event_img}`,
+                          }
+                        : defaultImage
+                    }
                     style={styles.descriptionImage}
                   />
                 </View>

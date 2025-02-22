@@ -15,6 +15,8 @@ import {getMemories} from '../../api/memoring/memories';
 import {Memory} from '../../lib/types/memories';
 import Config from 'react-native-config';
 
+import defaultMemoryImage from '../../assets/graphics/default_memory_image.png';
+
 const MainheroView = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
 
@@ -43,7 +45,11 @@ const MainheroView = () => {
       renderItem={({item}) => (
         <View style={styles.card}>
           <Image
-            source={{uri: `${Config.API_BASE_URL}/${item.memory_img}`}}
+            source={
+              item.memory_img
+                ? {uri: `${Config.API_BASE_URL}/${item.memory_img}`}
+                : defaultMemoryImage
+            }
             style={styles.image}
           />
           <CustomText weight="ExtraBold" style={{fontSize: 24, marginTop: 20}}>

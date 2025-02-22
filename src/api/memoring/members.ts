@@ -7,3 +7,7 @@ export const getMembers = async (): Promise<
 > => {
   return apiClient.get('/api/v1/members');
 };
+
+export const getMembersGetMain = async () => {
+  return apiClient.get('/api/v1/members/get_main');
+};
