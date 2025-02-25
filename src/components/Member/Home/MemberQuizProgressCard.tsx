@@ -106,7 +106,7 @@ const MemberQuizProgressCard = () => {
               fontSize: 15,
               color: '#fff',
             }}>
-            퀴즈 등록하기
+            추억 등록하기
           </CustomText>
         </Pressable>
       </View>

@@ -32,6 +32,7 @@ import {
 } from '../../api/memoring/quizzes';
 import {QuizMain, QuizDummy} from '../../lib/types/quizzes';
 import Config from 'react-native-config';
+import AnswerLoadingCharacter from '../../components/QuizResult/AnswerLoadingCharacter';
 
 type RootStackParamList = {
   Quiz: {memoryId: number; title: string};
@@ -52,6 +53,7 @@ const QuizScreen = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [llmAnswer, setLlmAnswer] = useState<QuizDummy | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const animatedTranslateY = useRef(new Animated.Value(400)).current;
 
@@ -63,7 +65,9 @@ const QuizScreen = () => {
   };
 
   const handleAnswer = async (choice: string) => {
+    setShowResult(true);
     if (questions[currentIndex].is_dummy) {
+      setIsLoading(true);
       setSelectedAnswer(choice);
 
       const llmAnswerData = await patchQuizzedUpdateQuizId(
@@ -71,7 +75,6 @@ const QuizScreen = () => {
         choice,
       );
       setLlmAnswer(llmAnswerData.data);
-      setShowResult(true);
 
       setCharacterType('happy');
       setCharacterDecorationType('heart');
@@ -80,18 +83,18 @@ const QuizScreen = () => {
       await patchQuizzedUpdateQuizId(questions[currentIndex].quiz_id, choice);
 
       setSelectedAnswer(choice);
-      setShowResult(true);
 
       setCharacterType(isCorrect ? 'happy' : 'sad');
       setCharacterDecorationType(isCorrect ? 'heart' : 'tear');
     }
+    setIsLoading(false);
 
     Animated.spring(animatedTranslateY, {
       toValue: -40,
       useNativeDriver: true,
       damping: 15,
       stiffness: 120,
-      mass: 1.5,
+      mass: 2.5,
     }).start();
   };
 
@@ -103,14 +106,16 @@ const QuizScreen = () => {
     }
     setShowResult(false);
 
-    setCharacterType('openRight');
+    setCharacterType(
+      questions[currentIndex].is_dummy ? 'openRight' : 'openLeft',
+    );
     setCharacterDecorationType(null);
     Animated.spring(animatedTranslateY, {
       toValue: questions[currentIndex].quiz_img ? 1000 : 180,
       useNativeDriver: true,
       damping: 10,
       stiffness: 120,
-      mass: 1.5,
+      mass: 2.5,
     }).start();
   };
 
@@ -136,10 +141,20 @@ const QuizScreen = () => {
         useNativeDriver: true,
         damping: 10,
         stiffness: 120,
-        mass: 1.5,
+        mass: 2.5,
       }).start();
     }
   }, [currentIndex, questions]);
+
+  useEffect(() => {
+    Animated.spring(animatedTranslateY, {
+      toValue: 0,
+      useNativeDriver: true,
+      damping: 15,
+      stiffness: 120,
+      mass: 2.5,
+    }).start();
+  }, [isLoading]);
 
   if (questions.length === 0) return null;
 
@@ -163,17 +178,22 @@ const QuizScreen = () => {
           totalSteps={questions.length}
           onBackPress={() => navigation.goBack()}
         />
-        <Character
-          type={characterType}
-          decoration={characterDecorationType}
-          animatedTransformValue={animatedTranslateY}
-        />
+        {isLoading ? (
+          <AnswerLoadingCharacter isLoading={isLoading} />
+        ) : (
+          <Character
+            type={characterType}
+            decoration={characterDecorationType}
+            animatedTransformValue={animatedTranslateY}
+          />
+        )}
+
         {showResult ? (
           <>
             {questions[currentIndex].is_dummy ? (
               <DummyResultView
-                initialReact={llmAnswer?.initial_react || ''}
-                mainReact={llmAnswer?.main_react || ''}
+                initialReact={isLoading ? '' : llmAnswer?.initial_react || ''}
+                mainReact={isLoading ? '' : llmAnswer?.main_react || ''}
               />
             ) : (
               <ResultView

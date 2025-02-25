@@ -59,7 +59,9 @@ const MemberRegisterScreen = (): React.JSX.Element => {
       formData.append('member_id', JSON.stringify(data.roles));
 
       const eventList = data.events.map(event => ({
-        event_time: event.date || new Date(), // 이벤트 시간 저장
+        event_time: event.date
+          ? new Date(event.date).toISOString()
+          : new Date().toISOString(),
         event_text: event.description, // 이벤트 설명 저장
         has_image: event.images.length > 0,
       }));

@@ -6,7 +6,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import CharacterStarCrop from '../../assets/icons/character_star_crop.svg';
 import SegmentedControl from '../../components/shared/SegmentedControl';
-import {useLayoutEffect, useState} from 'react';
+import {useLayoutEffect, useState, useEffect} from 'react';
 
 import ArrowLeft from '../../assets/icons/arrow_left.svg';
 import ArrowRight from '../../assets/icons/arrow_right.svg';
@@ -20,6 +20,8 @@ import {
 } from '../../utils/statistics';
 import {getStatisticsStatistics} from '../../api/memoring/statistics';
 import {useQuery} from '@tanstack/react-query';
+import {MainInfo} from '../../lib/types/members';
+import {getMembersGetMain} from '../../api/memoring/members';
 
 type GraphOptionMap = {
   [key in graphOptionType]: string;
@@ -39,6 +41,8 @@ const MemberStatisticsScreen = () => {
   // 그래프 옵션
   const [selectedGraphOption, setSelectedGraphOption] =
     useState<graphOptionType>('month');
+
+  const [mainName, setMainName] = useState<MainInfo>();
 
   const date = new Date();
   const currentYear = date.getFullYear();
@@ -163,6 +167,22 @@ const MemberStatisticsScreen = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const nameData = await getMembersGetMain();
+        console.log('nameData:', nameData);
+        setMainName(nameData.data);
+      } catch (error) {
+        console.error('Error fetching memories:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!mainName) return null;
+
   if (weekQuery.isLoading || monthQuery.isLoading || yearQuery.isLoading)
     return null;
 
@@ -193,7 +213,7 @@ const MemberStatisticsScreen = () => {
               color: '#222225',
               lineHeight: 32,
             }}>
-            선옥 님의 퀴즈 결과를
+            {mainName.memberName}님의 퀴즈 결과를
           </CustomText>
           <CustomText
             weight="ExtraBold"

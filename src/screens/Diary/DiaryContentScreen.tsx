@@ -11,6 +11,7 @@ import {
   ParamListBase,
 } from '@react-navigation/native';
 import {getEventsGeteventsbymemoryidMemoryid} from '../../api/memoring/events';
+import {format} from 'date-fns';
 
 import {Event} from '../../lib/types/events';
 import Config from 'react-native-config';
@@ -142,7 +143,10 @@ const DiaryContentScreen = () => {
                       fontSize: 15,
                       color: '#444447',
                     }}>
-                    {events[index].event_time}
+                    {format(
+                      new Date(events[index].event_time),
+                      'yyyy년 MM월 dd일',
+                    )}
                   </CustomText>
                 </View>
 

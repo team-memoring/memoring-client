@@ -175,7 +175,7 @@ const MemberMemoryBox = ({
             }}>
             추억의 날짜
           </CustomText>
-          <MemoryDatePicker />
+          <MemoryDatePicker memoryIndex={memoryIndex} />
         </View>
 
         <View

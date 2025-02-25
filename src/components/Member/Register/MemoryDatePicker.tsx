@@ -7,27 +7,36 @@ import {
   Platform,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import {useFormContext} from 'react-hook-form';
 import {CustomText} from '../../shared';
 import Calendar from '../../../assets/icons/calendar.svg';
+import {IMemoryRegister} from '../../../lib/model/i-memory';
 
-const MemoryDatePicker = () => {
-  const [date, setDate] = useState(new Date());
-  const [tempDate, setTempDate] = useState(new Date()); // iOS에서 변경할 임시 날짜
+interface MemoryDatePickerProps {
+  memoryIndex: number;
+}
+
+const MemoryDatePicker = ({memoryIndex}: MemoryDatePickerProps) => {
+  const {watch, setValue} = useFormContext<IMemoryRegister>();
+  const events = watch('events');
+  const currentEventDate = events[memoryIndex]?.date || new Date();
+
+  const [tempDate, setTempDate] = useState(currentEventDate);
   const [showPicker, setShowPicker] = useState(false);
 
   const onChange = (event: any, selectedDate?: Date) => {
     if (selectedDate) {
-      setTempDate(selectedDate); // 변경은 임시로 저장 (iOS)
+      setTempDate(selectedDate); // iOS에서는 임시로 저장
     }
   };
 
   const confirmDate = () => {
-    setDate(tempDate); // "완료" 버튼을 누르면 최종 확정
+    setValue(`events.${memoryIndex}.date`, tempDate); // React Hook Form에 업데이트
     setShowPicker(false);
   };
 
   const cancelDate = () => {
-    setTempDate(date); // 기존 날짜로 복구
+    setTempDate(currentEventDate); // 기존 날짜로 복구
     setShowPicker(false);
   };
 
@@ -37,7 +46,7 @@ const MemoryDatePicker = () => {
         style={styles.datePickerContainer}
         onPress={() => setShowPicker(true)}>
         <CustomText weight="ExtraBold" style={styles.dateText}>
-          {date.toLocaleDateString('ko-KR', {
+          {currentEventDate.toLocaleDateString('ko-KR', {
             year: 'numeric',
             month: 'long',
             day: 'numeric',
@@ -46,7 +55,6 @@ const MemoryDatePicker = () => {
         <Calendar width={24} height={24} />
       </TouchableOpacity>
 
-      {/* iOS 전용 모달 */}
       {Platform.OS === 'ios' && showPicker && (
         <Modal
           transparent
@@ -61,7 +69,6 @@ const MemoryDatePicker = () => {
                 display="spinner"
                 onChange={onChange}
               />
-              {/* 완료 및 취소 버튼 */}
               <View style={styles.modalButtons}>
                 <TouchableOpacity onPress={cancelDate}>
                   <CustomText style={styles.cancelButton}>취소</CustomText>
@@ -75,15 +82,16 @@ const MemoryDatePicker = () => {
         </Modal>
       )}
 
-      {/* Android에서는 기존 방식 유지 */}
       {Platform.OS === 'android' && showPicker && (
         <DateTimePicker
-          value={date}
+          value={currentEventDate}
           mode="date"
           display="default"
           onChange={(event, selectedDate) => {
             setShowPicker(false);
-            if (selectedDate) setDate(selectedDate);
+            if (selectedDate) {
+              setValue(`events.${memoryIndex}.date`, selectedDate);
+            }
           }}
         />
       )}
@@ -107,13 +115,12 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 반투명 배경
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: '#FFF',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-
     alignItems: 'center',
     padding: 16,
     paddingBottom: 24,

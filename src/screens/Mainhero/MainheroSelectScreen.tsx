@@ -5,24 +5,29 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../../components/shared/Header';
 
 import {CustomText} from '../../components/shared';
-import {getUser} from '../../utils/storage';
 
 import MainheroView from '../../components/Mainhero/MainheroView';
+import {MainInfo} from '../../lib/types/members';
+import {getMembersGetMain} from '../../api/memoring/members';
 
 const MainheroSelectScreen = (): React.JSX.Element => {
-  const [username, setUsername] = React.useState<string | null>(null);
+  const [mainName, setMainName] = useState<MainInfo>();
 
   useEffect(() => {
-    const loadUsername = async () => {
-      const user = await getUser();
-
-      if (user) {
-        setUsername(user.nickname);
+    const fetchData = async () => {
+      try {
+        const nameData = await getMembersGetMain();
+        console.log('nameData:', nameData);
+        setMainName(nameData.data);
+      } catch (error) {
+        console.error('Error fetching memories:', error);
       }
     };
 
-    loadUsername();
+    fetchData();
   }, []);
+
+  if (!mainName) return <View />;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,7 +42,7 @@ const MainheroSelectScreen = (): React.JSX.Element => {
               color: '#222225',
               lineHeight: 32,
             }}>
-            {username}님, 오늘은
+            {mainName.memberName}님, 오늘은
           </CustomText>
           <CustomText
             weight="ExtraBold"

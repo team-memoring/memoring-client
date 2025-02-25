@@ -226,7 +226,6 @@ const AppNavigator = () => {
         component={DiaryScreen}
         options={{
           headerShown: false,
-          animation: 'none',
         }}
       />
       <Stack.Screen
@@ -234,7 +233,6 @@ const AppNavigator = () => {
         component={DiaryContentScreen}
         options={{
           headerShown: false,
-          animation: 'none',
         }}
       />
     </Stack.Navigator>
