@@ -31,6 +31,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [accessibleIndex, setAccessibleIndex] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isNextDisabled = !(currentIndex < accessibleIndex);
 
   const animatedTranslateY = useRef(new Animated.Value(0)).current;
@@ -52,6 +53,7 @@ const MemberRegisterScreen = (): React.JSX.Element => {
 
   const handleSubmit = async (data: IMemoryRegister) => {
     try {
+      setIsSubmitting(true);
       const formData = new FormData();
 
       formData.append('memory_title', data.title);
@@ -93,10 +95,14 @@ const MemberRegisterScreen = (): React.JSX.Element => {
       });
     } catch (error) {
       console.error('API Error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleNextPress = () => {
+    if (isSubmitting) return;
+
     if (currentIndex !== TOTAL_STEPS - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
