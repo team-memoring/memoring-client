@@ -32,6 +32,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>kakao$(KAKAO_NATIVE_APP_KEY)</string>
+				<string>memoring</string>
 			</array>
 		</dict>
 	</array>
@@ -43,6 +44,8 @@
 		<string>storykompassauth</string>
 		<string>kakaolink</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>사진 선택을 위해 갤러리 접근 권한이 필요합니다.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
@@ -72,6 +75,10 @@
 		<string>NanumSquareRoundEB.ttf</string>
 		<string>NanumSquareRoundL.ttf</string>
 		<string>NanumSquareRoundR.ttf</string>
+		<string>NanumGothic.ttf</string>
+		<string>NanumGothicBold.ttf</string>
+		<string>NanumGothicExtraBold.ttf</string>
+		<string>NanumGothicLight.ttf</string>
 	</array>
 </dict>
 </plist>

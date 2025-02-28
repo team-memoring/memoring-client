@@ -3,10 +3,8 @@ import {login, logout, unlink} from '@react-native-seoul/kakao-login';
 export const signInWithKakao = async (): Promise<string | null> => {
   try {
     const token = await login();
-    console.log('login success', token);
     return token.accessToken;
   } catch (err) {
-    console.error('login error', err);
     return null;
   }
 };
